@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.ecoloops.ecoloopsapp.screens.FirstScreen
+import com.ecoloops.ecoloopsapp.screens.FourScreen
 import com.ecoloops.ecoloopsapp.screens.SecondScreen
 import com.ecoloops.ecoloopsapp.screens.ThirdScreen
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
@@ -26,7 +27,8 @@ class OnBoardingFragment : Fragment() {
         val fragmentList = arrayListOf<Fragment>(
             FirstScreen(),
             SecondScreen(),
-            ThirdScreen()
+            ThirdScreen(),
+            FourScreen()
         )
 
         val adapter = ViewPagerAdapter(

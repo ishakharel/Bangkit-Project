@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.ecoloops.ecoloopsapp.R
 
 
@@ -21,23 +22,16 @@ class ThirdScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_third_screen, container, false)
-        val finish = view.findViewById<TextView>(R.id.tvFinish)
+        val view = inflater.inflate(R.layout.fragment_third_screen, container, false)
 
-        finish.setOnClickListener {
-            findNavController().navigate(R.id.action_onBoardingFragment_to_homeFragment)
-            onBoardingIsFinished()
+        val next = view.findViewById<TextView>(R.id.tvNext3)
+        val viewPager = activity?.findViewById<ViewPager2>(R.id.view_pager)
+
+        next.setOnClickListener {
+            viewPager?.currentItem = 3
         }
 
         return view
-    }
-
-    private fun onBoardingIsFinished(){
-
-        val sharedPreferences = requireActivity().getSharedPreferences("onBoarding", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("finished",true)
-        editor.apply()
     }
 
 
