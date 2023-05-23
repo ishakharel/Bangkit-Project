@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">EcoloopsApp</string>
+
+    <string name="title_boarding1">About Us</string>
+    <string name="title_boarding2">Scan Sampah</string>
+    <string name="title_boarding3">Recycle</string>
+    <string name="title_boarding4">Monetize</string>
+
+    <string name="description_boarding1">Ecoloops adalah aplikasi Identifikasi untuk Mengklasifikasikan sampah pengguna.</string>
+    <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
+    <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
+    <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
+
 </resources>
