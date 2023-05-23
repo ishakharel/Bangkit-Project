@@ -22,7 +22,7 @@ app.get('/test', (req, res) => {
     })
 });
 
-app.use('/auth', authRouter);
+app.use('/', authRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port: http://localhost:${PORT}/`);
