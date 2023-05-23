@@ -31,14 +31,14 @@ const login = (req, res) => {
 
         const user = results[0];
 
-        if (!user.pass) {
+        if (!user.password) {
             res.status(500).send({ 
                 error: 'Failed to retrieve user password',
             });
             return;
         }
 
-        const isPassValid = bcrypt.compareSync(password, user.pass);
+        const isPassValid = bcrypt.compareSync(password, user.password);
 
         if (!isPassValid) {
             res.status(401).send({
@@ -84,11 +84,11 @@ const register = (req, res) => {
         const id = nanoid(16);
         const hashedPassword = bcrypt.hashSync(password, 8);
 
-        db.query('INSERT INTO users VALUES (?, ?, ?, ?)', [id, email, hashedPassword, name], (err, results) => {
+        db.query('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [id, name, email, hashedPassword], (err, results) => {
             if(err) {
                 res.status(500).send({
                     status: 'error',
-                    message: 'Internal server error, please try again later',
+                    message: 'Internal server error, please try again later'
                 });
                 return;
             }
