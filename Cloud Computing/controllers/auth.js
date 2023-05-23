@@ -1,6 +1,7 @@
 const db = require("../database/db-config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const session = require("express-session");
 const { nanoid } = require("nanoid");
 
 require("dotenv").config();
@@ -33,14 +34,14 @@ const login = (req, res) => {
 
     const user = results[0];
 
-    if (!user.password) {
+    if (!user.pass) {
       res.status(500).send({
         error: "Failed to retrieve user password",
       });
       return;
     }
 
-    const isPassValid = bcrypt.compareSync(password, user.password);
+    const isPassValid = bcrypt.compareSync(password, user.pass);
 
     if (!isPassValid) {
       res.status(401).send({
@@ -50,11 +51,18 @@ const login = (req, res) => {
       return;
     }
 
-    req.session.userId = user.id;
+    if (!user.password) {
+      res.status(500).send({
+        error: "Failed to retrieve user password",
+      });
+      return;
+    }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
+
+    req.session.userId = user.id;
 
     res.status(200).send({
       status: "success",
@@ -91,8 +99,8 @@ const register = (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     db.query(
-      "INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)",
-      [id, name, email, hashedPassword],
+      "INSERT INTO users VALUES (?, ?, ?, ?)",
+      [id, email, hashedPassword, name],
       (err, results) => {
         if (err) {
           res.status(500).send({
@@ -101,10 +109,35 @@ const register = (req, res) => {
           });
           return;
         }
-        res.status(201).send({
-          status: "success",
-          message: "User registered succesfully",
-        });
+
+        if (results.length > 0) {
+          res.status(409).send({
+            status: "error",
+            message: "Email alredy exist",
+          });
+          return;
+        }
+
+        const id = nanoid(16);
+        const hashedPassword = bcrypt.hashSync(password, 8);
+
+        db.query(
+          "INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)",
+          [id, name, email, hashedPassword],
+          (err, results) => {
+            if (err) {
+              res.status(500).send({
+                status: "error",
+                message: "Internal server error, please try again later",
+              });
+              return;
+            }
+            res.status(201).send({
+              status: "success",
+              message: "User registered succesfully",
+            });
+          }
+        );
       }
     );
   });
