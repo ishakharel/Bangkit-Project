@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="400dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:gravity="center"
@@ -43,14 +43,14 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
+    <Button
         android:id="@+id/tvNext3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:text="Next"
-        android:textColor="@color/black"
-        android:textSize="30sp"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

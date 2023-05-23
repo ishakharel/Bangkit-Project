@@ -12,7 +12,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/boarding3"
+        android:src="@drawable/boarding4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="400dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:gravity="center"
@@ -43,14 +43,14 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
+    <Button
         android:id="@+id/tvFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:text="Finish"
-        android:textColor="@color/black"
-        android:textSize="30sp"
+        android:text="@string/start"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">EcoloopsApp</string>
 
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+
+
     <string name="title_boarding1">About Us</string>
     <string name="title_boarding2">Scan Sampah</string>
     <string name="title_boarding3">Recycle</string>
