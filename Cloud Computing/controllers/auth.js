@@ -119,8 +119,7 @@ const register = (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, 8);
 
         db.query(
-          "INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)",
-          [id, name, email, hashedPassword],
+          'INSERT INTO users VALUES (?, ?, ?, ?, ?)', [id, name, email, hashedPassword, 0],
           (err, results) => {
             if (err) {
               res.status(500).send({
