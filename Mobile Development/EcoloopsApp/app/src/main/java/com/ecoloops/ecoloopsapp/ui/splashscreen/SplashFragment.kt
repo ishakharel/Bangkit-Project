@@ -1,4 +1,4 @@
-package com.ecoloops.ecoloopsapp
+package com.ecoloops.ecoloopsapp.ui.splashscreen
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import com.ecoloops.ecoloopsapp.R
 
 
 class SplashFragment : Fragment() {

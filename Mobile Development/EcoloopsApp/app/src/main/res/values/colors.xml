@@ -10,4 +10,5 @@
     <color name="colorTextSecondary">#C7C7CC</color>
     <color name="colorBackground">#FFFFFFFF</color>
     <color name="colorOnBoardingIndicatorInActive">#8E8E93</color>
+    <color name="disabledButtonColor">#dddddd</color>
 </resources>

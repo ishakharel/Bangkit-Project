@@ -1,4 +1,4 @@
-package com.ecoloops.ecoloopsapp
+package com.ecoloops.ecoloopsapp.ui.boarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.ecoloops.ecoloopsapp.screens.FirstScreen
-import com.ecoloops.ecoloopsapp.screens.FourScreen
-import com.ecoloops.ecoloopsapp.screens.SecondScreen
-import com.ecoloops.ecoloopsapp.screens.ThirdScreen
+import com.ecoloops.ecoloopsapp.R
+import com.ecoloops.ecoloopsapp.ui.boarding.screens.FirstScreen
+import com.ecoloops.ecoloopsapp.ui.boarding.screens.FourScreen
+import com.ecoloops.ecoloopsapp.ui.boarding.screens.SecondScreen
+import com.ecoloops.ecoloopsapp.ui.boarding.screens.ThirdScreen
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 

@@ -1,4 +1,4 @@
-package com.ecoloops.ecoloopsapp
+package com.ecoloops.ecoloopsapp.ui.boarding
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

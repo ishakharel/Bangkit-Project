@@ -1,4 +1,4 @@
-package com.ecoloops.ecoloopsapp.screens
+package com.ecoloops.ecoloopsapp.ui.boarding.screens
 
 import android.content.Context
 import android.os.Bundle
