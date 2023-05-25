@@ -25,7 +25,7 @@ class FourScreen : Fragment() {
         val finish = view.findViewById<TextView>(R.id.tvFinish)
 
         finish.setOnClickListener {
-            findNavController().navigate(R.id.action_onBoardingFragment_to_homeFragment)
+            findNavController().navigate(R.id.action_onBoardingFragment_to_registActivity)
             onBoardingIsFinished()
         }
 
