@@ -1,7 +1,6 @@
 const db = require("../database/db-config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const session = require("express-session");
 const { nanoid } = require("nanoid");
 
 require("dotenv").config();
@@ -61,8 +60,6 @@ const login = (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-
-    req.session.userId = user.id;
 
     res.status(200).send({
       status: "success",
