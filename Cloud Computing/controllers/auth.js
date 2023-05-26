@@ -1,16 +1,17 @@
-const db = require("../database/db-config");
+const db = require("../config/db-config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { nanoid } = require("nanoid");
+const OTP = require('otp');
+const nodemailer = require('nodemailer');
+
 
 require("dotenv").config();
 
 const login = (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res
-      .status(400)
-      .json({ error: "Invalid request. Please provide email and password" });
+    res.status(400).json({ error: "Invalid request. Please provide email and password" });
     return;
   }
 
@@ -33,26 +34,19 @@ const login = (req, res) => {
 
     const user = results[0];
 
-    if (!user.pass) {
+    if (!user.password) {
       res.status(500).send({
         error: "Failed to retrieve user password",
       });
       return;
     }
 
-    const isPassValid = bcrypt.compareSync(password, user.pass);
+    const isPassValid = bcrypt.compareSync(password, user.password);
 
     if (!isPassValid) {
       res.status(401).send({
         status: "error",
         message: "Invalid password",
-      });
-      return;
-    }
-
-    if (!user.password) {
-      res.status(500).send({
-        error: "Failed to retrieve user password",
       });
       return;
     }
@@ -67,6 +61,7 @@ const login = (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        points: user.total_points,
         token: token,
       },
     });
@@ -96,8 +91,7 @@ const register = (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     db.query(
-      "INSERT INTO users VALUES (?, ?, ?, ?)",
-      [id, email, hashedPassword, name],
+      'INSERT INTO users VALUES (?, ?, ?, ?, ?)', [id, name, email, hashedPassword, 0],
       (err, results) => {
         if (err) {
           res.status(500).send({
@@ -106,37 +100,191 @@ const register = (req, res) => {
           });
           return;
         }
-
-        if (results.length > 0) {
-          res.status(409).send({
-            status: "error",
-            message: "Email alredy exist",
-          });
-          return;
-        }
-
-        const id = nanoid(16);
-        const hashedPassword = bcrypt.hashSync(password, 8);
-
-        db.query(
-          'INSERT INTO users VALUES (?, ?, ?, ?, ?)', [id, name, email, hashedPassword, 0],
-          (err, results) => {
-            if (err) {
-              res.status(500).send({
-                status: "error",
-                message: "Internal server error, please try again later",
-              });
-              return;
-            }
-            res.status(201).send({
-              status: "success",
-              message: "User registered succesfully",
-            });
-          }
-        );
+        res.status(201).send({
+          status: "success",
+          message: "User registered succesfully",
+        });
       }
     );
   });
 };
 
-module.exports = { register, login };
+const generateOTP = () => {
+  const otp = new OTP();
+  return otp.generate(6, { specialChars: false} );
+}
+
+const sendOTP = (email, otp) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+
+  const mailOptions = {
+    from: 'your_email',
+    to: email,
+    subject: 'Password reset OTP',
+    text: `Your OTP for password reset is: ${otp}`
+  }
+
+  try {
+    transporter.sendMail(mailOptions);
+    console.log('OTP sent to email');
+  } catch (err) {
+    console.error('Error sending OTP:', err);
+  }
+}
+
+const forgotPassword = (req, res) => {
+  const { email } = req.body;
+  db.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
+    if(error){
+      res.status(500).send({
+        message: 'Internal server error, try again later',
+      });
+      return;
+    }
+
+    if(results === 0){
+      res.status(404).send({
+        message: 'User not found'
+      });
+      return;
+    }
+
+    const otp = generateOTP();
+
+    db.query('INSERT INTO users_otp (email, otp) VALUES (?, ?)', [email, otp], (error, results) => {
+      if(error){
+        res.status(500).send({
+          message: 'Internal server error, try again later',
+        });
+        return;
+      }
+
+      sendOTP(email, otp)
+        .then(()=> res.status(200).send({ message: 'OTP sent successfully'}))
+        .catch(() => res.status(500).send({ message: 'Internal server error, try again later'}));
+    });
+  });
+}
+
+const verifyOTP = (req, res) => {
+  const { email, otp } = req.body;
+  db.query('SELECT * FROM users_otp WHERE email = ? AND otp = ? AND TIMESTAMPDIFF(MINUTE, created_at, NOW())', [email, otp], (error, results) => {
+    if(error) {
+      console.error('Error verifying OTP:', error);
+      res.status(500).send({
+        message: 'Internal server error, try again later'
+      });
+      return;
+    }
+
+    if(results.length === 0) {
+      res.status(400).send({
+        message: 'Invalid OTP'
+      });
+      return;
+    }
+
+    res.status(200).send({
+      message: 'OTP is Valid',
+      isOTPValid: true
+    });
+  });
+}
+
+const resetPassword = (req, res) => {
+  const { email, newPassword } = req.body;
+  const hashedPassword = bcrypt.hashSync(newPassword, 8);
+
+  db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
+    if(error){
+      console.log('Error updating password: ', error);
+      res.status(500).send({
+        message: 'Internal server error, try again later'
+      });
+      return;
+    }
+
+    db.query('DELETE FROM users_otp WHERE email = ?', [email], (error, results) => {
+      if(error) {
+        console.log('Error deleteing OTP: ', error);
+        res.status(500).send({
+          message: 'Internal server error, try again later'
+        });
+        return;
+      }
+
+      res.status(200).send({
+        message: 'Password reset successfully'
+      });
+    });
+  });
+}
+
+const changePassword = (req, res) => {
+  const { email, oldPassword, newPassword } = req.body;
+  
+  db.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
+      if(error) {
+          res.status(500).send({
+              message: 'Internal server error, Try again later'
+          });
+          return;
+      }
+      
+      if (results.length === 0) {
+          res.status(401).send({
+              status: "error",
+              message: "Email not registered",
+          });
+          return;
+      }
+      
+      const user = results[0];
+      
+      if (!user.password) {
+          res.status(500).send({
+              error: "Failed to retrieve user password",
+          });
+          return;
+      }
+
+      const isPassValid = bcrypt.compareSync(oldPassword, user.password);
+      
+      if(isPassValid) {
+        const hashedPassword = bcrypt.hashSync(newPassword, 8);
+          db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
+              if(error){
+                  res.status(500).send({
+                      message: 'Internal server error, Try agail later'
+                  });
+                  return;
+              }
+
+              res.status(200).send({
+                status: 'success',
+                message: 'Password is changed!'
+              })
+          });
+      } else {
+          res.status(401).send({
+              message: 'Invalid Old Password'
+          });
+          return;
+      }
+  });
+}
+
+module.exports = { 
+  register, 
+  login, 
+  forgotPassword, 
+  verifyOTP, 
+  resetPassword,
+  changePassword
+};

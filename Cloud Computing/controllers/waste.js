@@ -1,4 +1,4 @@
-const db = require("../database/db-config");
+const db = require("../config/db-config");
 
 require("dotenv").config();
 

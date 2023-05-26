@@ -19,8 +19,9 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
-    "mysql": "^2.16.0",
-    "nanoid": "^3.0.2",
+    "mysql": "^2.18.1",
+    "nanoid": "^3.3.6",
+    "nodemin": "^1.0.1",
     "nodemon": "^2.0.22"
   }
 }
