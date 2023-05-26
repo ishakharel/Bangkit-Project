@@ -16,6 +16,11 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
+            android:id="@+id/action_onBoardingFragment_to_registActivity"
+            app:destination="@id/registrastActivity"
+            app:popUpTo="@id/onBoardingFragment"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_splashFragment_to_onBoardingFragment"
             app:destination="@id/onBoardingFragment"
             app:popUpTo="@id/splashFragment"
