@@ -2,6 +2,8 @@ const { nanoid } = require("nanoid");
 const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
 const { format } = require("util");
+const sharp = require("sharp");
+const path = require("path");
 const userId = "4w3zSDRVZoNCCoFN";
 
 require("dotenv").config();
@@ -41,6 +43,9 @@ const upload = async (req, res) => {
     }
 
     // Create a new blob in the bucket and upload the file data.
+    const resizedImageBuffer = await sharp(req.file.buffer)
+      .resize(800, 600) // Specify the desired width and height
+      .toBuffer();
     const blob = bucket.file(req.file.originalname);
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -55,9 +60,10 @@ const upload = async (req, res) => {
       const publicUrl = format(
         `https://storage.googleapis.com/${bucket.name}/${blob.name}`
       );
+
       const id = nanoid(16);
       const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const values = [id, userId, 2, publicUrl, 100, new Date()];
+      const values = [id, userId, 1, publicUrl, 100, new Date()];
 
       try {
         // Make the file public
@@ -72,13 +78,13 @@ const upload = async (req, res) => {
       db.query(sql, values, (err, result) => {
         res.status(201).json({
           status: "success",
-          message: "Upload succesfully",
+          message: "Successfully upload!",
           url: publicUrl,
         });
       });
     });
 
-    blobStream.end(req.file.buffer);
+    blobStream.end(resizedImageBuffer);
   } catch (err) {
     res.status(500).send({
       message: `Could not upload the file: ${req.file.originalname}. ${err}`,
@@ -86,4 +92,17 @@ const upload = async (req, res) => {
   }
 };
 
-module.exports = { categories, histories, upload };
+const historyWithId = (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  db.query("SELECT * FROM waste_histories WHERE id = ? ", [id], (err, res) => {
+    if (err) {
+      return res.status(500).json({ message: id });
+    }
+
+    return res.status(200).json({ data: id });
+  });
+};
+
+module.exports = { categories, histories, upload, historyWithId };

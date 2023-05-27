@@ -18,4 +18,10 @@ const storage = new Storage({
 });
 const bucket = storage.bucket("scan-waste-users");
 
+const resize = async (image) =>
+  await sharp(image)
+    .resize(200, 200)
+    .jpeg({ quality: 90 })
+    .toFile(path.resolve(req.file.destination, "resized", image));
+
 module.exports = { multerConfig, storage, bucket, processFileConfig };
