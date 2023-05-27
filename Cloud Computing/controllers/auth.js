@@ -5,27 +5,30 @@ const { nanoid } = require("nanoid");
 const OTP = require('otp');
 const nodemailer = require('nodemailer');
 
-
 require("dotenv").config();
 
 const login = (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(400).json({ error: "Invalid request. Please provide email and password" });
+    res.status(400).json({
+      status: 'success',
+      message: 'Invalid request. Please provide email and password'
+    });
     return;
   }
 
-  db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
-    if (err) {
-      res.status(500).send({
+  db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
+    if (error) {
+      res.status(500).json({
         status: "error",
-        message: "Internal server error, please try again later",
+        message: "Internal server error, cannot find user email, please try again later",
       });
+      console.log(error)
       return;
     }
 
     if (results.length === 0) {
-      res.status(401).send({
+      res.status(404).send({
         status: "error",
         message: "Email not registered",
       });
@@ -33,14 +36,7 @@ const login = (req, res) => {
     }
 
     const user = results[0];
-
-    if (!user.password) {
-      res.status(500).send({
-        error: "Failed to retrieve user password",
-      });
-      return;
-    }
-
+    
     const isPassValid = bcrypt.compareSync(password, user.password);
 
     if (!isPassValid) {
@@ -172,8 +168,9 @@ const forgotPassword = (req, res) => {
   });
 }
 
-const verifyOTP = (req, res) => {
-  const { email, otp } = req.body;
+const resetPassword = (req, res) => {
+  const { email, newPassword, otp } = req.body;
+  
   db.query('SELECT * FROM users_otp WHERE email = ? AND otp = ? AND TIMESTAMPDIFF(MINUTE, created_at, NOW())', [email, otp], (error, results) => {
     if(error) {
       console.error('Error verifying OTP:', error);
@@ -182,45 +179,36 @@ const verifyOTP = (req, res) => {
       });
       return;
     }
-
+    
     if(results.length === 0) {
       res.status(400).send({
         message: 'Invalid OTP'
       });
       return;
     }
-
-    res.status(200).send({
-      message: 'OTP is Valid',
-      isOTPValid: true
-    });
-  });
-}
-
-const resetPassword = (req, res) => {
-  const { email, newPassword } = req.body;
-  const hashedPassword = bcrypt.hashSync(newPassword, 8);
-
-  db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
-    if(error){
-      console.log('Error updating password: ', error);
-      res.status(500).send({
-        message: 'Internal server error, try again later'
-      });
-      return;
-    }
-
-    db.query('DELETE FROM users_otp WHERE email = ?', [email], (error, results) => {
-      if(error) {
-        console.log('Error deleteing OTP: ', error);
+    
+    const hashedPassword = bcrypt.hashSync(newPassword, 8);
+    db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
+      if(error){
+        console.log('Error updating password: ', error);
         res.status(500).send({
           message: 'Internal server error, try again later'
         });
         return;
       }
-
-      res.status(200).send({
-        message: 'Password reset successfully'
+  
+      db.query('DELETE FROM users_otp WHERE email = ?', [email], (error, results) => {
+        if(error) {
+          console.log('Error deleteing OTP: ', error);
+          res.status(500).send({
+            message: 'Internal server error, try again later'
+          });
+          return;
+        }
+  
+        res.status(200).send({
+          message: 'Password reset successfully'
+        });
       });
     });
   });
@@ -280,11 +268,37 @@ const changePassword = (req, res) => {
   });
 }
 
+const checkAuth = (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    res.status(400).send({
+      status: 'error',
+      message: 'Invalid request, Please provide token'
+    });
+  }
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  if(!decodedToken){
+    res.status(401).send({
+      status: 'error',
+      message: 'Unautherized user'
+    });
+  }
+
+  res.status(200).send({
+    status: 'Success',
+    message: 'User Autherized',
+    data: {
+      userId: decodedToken.id
+    }
+  });
+}
+
 module.exports = { 
   register, 
   login, 
-  forgotPassword, 
-  verifyOTP, 
+  forgotPassword,
   resetPassword,
-  changePassword
+  changePassword,
+  checkAuth
 };
