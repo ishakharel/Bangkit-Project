@@ -1,5 +1,5 @@
 const db = require('../config/db-config');
-const nanoid = require('nanoid');
+const { nanoid } = require('nanoid');
 
 const getUserById = (req, res) => {
     const userId = req.params.id;
@@ -49,7 +49,7 @@ const changeUsername = (req, res) => {
         return;
     }
 
-    db.query('UPDATE users SET name = ?, WHERE id = ?', [newUsername, userId], (error, results) => {
+    db.query('UPDATE users SET name = ? WHERE id = ?', [newUsername, userId], (error, results) => {
         if(error){
             res.status(500).json({
                 status: 'error',
@@ -182,7 +182,7 @@ const addNotification = (req, res) => {
     const id = nanoid(20);
 
     db.query('INSERT INTO users_notifications VALUES (?, ?, ?, ?, NOW())', 
-    [id, userId, title, message, date], (error, results) => {
+    [id, userId, title, message], (error, results) => {
         if(error){
             res.status(500).json({
                 status: 'error',
@@ -219,6 +219,14 @@ const getNotificationByUserId = (req, res) => {
             return;
         }
 
+        if(results.length === 0){
+            res.status(404).json({
+                status: 'error',
+                message: 'Notification not found'
+            });
+            return;
+        }
+
         res.status(200).json({
             status: 'success',
             data: results
@@ -235,7 +243,7 @@ const deleteNotificationById = (req, res) => {
         });
         return;
     }
-    db.query('DELETE FROM user_notifications WHERE id = ?', [notifId], (error, results) => {
+    db.query('SELECT * FROM users_notifications WHERE id = ?', [notifId], (error, results) => {
         if(error){
             res.status(500).json({
                 status: 'error',
@@ -245,10 +253,28 @@ const deleteNotificationById = (req, res) => {
             return;
         }
 
-        res.status(200).json({
-            status: 'success',
-            message: 'notifications is successfully delete'
-        })
+        if(results.length === 0){
+            res.status(404).json({
+                status: 'error',
+                message: 'Notification not found'
+            });
+            return;
+        }
+        db.query('DELETE FROM users_notifications WHERE id = ?', [notifId], (error, results) => {
+            if(error){
+                res.status(500).json({
+                    status: 'error',
+                    message: 'Internal server error. Cannot delete user notification, please try again later',
+                });
+                console.log(error);
+                return;
+            }
+    
+            res.status(200).json({
+                status: 'success',
+                message: 'notifications is successfully delete'
+            })
+        });
     });
 }
 

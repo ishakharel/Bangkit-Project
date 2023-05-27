@@ -2,9 +2,8 @@ const db = require("../config/db-config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { nanoid } = require("nanoid");
-const OTP = require('otp');
 const nodemailer = require('nodemailer');
-
+const otpGenerator = require("otp-generator");
 require("dotenv").config();
 
 const login = (req, res) => {
@@ -56,6 +55,7 @@ const login = (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        image: user.image,
         points: user.total_points,
         token: token,
       },
@@ -115,35 +115,6 @@ const register = (req, res) => {
   });
 };
 
-const generateOTP = () => {
-  const otp = new OTP();
-  return otp.generate(6, { specialChars: false} );
-}
-
-const sendOTP = (email, otp) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD
-    }
-  });
-
-  const mailOptions = {
-    from: process.env.EMAIL_USERNAME,
-    to: email,
-    subject: 'Password reset OTP',
-    text: `Your OTP for password reset is: ${otp}`
-  }
-
-  try {
-    transporter.sendMail(mailOptions);
-    console.log('OTP sent to email');
-  } catch (error) {
-    console.log('Error sending OTP:', error);
-  }
-}
-
 const forgotPassword = (req, res) => {
   const { email } = req.body;
   if(!email) {
@@ -163,7 +134,7 @@ const forgotPassword = (req, res) => {
       return;
     }
 
-    if(results === 0){
+    if(results.length === 0){
       res.status(404).json({
         status: 'error',
         message: 'Email not found'
@@ -171,9 +142,9 @@ const forgotPassword = (req, res) => {
       return;
     }
 
-    const otp = generateOTP();
+    const generatedOTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
 
-    db.query('INSERT INTO users_otp (email, otp) VALUES (?, ?)', [email, otp], (error, results) => {
+    db.query('INSERT INTO users_otp (email, otp) VALUES (?, ?)', [email, generatedOTP], (error, results) => {
       if(error){
         res.status(500).json({
           status: 'error',
@@ -183,9 +154,38 @@ const forgotPassword = (req, res) => {
         return;
       }
 
-      sendOTP(email, otp)
-        .then(()=> res.status(200).json({ status: 'success', message: 'OTP sent successfully'}))
-        .catch(() => res.status(500).json({ status: 'error', message: 'Internal server error. Cannot send to email, please try again later'}));
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+    
+      const mailOptions = {
+        from: process.env.EMAIL_USERNAME,
+        to: email,
+        subject: 'Password reset OTP',
+        text: `Your OTP for password reset is: ${generatedOTP}`
+      }
+
+      transporter.sendMail(mailOptions, (error) => {
+        if(error) {
+          res.status(500).json({
+            status: 'error',
+            message: 'Failed to send OTP email.' 
+          });
+          console.log(error);
+        } else {
+          res.status(200).json({
+            status: 'success',
+            message: 'OTP email sent successfully' 
+          });
+        }
+      });
     });
   });
 }
@@ -213,7 +213,7 @@ const resetPassword = (req, res) => {
     if(results.length === 0) {
       res.status(400).json({
         status: 'error',
-        message: 'Invalid OTP'
+        message: 'Invalid OTP and Email'
       });
       return;
     }
@@ -259,50 +259,50 @@ const changePassword = (req, res) => {
   }
   
   db.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
-      if(error) {
+    if(error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal server error, Cannot find email, try again later'
+      });
+      console.log(error);
+      return;
+    }
+    
+    if (results.length === 0) {
+      res.status(401).json({
+        status: "error",
+        message: "Email not registered",
+      });
+      return;
+    }
+    
+    const user = results[0];
+    const isPassValid = bcrypt.compareSync(oldPassword, user.password);
+    
+    if(isPassValid) {
+      const hashedPassword = bcrypt.hashSync(newPassword, 8);
+      db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
+        if(error){
           res.status(500).json({
-            status: 'error',
-            message: 'Internal server error, Cannot find email, try again later'
+            status: "error",
+            message: 'Internal server error. Cannot update user Try again later'
           });
           console.log(error);
           return;
-      }
-      
-      if (results.length === 0) {
-          res.status(401).json({
-            status: "error",
-            message: "Email not registered",
-          });
-          return;
-      }
-      
-      const user = results[0];
-      const isPassValid = bcrypt.compareSync(oldPassword, user.password);
-      
-      if(isPassValid) {
-        const hashedPassword = bcrypt.hashSync(newPassword, 8);
-          db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
-              if(error){
-                  res.status(500).json({
-                    status: "error",
-                    message: 'Internal server error. Cannot update user Try again later'
-                  });
-                  console.log(error);
-                  return;
-              }
+        }
 
-              res.status(200).json({
-                status: 'success',
-                message: 'Password is changed!'
-              })
-          });
-      } else {
-          res.status(401).json({
-            status: "error",
-            message: 'Invalid Old Password'
-          });
-          return;
-      }
+        res.status(200).json({
+          status: 'success',
+          message: 'Password is changed!'
+        })
+      });
+    } else {
+      res.status(401).json({
+        status: "error",
+        message: 'Invalid Old Password'
+      });
+      return;
+    }
   });
 }
 

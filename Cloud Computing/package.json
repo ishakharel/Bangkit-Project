@@ -21,7 +21,7 @@
     "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "nanoid": "^3.3.6",
-    "nodemin": "^1.0.1",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "otp-generator": "^4.0.1"
   }
 }
