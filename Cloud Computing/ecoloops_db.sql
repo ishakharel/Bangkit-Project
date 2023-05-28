@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 24, 2023 at 03:34 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: May 28, 2023 at 04:09 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecoloops_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `merch`
+--
+
+CREATE TABLE `merch` (
+  `id` int(11) NOT NULL,
+  `name` char(100) NOT NULL,
+  `points` int(11) NOT NULL,
+  `stok` int(11) NOT NULL,
+  `image` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `merch`
+--
+
+INSERT INTO `merch` (`id`, `name`, `points`, `stok`, `image`) VALUES
+(1, 'T-Shirt EcoLoops', 25000, 7, ''),
+(2, 'Gopay Coin', 10, 10, '');
 
 -- --------------------------------------------------------
 
@@ -45,7 +67,47 @@ CREATE TABLE `users` (
   `name` text NOT NULL,
   `email` text NOT NULL,
   `password` text NOT NULL,
+  `image` text NOT NULL,
   `total_points` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_merch_redeem`
+--
+
+CREATE TABLE `users_merch_redeem` (
+  `id` char(20) NOT NULL,
+  `user_id` char(16) NOT NULL,
+  `merch_id` int(11) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_notifications`
+--
+
+CREATE TABLE `users_notifications` (
+  `id` char(20) NOT NULL,
+  `user_id` char(16) NOT NULL,
+  `title` text NOT NULL,
+  `message` text NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_otp`
+--
+
+CREATE TABLE `users_otp` (
+  `email` text NOT NULL,
+  `otp` char(6) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -106,6 +168,12 @@ CREATE TABLE `waste_history` (
 --
 
 --
+-- Indexes for table `merch`
+--
+ALTER TABLE `merch`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `new_waste_category`
 --
 ALTER TABLE `new_waste_category`
@@ -115,6 +183,18 @@ ALTER TABLE `new_waste_category`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users_merch_redeem`
+--
+ALTER TABLE `users_merch_redeem`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users_notifications`
+--
+ALTER TABLE `users_notifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -134,6 +214,12 @@ ALTER TABLE `waste_history`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `merch`
+--
+ALTER TABLE `merch`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `new_waste_category`
