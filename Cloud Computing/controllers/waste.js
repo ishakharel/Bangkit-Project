@@ -1,4 +1,9 @@
+const { nanoid } = require("nanoid");
 const db = require("../config/db-config");
+const { bucket, processFileConfig } = require("../config/storage-config");
+const { format } = require("util");
+const sharp = require("sharp");
+const userId = "4w3zSDRVZoNCCoFN";
 
 require("dotenv").config();
 
@@ -13,8 +18,24 @@ const categories = (req, res) => {
   });
 };
 
+const categoriesWithId = (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    "SELECT * FROM waste_category WHERE id = ? ",
+    [id],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Server Error!");
+      }
+
+      return res.status(200).json(result);
+    }
+  );
+};
+
 const histories = (req, res) => {
-  const userId = req.session.userId;
   db.query(
     "SELECT * FROM waste_history WHERE user_id = ?",
     [userId],
@@ -29,48 +50,80 @@ const histories = (req, res) => {
   );
 };
 
-const upload = (req, res) => {
-  // const userId = req.session.userId;
-  const id = nanoid(16);
+const upload = async (req, res) => {
+  try {
+    await processFileConfig(req, res);
 
-  // if (!userId) {
-  //   res.send("You are not logged in");
-  //   return;
-  // }
-
-  const { categoryId, userId } = req.body;
-  const imageFile = req.file;
-
-  // Upload the image file to Google Cloud Storage
-  const file = storage.bucket(bucketName).file(imageFile.originalname);
-  const stream = file.createWriteStream({
-    metadata: {
-      contentType: imageFile.mimetype,
-    },
-  });
-
-  stream.on("error", (err) => {
-    console.error("Error uploading image to Google Cloud Storage:", err);
-    res.status(500).send("Server Error");
-  });
-
-  stream.on("finish", async () => {
-    // Insert the post data into the MySQL database
-    const imageUrl = `https://storage.googleapis.com/${bucketName}/${file.name}`;
-    const sql =
-      "INSERT INTO posts (id, user_id, category_id, image, point, date) VALUES (?, ?, ?, ?, ?)";
-    const values = [id, userId, categoryId, imageUrl, 100, new Date()];
-
-    try {
-      await db.query(sql, values);
-      res.status(200).send("Post created successfully");
-    } catch (error) {
-      console.error("Error inserting post:", error);
-      res.status(500).send("Server Error");
+    if (!req.file) {
+      return res.status(400).send({ message: "Please upload a file!" });
     }
-  });
 
-  stream.end(imageFile.buffer);
+    // Create a new blob in the bucket and upload the file data.
+    const resizedImageBuffer = await sharp(req.file.buffer)
+      .resize(200, 200) // Specify the desired width and height
+      .toBuffer();
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+    });
+
+    blobStream.on("error", (err) => {
+      res.status(500).send({ message: err.message });
+    });
+
+    blobStream.on("finish", async (data) => {
+      // Create URL for directly file access via HTTP.
+      const publicUrl = format(
+        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+      );
+
+      const id = nanoid(16);
+      const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
+      const values = [id, userId, 1, publicUrl, 100, new Date()];
+
+      try {
+        // Make the file public
+        await bucket.file(req.file.originalname).makePublic();
+      } catch {
+        return res.status(500).send({
+          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
+          url: publicUrl,
+        });
+      }
+
+      db.query(sql, values, (err, result) => {
+        res.status(201).json({
+          status: "success",
+          message: "Successfully upload!",
+          url: publicUrl,
+        });
+      });
+    });
+
+    blobStream.end(resizedImageBuffer);
+  } catch (err) {
+    res.status(500).send({
+      message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+    });
+  }
 };
 
-module.exports = { categories, histories, upload };
+const historyWithId = (req, res) => {
+  const { id } = req.params;
+
+  db.query("SELECT * FROM waste_histories WHERE id = ? ", [id], (err, res) => {
+    if (err) {
+      return res.status(500).json({ message: id });
+    }
+
+    return res.status(200).json({ data: id });
+  });
+};
+
+module.exports = {
+  categories,
+  histories,
+  upload,
+  historyWithId,
+  categoriesWithId,
+};

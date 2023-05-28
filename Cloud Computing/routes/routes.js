@@ -26,5 +26,8 @@ router.delete("/user/notif/:id", userController.deleteNotificationById);
 //Waste
 router.get("/waste/categories", wasteController.categories);
 router.get("/waste/histories", wasteController.histories);
+router.get("/waste/histories/:id", wasteController.historyWithId);
+router.get("/waste/categories/:id", wasteController.categoriesWithId);
+router.post("/waste/upload", wasteController.upload);
 
 module.exports = router;
