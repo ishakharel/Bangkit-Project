@@ -3,7 +3,6 @@ const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
 const { format } = require("util");
 const sharp = require("sharp");
-const path = require("path");
 const userId = "4w3zSDRVZoNCCoFN";
 
 require("dotenv").config();
@@ -17,6 +16,23 @@ const categories = (req, res) => {
 
     return res.status(200).json(result);
   });
+};
+
+const categoriesWithId = (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    "SELECT * FROM waste_category WHERE id = ? ",
+    [id],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Server Error!");
+      }
+
+      return res.status(200).json(result);
+    }
+  );
 };
 
 const histories = (req, res) => {
@@ -44,7 +60,7 @@ const upload = async (req, res) => {
 
     // Create a new blob in the bucket and upload the file data.
     const resizedImageBuffer = await sharp(req.file.buffer)
-      .resize(800, 600) // Specify the desired width and height
+      .resize(200, 200) // Specify the desired width and height
       .toBuffer();
     const blob = bucket.file(req.file.originalname);
     const blobStream = blob.createWriteStream({
@@ -94,7 +110,6 @@ const upload = async (req, res) => {
 
 const historyWithId = (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   db.query("SELECT * FROM waste_histories WHERE id = ? ", [id], (err, res) => {
     if (err) {
@@ -105,4 +120,10 @@ const historyWithId = (req, res) => {
   });
 };
 
-module.exports = { categories, histories, upload, historyWithId };
+module.exports = {
+  categories,
+  histories,
+  upload,
+  historyWithId,
+  categoriesWithId,
+};
