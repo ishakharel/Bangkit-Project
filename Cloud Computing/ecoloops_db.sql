@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2023 at 04:09 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: May 31, 2023 at 12:35 AM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,7 @@ CREATE TABLE `merch` (
   `points` int(11) NOT NULL,
   `stok` int(11) NOT NULL,
   `image` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `merch`
@@ -54,7 +54,7 @@ CREATE TABLE `new_waste_category` (
   `name` char(100) NOT NULL,
   `category` char(50) NOT NULL,
   `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -64,12 +64,22 @@ CREATE TABLE `new_waste_category` (
 
 CREATE TABLE `users` (
   `id` char(16) NOT NULL,
+  `token` text NOT NULL,
   `name` text NOT NULL,
   `email` text NOT NULL,
   `password` text NOT NULL,
   `image` text NOT NULL,
   `total_points` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `token`, `name`, `email`, `password`, `image`, `total_points`) VALUES
+('1a52iANbZpmhLG-K', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhNTJpQU5iWnBtaExHLUsiLCJpYXQiOjE2ODU0NDM1MDIsImV4cCI6MTY5MzIxOTUwMn0.qA5HgvhhW3WAxbIbxeBOwK0uWRHJyU6ggBOyZUv19Og', 'Azka Z H', 'azka@gmail.com', '$2a$08$I2xkNDdO6jrtyczNjCG3ZO9FzJNnLkxeYWK9cqGa62OXjO2NiCYvG', '', 100),
+('CP84Nc5Uf7tuQL17', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNQODROYzVVZjd0dVFMMTciLCJpYXQiOjE2ODU0NDI5NzcsImV4cCI6MTY5MzIxODk3N30.-TejwzSM2DaGiGK1CGkrKGhe6bwR6Pnz8TbNFVQKUMY', 'Azka Z Hanif', 'azka@mail.com', '$2a$08$Pcc0PO4SENzDryX8Wre3IucuYs4Z.NQEeSNG5Xka3K2R.J.gQNuBC', '', 100),
+('Eq-vXTztcEo4LfJi', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVxLXZYVHp0Y0VvNExmSmkiLCJpYXQiOjE2ODU0NDQ4NzMsImV4cCI6MTY5MzIyMDg3M30.__YOdxkfHZdA9xDio3lr5b2bbzpfwlGeF6KxvlY-Jnw', 'Azka Zufar Hanif', 'azkazhanif@gmail.com', '$2a$08$f.N6wv010.9i6xLQBufISOCNoN1iH/2l8oyskIuYfZgxdpWj8VfaK', '', 100);
 
 -- --------------------------------------------------------
 
@@ -82,7 +92,7 @@ CREATE TABLE `users_merch_redeem` (
   `user_id` char(16) NOT NULL,
   `merch_id` int(11) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -96,7 +106,14 @@ CREATE TABLE `users_notifications` (
   `title` text NOT NULL,
   `message` text NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users_notifications`
+--
+
+INSERT INTO `users_notifications` (`id`, `user_id`, `title`, `message`, `date`) VALUES
+('aH-1wGlNhtYB3c74q85_', 'CP84Nc5Uf7tuQL17', 'Notif 1', 'Hadiah mobil hotwheels', '2023-05-30');
 
 -- --------------------------------------------------------
 
@@ -108,7 +125,7 @@ CREATE TABLE `users_otp` (
   `email` text NOT NULL,
   `otp` char(6) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -124,7 +141,7 @@ CREATE TABLE `waste_category` (
   `category` char(50) NOT NULL,
   `description_recycle` text NOT NULL,
   `points` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `waste_category`
@@ -161,7 +178,23 @@ CREATE TABLE `waste_history` (
   `image` text NOT NULL,
   `point` int(11) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `waste_history`
+--
+
+INSERT INTO `waste_history` (`id`, `user_id`, `category_id`, `image`, `point`, `date`) VALUES
+('48TEvD0OmdZnoGox', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('5NpsxeQar5WhkFpt', 'CP84Nc5Uf7tuQL17', 6, 'https://storage.googleapis.com/scan-waste-users/MASTER.png', 100, '2023-05-30'),
+('B3VZyR7uCHixQiu7', 'Eq-vXTztcEo4LfJi', 8, 'https://storage.googleapis.com/scan-waste-users/WhatsApp Image 2023-05-18 at 10.59.04.jpg', 100, '2023-05-30'),
+('dmDiUahg0XBYYyp9', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('g6NuBwUWQcBWF75l', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('HY0MfESUEBN-ngNC', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('ki4oO115g2-ZLcB9', 'CP84Nc5Uf7tuQL17', 8, 'https://storage.googleapis.com/scan-waste-users/MASTER.png', 100, '2023-05-30'),
+('ucA8X-20S_b1yL3j', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('UZZwsfAvAvQjlNz0', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('YdBFsJOq0X6u1QHr', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30');
 
 --
 -- Indexes for dumped tables
