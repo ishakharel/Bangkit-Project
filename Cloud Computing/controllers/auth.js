@@ -2,7 +2,7 @@ const db = require("../config/db-config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { nanoid } = require("nanoid");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 require("dotenv").config();
 
@@ -10,8 +10,8 @@ const login = (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).json({
-      status: 'error',
-      message: 'Invalid request. Please provide email and password'
+      status: "error",
+      message: "Invalid request. Please provide email and password",
     });
     return;
   }
@@ -20,7 +20,8 @@ const login = (req, res) => {
     if (error) {
       res.status(500).json({
         status: "error",
-        message: "Internal server error. Cannot find email, please try again later",
+        message:
+          "Internal server error. Cannot find email, please try again later",
       });
       console.log(error);
       return;
@@ -65,11 +66,11 @@ const login = (req, res) => {
 
 const register = (req, res) => {
   const { email, password, name } = req.body;
-  
-  if(!email || !password || !name) {
+
+  if (!email || !password || !name) {
     res.status(400).json({
       status: "error",
-      message: "Invalid request, please provide email, password, and name"
+      message: "Invalid request, please provide email, password, and name",
     });
     return;
   }
@@ -78,7 +79,8 @@ const register = (req, res) => {
     if (error) {
       res.status(500).json({
         status: "error",
-        message: "Internal server error. Cannot find email, please try again later",
+        message:
+          "Internal server error. Cannot find email, please try again later",
       });
       console.log(error);
       return;
@@ -96,12 +98,14 @@ const register = (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     db.query(
-      'INSERT INTO users VALUES (?, ?, ?, ?, ?)', [id, name, email, hashedPassword, 0],
+      "INSERT INTO users (id, name, email, password, total_points) VALUES (?, ?, ?, ?, ?)",
+      [id, name, email, hashedPassword, 0],
       (error, results) => {
         if (error) {
           res.status(500).json({
             status: "error",
-            message: "Internal server error. Cannot insert user, please try again later",
+            message:
+              "Internal server error. Cannot insert user, please try again later",
           });
           console.log(error);
           return;
@@ -117,157 +121,182 @@ const register = (req, res) => {
 
 const forgotPassword = (req, res) => {
   const { email } = req.body;
-  if(!email) {
+  if (!email) {
     res.status(400).json({
-      status: 'error',
-      message: 'Invalid request. Please provide email'
+      status: "error",
+      message: "Invalid request. Please provide email",
     });
     return;
   }
-  db.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
-    if(error){
+  db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
+    if (error) {
       res.status(500).json({
-        status: 'error',
-        message: 'Internal server error. Cannot find email, please try again later',
+        status: "error",
+        message:
+          "Internal server error. Cannot find email, please try again later",
       });
       console.log(error);
       return;
     }
 
-    if(results.length === 0){
+    if (results.length === 0) {
       res.status(404).json({
-        status: 'error',
-        message: 'Email not found'
+        status: "error",
+        message: "Email not found",
       });
       return;
     }
 
-    const generatedOTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-
-    db.query('INSERT INTO users_otp (email, otp) VALUES (?, ?)', [email, generatedOTP], (error, results) => {
-      if(error){
-        res.status(500).json({
-          status: 'error',
-          message: 'Internal server error. Cannot insert otp, please try again later',
-        });
-        console.log(error);
-        return;
-      }
-
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD
-        }
-      });
-    
-      const mailOptions = {
-        from: process.env.EMAIL_USERNAME,
-        to: email,
-        subject: 'Password reset OTP',
-        text: `Your OTP for password reset is: ${generatedOTP}`
-      }
-
-      transporter.sendMail(mailOptions, (error) => {
-        if(error) {
-          res.status(500).json({
-            status: 'error',
-            message: 'Failed to send OTP email.' 
-          });
-          console.log(error);
-        } else {
-          res.status(200).json({
-            status: 'success',
-            message: 'OTP email sent successfully' 
-          });
-        }
-      });
+    const generatedOTP = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
     });
-  });
-}
 
-const resetPassword = (req, res) => {
-  const { email, newPassword, otp } = req.body;
-  if(!email || !newPassword || !otp) {
-    res.status(400).json({
-      status: 'error',
-      message: 'Invalid request. Please provide email, password and otp'
-    });
-    return;
-  }
-  
-  db.query('SELECT * FROM users_otp WHERE email = ? AND otp = ? AND TIMESTAMPDIFF(MINUTE, created_at, NOW())', [email, otp], (error, results) => {
-    if(error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Internal server error. Cannot verifying OTP, please try again later'
-      });
-      console.log(error);
-      return;
-    }
-    
-    if(results.length === 0) {
-      res.status(400).json({
-        status: 'error',
-        message: 'Invalid OTP and Email'
-      });
-      return;
-    }
-    
-    const hashedPassword = bcrypt.hashSync(newPassword, 8);
-    db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
-      if(error){
-        res.status(500).json({
-          status: 'error',
-          message: 'Internal server error. Cannot update password, please try again later'
-        });
-        console.log(error);
-        return;
-      }
-  
-      db.query('DELETE FROM users_otp WHERE email = ?', [email], (error, results) => {
-        if(error) {
+    db.query(
+      "INSERT INTO users_otp (email, otp) VALUES (?, ?)",
+      [email, generatedOTP],
+      (error, results) => {
+        if (error) {
           res.status(500).json({
-            status: 'error',
-            message: 'Internal server error. Cannot delete OTP code, please try again later'
+            status: "error",
+            message:
+              "Internal server error. Cannot insert otp, please try again later",
           });
           console.log(error);
           return;
         }
-  
-        res.status(200).json({
-          status: 'success',
-          message: 'Password reset successfully'
-        });
-      });
-    });
-  });
-}
 
-const changePassword = (req, res) => {
-  const { email, oldPassword, newPassword } = req.body;
-  if(!email || !oldPassword || !newPassword) {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
+          },
+        });
+
+        const mailOptions = {
+          from: process.env.EMAIL_USERNAME,
+          to: email,
+          subject: "Password reset OTP",
+          text: `Your OTP for password reset is: ${generatedOTP}`,
+        };
+
+        transporter.sendMail(mailOptions, (error) => {
+          if (error) {
+            res.status(500).json({
+              status: "error",
+              message: "Failed to send OTP email.",
+            });
+            console.log(error);
+          } else {
+            res.status(200).json({
+              status: "success",
+              message: "OTP email sent successfully",
+            });
+          }
+        });
+      }
+    );
+  });
+};
+
+const resetPassword = (req, res) => {
+  const { email, newPassword, otp } = req.body;
+  if (!email || !newPassword || !otp) {
     res.status(400).json({
-      status: 'error',
-      message: 'Invalid request. Please provide email, old password, and new password'
+      status: "error",
+      message: "Invalid request. Please provide email, password and otp",
     });
     return;
   }
-  
-  db.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
-    if(error) {
+
+  db.query(
+    "SELECT * FROM users_otp WHERE email = ? AND otp = ? AND TIMESTAMPDIFF(MINUTE, created_at, NOW())",
+    [email, otp],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({
+          status: "error",
+          message:
+            "Internal server error. Cannot verifying OTP, please try again later",
+        });
+        console.log(error);
+        return;
+      }
+
+      if (results.length === 0) {
+        res.status(400).json({
+          status: "error",
+          message: "Invalid OTP and Email",
+        });
+        return;
+      }
+
+      const hashedPassword = bcrypt.hashSync(newPassword, 8);
+      db.query(
+        "UPDATE users SET password = ? WHERE email = ?",
+        [hashedPassword, email],
+        (error, results) => {
+          if (error) {
+            res.status(500).json({
+              status: "error",
+              message:
+                "Internal server error. Cannot update password, please try again later",
+            });
+            console.log(error);
+            return;
+          }
+
+          db.query(
+            "DELETE FROM users_otp WHERE email = ?",
+            [email],
+            (error, results) => {
+              if (error) {
+                res.status(500).json({
+                  status: "error",
+                  message:
+                    "Internal server error. Cannot delete OTP code, please try again later",
+                });
+                console.log(error);
+                return;
+              }
+
+              res.status(200).json({
+                status: "success",
+                message: "Password reset successfully",
+              });
+            }
+          );
+        }
+      );
+    }
+  );
+};
+
+const changePassword = (req, res) => {
+  const { email, oldPassword, newPassword } = req.body;
+  if (!email || !oldPassword || !newPassword) {
+    res.status(400).json({
+      status: "error",
+      message:
+        "Invalid request. Please provide email, old password, and new password",
+    });
+    return;
+  }
+
+  db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
+    if (error) {
       res.status(500).json({
-        status: 'error',
-        message: 'Internal server error, Cannot find email, try again later'
+        status: "error",
+        message: "Internal server error, Cannot find email, try again later",
       });
       console.log(error);
       return;
     }
-    
+
     if (results.length === 0) {
       res.status(401).json({
         status: "error",
@@ -275,70 +304,79 @@ const changePassword = (req, res) => {
       });
       return;
     }
-    
+
     const user = results[0];
     const isPassValid = bcrypt.compareSync(oldPassword, user.password);
-    
-    if(isPassValid) {
-      const hashedPassword = bcrypt.hashSync(newPassword, 8);
-      db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email], (error, results) => {
-        if(error){
-          res.status(500).json({
-            status: "error",
-            message: 'Internal server error. Cannot update user Try again later'
-          });
-          console.log(error);
-          return;
-        }
 
-        res.status(200).json({
-          status: 'success',
-          message: 'Password is changed!'
-        })
-      });
+    if (isPassValid) {
+      const hashedPassword = bcrypt.hashSync(newPassword, 8);
+      db.query(
+        "UPDATE users SET password = ? WHERE email = ?",
+        [hashedPassword, email],
+        (error, results) => {
+          if (error) {
+            res.status(500).json({
+              status: "error",
+              message:
+                "Internal server error. Cannot update user Try again later",
+            });
+            console.log(error);
+            return;
+          }
+
+          res.status(200).json({
+            status: "success",
+            message: "Password is changed!",
+          });
+        }
+      );
     } else {
       res.status(401).json({
         status: "error",
-        message: 'Invalid Old Password'
+        message: "Invalid Old Password",
       });
       return;
     }
   });
-}
+};
 
 const checkAuth = (req, res) => {
-  const { token } = req.body;
+  // const { token } = req.body;
+  const authHeader = req.headers["authentication"];
+  const token = authHeader.replace("Bearer ", "");
+  console.log(token);
+
   if (!token) {
     res.status(400).json({
-      status: 'error',
-      message: 'Invalid request, Please provide token'
+      status: "error",
+      message: "Invalid request, Please provide token",
     });
     return;
   }
 
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  if(!decodedToken){
+  if (!decodedToken) {
     res.status(401).json({
-      status: 'error',
-      message: 'Unautherized user'
+      status: "error",
+      message: "Unautherized user",
     });
     return;
   }
 
   res.status(200).json({
-    status: 'Success',
-    message: 'User Autherized',
+    status: "Success",
+    message: "User Autherized",
     data: {
-      userId: decodedToken.id
-    }
+      userId: decodedToken.id,
+    },
   });
-}
+};
 
-module.exports = { 
-  register, 
-  login, 
+module.exports = {
+  register,
+  login,
   forgotPassword,
   resetPassword,
   changePassword,
-  checkAuth
+  checkAuth,
 };

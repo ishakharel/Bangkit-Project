@@ -18,16 +18,19 @@ router.get("/user/notif/:id", userController.getNotificationByUserId);
 router.get("/user/user/:id", userController.getUserById);
 router.get("/user/merch", userController.getAllMerch);
 router.get("/user/points/:id", userController.checkPoints);
-router.get("/user/merch-redeemed/:id", userController.getMerchRedeemedByUserId)
+router.get("/user/merch-redeemed/:id", userController.getMerchRedeemedByUserId);
 router.put("/user/points/:id", userController.exchangePoints);
 router.put("/user/username/:id", userController.changeUsername);
 router.delete("/user/notif/:id", userController.deleteNotificationById);
 
 //Waste
 router.get("/waste/categories", wasteController.categories);
-router.get("/waste/histories", wasteController.histories);
-router.get("/waste/histories/:id", wasteController.historyWithId);
-router.get("/waste/categories/:id", wasteController.categoriesWithId);
+router.get("/waste/histories/:user_id", wasteController.histories);
+router.get(
+  "/waste/histories/:user_id/:history_id",
+  wasteController.historyDetail
+);
+router.get("/waste/categories/:category_id", wasteController.categoryById);
 router.post("/waste/upload", wasteController.upload);
 
 module.exports = router;

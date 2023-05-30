@@ -3,7 +3,8 @@ const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
 const { format } = require("util");
 const sharp = require("sharp");
-const userId = "4w3zSDRVZoNCCoFN";
+const { tf } = require("@tensorflow/tfjs");
+// const userId = "4w3zSDRVZoNCCoFN";
 
 require("dotenv").config();
 
@@ -18,12 +19,12 @@ const categories = (req, res) => {
   });
 };
 
-const categoriesWithId = (req, res) => {
-  const { id } = req.params;
+const categoryById = (req, res) => {
+  const categoryId = req.params.category_id;
 
   db.query(
     "SELECT * FROM waste_category WHERE id = ? ",
-    [id],
+    [categoryId],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -36,6 +37,8 @@ const categoriesWithId = (req, res) => {
 };
 
 const histories = (req, res) => {
+  const userId = req.params.user_id;
+
   db.query(
     "SELECT * FROM waste_history WHERE user_id = ?",
     [userId],
@@ -50,8 +53,36 @@ const histories = (req, res) => {
   );
 };
 
+const historyDetail = (req, res) => {
+  const userId = req.params.id;
+  const id = req.params.history_id;
+
+  db.query(
+    "SELECT * FROM waste_history WHERE user_id = ? AND id = ? ",
+    [userId, id],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Server Error!");
+      }
+
+      return res.status(200).json({ id: userId, data: result });
+    }
+  );
+};
+
 const upload = async (req, res) => {
   try {
+    const userId = req.headers["id"];
+
+    if (!userId) {
+      res.status(400).json({
+        status: "error",
+        message: "Invalid request. Please provide user id",
+      });
+      return;
+    }
+
     await processFileConfig(req, res);
 
     if (!req.file) {
@@ -62,6 +93,7 @@ const upload = async (req, res) => {
     const resizedImageBuffer = await sharp(req.file.buffer)
       .resize(200, 200) // Specify the desired width and height
       .toBuffer();
+
     const blob = bucket.file(req.file.originalname);
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -92,11 +124,17 @@ const upload = async (req, res) => {
       }
 
       db.query(sql, values, (err, result) => {
-        res.status(201).json({
-          status: "success",
-          message: "Successfully upload!",
-          url: publicUrl,
-        });
+        db.query(
+          "UPDATE users SET total_points = (SELECT SUM(point) FROM waste_history WHERE waste_history.user_id = ?)",
+          [userId],
+          (err, result) => {
+            res.status(201).json({
+              status: "success",
+              message: "Successfully upload!",
+              url: publicUrl,
+            });
+          }
+        );
       });
     });
 
@@ -108,22 +146,10 @@ const upload = async (req, res) => {
   }
 };
 
-const historyWithId = (req, res) => {
-  const { id } = req.params;
-
-  db.query("SELECT * FROM waste_histories WHERE id = ? ", [id], (err, res) => {
-    if (err) {
-      return res.status(500).json({ message: id });
-    }
-
-    return res.status(200).json({ data: id });
-  });
-};
-
 module.exports = {
   categories,
   histories,
   upload,
-  historyWithId,
-  categoriesWithId,
+  categoryById,
+  historyDetail,
 };
