@@ -2,7 +2,7 @@ const db = require("../config/db-config");
 const { nanoid } = require("nanoid");
 
 const getUserById = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
 
   if (!userId) {
     res.status(400).json({
@@ -39,7 +39,7 @@ const getUserById = (req, res) => {
 };
 
 const changeUsername = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   const { newUsername } = req.body;
 
   if (!userId || !newUsername) {
@@ -73,7 +73,7 @@ const changeUsername = (req, res) => {
 };
 
 const checkPoints = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
       status: "error",
@@ -103,7 +103,7 @@ const checkPoints = (req, res) => {
 
 const exchangePoints = (req, res) => {
   const { merchId, merchPoints } = req.body;
-  const userId = req.params.id;
+  const userId = req.user.id;
 
   if (!userId || !merchId || !merchPoints) {
     res.status(400).json({
@@ -193,7 +193,8 @@ const exchangePoints = (req, res) => {
 };
 
 const addNotification = (req, res) => {
-  const { userId, title, message } = req.body;
+  const { title, message } = req.body;
+  const userId = req.user.id;
   if (!userId || !title || !message) {
     res.status(400).json({
       status: "error",
@@ -227,7 +228,7 @@ const addNotification = (req, res) => {
 };
 
 const getNotificationByUserId = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
       status: "error",
@@ -340,7 +341,7 @@ const getAllMerch = (req, res) => {
 };
 
 const getMerchRedeemedByUserId = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
       status: "error",

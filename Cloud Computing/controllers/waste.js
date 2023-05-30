@@ -4,7 +4,6 @@ const { bucket, processFileConfig } = require("../config/storage-config");
 const { format } = require("util");
 const sharp = require("sharp");
 const { tf } = require("@tensorflow/tfjs");
-// const userId = "4w3zSDRVZoNCCoFN";
 
 require("dotenv").config();
 
@@ -21,6 +20,7 @@ const categories = (req, res) => {
 
 const categoryById = (req, res) => {
   const categoryId = req.params.category_id;
+  console.log(categoryId);
 
   db.query(
     "SELECT * FROM waste_category WHERE id = ? ",
@@ -37,7 +37,7 @@ const categoryById = (req, res) => {
 };
 
 const histories = (req, res) => {
-  const userId = req.params.user_id;
+  const userId = req.user.id;
 
   db.query(
     "SELECT * FROM waste_history WHERE user_id = ?",
@@ -54,7 +54,7 @@ const histories = (req, res) => {
 };
 
 const historyDetail = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   const id = req.params.history_id;
 
   db.query(
@@ -73,7 +73,8 @@ const historyDetail = (req, res) => {
 
 const upload = async (req, res) => {
   try {
-    const userId = req.headers["id"];
+    const userId = req.user.id;
+    const categoryId = req.body.categoryId;
 
     if (!userId) {
       res.status(400).json({
@@ -111,7 +112,7 @@ const upload = async (req, res) => {
 
       const id = nanoid(16);
       const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const values = [id, userId, 1, publicUrl, 100, new Date()];
+      const values = [id, userId, 8, publicUrl, 100, new Date()];
 
       try {
         // Make the file public
