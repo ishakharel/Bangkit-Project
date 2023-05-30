@@ -50,17 +50,23 @@ const login = (req, res) => {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        image: user.image,
-        points: user.total_points,
-        token: token,
-      },
-    });
+    db.query(
+      "UPDATE users SET token = ? WHERE id = ?",
+      [token, user.id],
+      (err, results) => {
+        res.status(200).json({
+          status: "success",
+          data: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            points: user.total_points,
+            token: token,
+          },
+        });
+      }
+    );
   });
 };
 
@@ -340,43 +346,10 @@ const changePassword = (req, res) => {
   });
 };
 
-const checkAuth = (req, res) => {
-  // const { token } = req.body;
-  const authHeader = req.headers["authentication"];
-  const token = authHeader.replace("Bearer ", "");
-  console.log(token);
-
-  if (!token) {
-    res.status(400).json({
-      status: "error",
-      message: "Invalid request, Please provide token",
-    });
-    return;
-  }
-
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  if (!decodedToken) {
-    res.status(401).json({
-      status: "error",
-      message: "Unautherized user",
-    });
-    return;
-  }
-
-  res.status(200).json({
-    status: "Success",
-    message: "User Autherized",
-    data: {
-      userId: decodedToken.id,
-    },
-  });
-};
-
 module.exports = {
   register,
   login,
   forgotPassword,
   resetPassword,
   changePassword,
-  checkAuth,
 };
