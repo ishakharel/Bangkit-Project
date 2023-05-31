@@ -3,6 +3,7 @@ const db = require("./config/db-config");
 const authRouter = require("./routes/routes");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const checkApiKey = require("./middleware/checkApiKey");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -15,7 +16,7 @@ db.connect((err) => {
   console.log("database connected");
 });
 
-app.get("/test", (req, res) => {
+app.get("/test", checkApiKey, (req, res) => {
   res.status(200).send({
     status: "success",
     message: "API is running",
