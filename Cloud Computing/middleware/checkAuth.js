@@ -1,17 +1,24 @@
 const jwt = require("jsonwebtoken");
 const db = require("../config/db-config");
+require("dotenv").config();
 
-const checkAuthentication = (req, res, next) => {
+const checkAuth = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader.split(" ")[1];
-  // console.log(token);
 
-  db.query("SELECT * FROM users WHERE token = ? ", [token], (err, result) => {
+  db.query("SELECT * FROM users WHERE token = ? ", [espcapedToken], (err, result) => {
+    console.log(token);
+    console.log(result);
     // res.status(200).json({ data: result });
     if (authHeader) {
+      const token = authHeader.split(" ")[1];
       jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-          return res.sendStatus(403);
+          res.status(403).json({
+            status: 'error',
+            message: 'User is Forbidden'
+          });
+          console.log(err);
+          return;
         }
         req.user = user;
         next();
@@ -22,4 +29,4 @@ const checkAuthentication = (req, res, next) => {
   });
 };
 
-module.exports = checkAuthentication;
+module.exports = checkAuth;

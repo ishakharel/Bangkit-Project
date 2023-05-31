@@ -50,10 +50,7 @@ const login = (req, res) => {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
 
-    db.query(
-      "UPDATE users SET token = ? WHERE id = ?",
-      [token, user.id],
-      (err, results) => {
+    db.query("UPDATE users SET token = ? WHERE id = ?", [token, user.id], (err, results) => {
         res.status(200).json({
           status: "success",
           data: {
@@ -103,10 +100,7 @@ const register = (req, res) => {
     const id = nanoid(16);
     const hashedPassword = bcrypt.hashSync(password, 8);
 
-    db.query(
-      "INSERT INTO users (id, name, email, password, total_points) VALUES (?, ?, ?, ?, ?)",
-      [id, name, email, hashedPassword, 0],
-      (error, results) => {
+    db.query("INSERT INTO users (id, name, email, password, total_points) VALUES (?, ?, ?, ?, ?)", [id, name, email, hashedPassword, 0], (error, results) => {
         if (error) {
           res.status(500).json({
             status: "error",
@@ -220,7 +214,7 @@ const resetPassword = (req, res) => {
   }
 
   db.query(
-    "SELECT * FROM users_otp WHERE email = ? AND otp = ? AND TIMESTAMPDIFF(MINUTE, created_at, NOW())",
+    "SELECT * FROM users_otp WHERE email = ? AND otp = ? AND (TIMESTAMPDIFF(MINUTE, created_at, NOW())<5)",
     [email, otp],
     (error, results) => {
       if (error) {
