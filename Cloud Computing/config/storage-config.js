@@ -14,8 +14,8 @@ let processFileConfig = util.promisify(multerConfig);
 // Configure Google Cloud Storage
 const storage = new Storage({
   keyFilename: "key.json",
-  projectId: "my-project-exam-382102",
+  projectId: "ecoloopse-bangkit-project",
 });
-const bucket = storage.bucket("scan-waste-users");
+const bucket = storage.bucket("ecoloops_bucket");
 
 module.exports = { multerConfig, storage, bucket, processFileConfig };
