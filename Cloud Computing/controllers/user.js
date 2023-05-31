@@ -1,5 +1,6 @@
 const db = require("../config/db-config");
 const { nanoid } = require("nanoid");
+const { bucket } = require("../config/storage-config");
 
 const getUserById = (req, res) => {
   const userId = req.user.id;
@@ -72,6 +73,63 @@ const changeUsername = (req, res) => {
   );
 };
 
+const changeImage = (req, res) => {
+  const userId = req.user.id;
+  if (!req.file) return res.status(400).send({ status: 'error', message: 'Please provide an image' });
+
+  const fileName = `user_profile/${userId}`;
+  const blob = bucket.file(fileName);
+
+  db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
+    if (error) {
+      res.status(500).json({ status: "error", message: "Internal server error. Cannot find user, please try again later" });
+      console.log(error);
+      return;
+    }
+
+    if (results.length !== 0 && results[0].image) {
+      const oldFileName = results[0].image.replace('https://storage.googleapis.com/ecoloops_bucket/', '');
+      const blobDelete = bucket.file(oldFileName);
+
+      blobDelete.delete()
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    const blobStream = blob.createWriteStream({
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+    });
+
+    blobStream.on("error", (err) => {
+      console.log(err);
+      res.status(500).json({ status: 'error', message: err });
+    });
+
+    blobStream.on('finish', () => {
+      const publicUrl = `https://storage.googleapis.com/ecoloops_bucket/${blob.name}`;
+      console.log(publicUrl);
+      db.query("UPDATE users SET image = ? WHERE id = ?", [publicUrl, userId], (error, results) => {
+        if (error) {
+          res.status(500).json({ status: "error", message: "Internal server error. Cannot update user image, please try again later" });
+          console.log(error);
+          return;
+        }
+
+        res.status(200).json({
+          status: 'success',
+          message: 'Image is successfully updated',
+          imageUrl: publicUrl,
+        });
+      });
+    });
+
+    blobStream.end(req.file.buffer);
+  });
+}
+
 const checkPoints = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
@@ -102,10 +160,10 @@ const checkPoints = (req, res) => {
 };
 
 const exchangePoints = (req, res) => {
-  const { merchId, merchPoints } = req.body;
+  const { merchId } = req.body;
   const userId = req.user.id;
 
-  if (!userId || !merchId || !merchPoints) {
+  if (!userId || !merchId) {
     res.status(400).json({
       status: "error",
       message:
@@ -113,7 +171,7 @@ const exchangePoints = (req, res) => {
     });
     return;
   }
-  db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
+  db.query("SELECT * FROM merch WHERE id = ?", [merchId], (error, results) => {
     if (error) {
       res.status(500).json({
         status: "error",
@@ -124,71 +182,85 @@ const exchangePoints = (req, res) => {
       return;
     }
 
-    const user = results[0];
+    const merch = results[0];
 
-    if (merchPoints > user.total_points) {
-      res.status(400).json({
-        message: "Points is not enough to exchange this merch",
-      });
-      return;
-    }
-
-    const total_points = user.total_points - merchPoints;
-
-    db.query(
-      "UPDATE users SET total_points = ? WHERE id = ?",
-      [total_points, userId],
-      (error, results2) => {
-        if (error) {
-          res.status(500).json({
-            status: "error",
-            message:
-              "Internal server error. Cannot update user, please try again later",
-          });
-          console.log(error);
-          return;
-        }
-
-        db.query(
-          "UPDATE merch SET stok = stok - 1 WHERE id = ?",
-          [merchId],
-          (error, results3) => {
-            if (error) {
-              res.status(500).json({
-                status: "error",
-                message:
-                  "Internal server error. Cannot update merch, please try again later",
-              });
-              console.log(error);
-              return;
-            }
-
-            const id = nanoid(20);
-
-            db.query(
-              "INSERT INTO users_merch_redeem VALUES (?, ?, ?, NOW())",
-              [id, userId, merchId],
-              (error, results4) => {
-                if (error) {
-                  res.status(500).json({
-                    status: "error",
-                    message:
-                      "Internal server error. Cannot insert merch redeem by user, please try again later",
-                  });
-                  console.log(error);
-                  return;
-                }
-
-                res.status(200).json({
-                  status: "success",
-                  message: "Points is successfully exchange",
-                });
-              }
-            );
-          }
-        );
+    db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
+      if (error) {
+        res.status(500).json({
+          status: "error",
+          message:
+            "Internal server error. Cannot find user, please try again later",
+        });
+        console.log(error);
+        return;
       }
-    );
+  
+      const user = results[0];
+  
+      if (merch.points > user.total_points) {
+        res.status(400).json({
+          message: "Points is not enough to exchange this merch",
+        });
+        return;
+      }
+  
+      const total_points = user.total_points - merch.points;
+  
+      db.query(
+        "UPDATE users SET total_points = ? WHERE id = ?",
+        [total_points, userId],
+        (error, results2) => {
+          if (error) {
+            res.status(500).json({
+              status: "error",
+              message:
+                "Internal server error. Cannot update user, please try again later",
+            });
+            console.log(error);
+            return;
+          }
+  
+          db.query(
+            "UPDATE merch SET stok = stok - 1 WHERE id = ?",
+            [merchId],
+            (error, results3) => {
+              if (error) {
+                res.status(500).json({
+                  status: "error",
+                  message:
+                    "Internal server error. Cannot update merch, please try again later",
+                });
+                console.log(error);
+                return;
+              }
+  
+              const id = nanoid(20);
+  
+              db.query(
+                "INSERT INTO users_merch_redeem VALUES (?, ?, ?, NOW())",
+                [id, userId, merchId],
+                (error, results4) => {
+                  if (error) {
+                    res.status(500).json({
+                      status: "error",
+                      message:
+                        "Internal server error. Cannot insert merch redeem by user, please try again later",
+                    });
+                    console.log(error);
+                    return;
+                  }
+  
+                  res.status(200).json({
+                    status: "success",
+                    message: "Points is successfully exchange",
+                  });
+                }
+              );
+            }
+          );
+        }
+      );
+    });
   });
 };
 
@@ -383,4 +455,5 @@ module.exports = {
   deleteNotificationById,
   getAllMerch,
   getMerchRedeemedByUserId,
+  changeImage
 };

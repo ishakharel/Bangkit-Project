@@ -185,16 +185,16 @@ CREATE TABLE `waste_history` (
 --
 
 INSERT INTO `waste_history` (`id`, `user_id`, `category_id`, `image`, `point`, `date`) VALUES
-('48TEvD0OmdZnoGox', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('48TEvD0OmdZnoGox', 'dem2mLniTb-sxjEl', 3, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
 ('5NpsxeQar5WhkFpt', 'CP84Nc5Uf7tuQL17', 6, 'https://storage.googleapis.com/scan-waste-users/MASTER.png', 100, '2023-05-30'),
 ('B3VZyR7uCHixQiu7', 'Eq-vXTztcEo4LfJi', 8, 'https://storage.googleapis.com/scan-waste-users/WhatsApp Image 2023-05-18 at 10.59.04.jpg', 100, '2023-05-30'),
-('dmDiUahg0XBYYyp9', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
-('g6NuBwUWQcBWF75l', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
-('HY0MfESUEBN-ngNC', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('dmDiUahg0XBYYyp9', 'CP84Nc5Uf7tuQL17', 4, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('g6NuBwUWQcBWF75l', 'CP84Nc5Uf7tuQL17', 5, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('HY0MfESUEBN-ngNC', 'dem2mLniTb-sxjEl', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
 ('ki4oO115g2-ZLcB9', 'CP84Nc5Uf7tuQL17', 8, 'https://storage.googleapis.com/scan-waste-users/MASTER.png', 100, '2023-05-30'),
-('ucA8X-20S_b1yL3j', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
-('UZZwsfAvAvQjlNz0', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
-('YdBFsJOq0X6u1QHr', 'CP84Nc5Uf7tuQL17', 1, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30');
+('ucA8X-20S_b1yL3j', 'CP84Nc5Uf7tuQL17', 7, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('UZZwsfAvAvQjlNz0', 'dem2mLniTb-sxjEl', 5, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30'),
+('YdBFsJOq0X6u1QHr', 'usxeVikNKW7Lqg79', 3, 'https://storage.googleapis.com/scan-waste-users/frame_4x.jpeg', 100, '2023-05-30');
 
 --
 -- Indexes for dumped tables
