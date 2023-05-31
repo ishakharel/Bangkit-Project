@@ -40,7 +40,7 @@ const histories = (req, res) => {
   const userId = req.user.id;
 
   db.query(
-    "SELECT * FROM waste_history WHERE user_id = ?",
+    "SELECT a.*, b.name as waste_name, b.category FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE user_id = ?",
     [userId],
     (error, result) => {
       if (error) {
