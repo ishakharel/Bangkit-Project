@@ -11,8 +11,8 @@ const checkAuth = (req, res, next) => {
       jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
           res.status(403).json({
-            status: 'error',
-            message: 'User is Forbidden'
+            status: "error",
+            message: "User is Forbidden",
           });
           console.log(err);
           return;
@@ -22,8 +22,8 @@ const checkAuth = (req, res, next) => {
       });
     } else {
       res.status(401).json({
-        status: 'error',
-        message: 'Unauthorized User'
+        status: "error",
+        message: "Unauthorized User",
       });
     }
   });

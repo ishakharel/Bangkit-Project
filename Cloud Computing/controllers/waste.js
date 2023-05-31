@@ -95,7 +95,7 @@ const upload = async (req, res) => {
       .resize(200, 200) // Specify the desired width and height
       .toBuffer();
 
-    const blob = bucket.file(req.file.originalname);
+    const blob = bucket.file("waste_history/" + req.file.originalname);
     const blobStream = blob.createWriteStream({
       resumable: false,
     });
@@ -107,7 +107,7 @@ const upload = async (req, res) => {
     blobStream.on("finish", async (data) => {
       // Create URL for directly file access via HTTP.
       const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        `https://storage.googleapis.com/waste_history/${bucket.name}/${blob.name}`
       );
 
       const id = nanoid(16);
@@ -119,7 +119,7 @@ const upload = async (req, res) => {
         await bucket.file(req.file.originalname).makePublic();
       } catch {
         return res.status(500).send({
-          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
+          message: `Uploaded the file successfully: ${req.file.originalname}`,
           url: publicUrl,
         });
       }
