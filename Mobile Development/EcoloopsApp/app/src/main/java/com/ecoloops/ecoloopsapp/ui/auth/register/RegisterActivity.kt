@@ -1,4 +1,4 @@
-package com.ecoloops.ecoloopsapp.ui.auth
+package com.ecoloops.ecoloopsapp.ui.auth.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator

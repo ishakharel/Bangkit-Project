@@ -26,7 +26,7 @@ class SplashFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
 
             if (onBoardingIsFinished()){
-                findNavController().navigate(R.id.action_onBoardingFragment_to_registActivity)
+                findNavController().navigate(R.id.action_onBoardingFragment_to_loginActivity)
             }else{
                 findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
             }

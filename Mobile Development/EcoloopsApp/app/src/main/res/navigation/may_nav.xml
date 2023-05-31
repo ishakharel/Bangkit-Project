@@ -16,8 +16,8 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_onBoardingFragment_to_registActivity"
-            app:destination="@id/registrastActivity"
+            android:id="@+id/action_onBoardingFragment_to_loginActivity"
+            app:destination="@id/loginActivity"
             app:popUpTo="@id/onBoardingFragment"
             app:popUpToInclusive="true" />
         <action
@@ -32,10 +32,10 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <activity
-        android:id="@+id/registrastActivity"
-        android:name="com.ecoloops.ecoloopsapp.ui.auth.RegisterActivity"
-        android:label="register_activity"
-        tools:layout="@layout/activity_register"
+        android:id="@+id/loginActivity"
+        android:name="com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity"
+        android:label="login_activity"
+        tools:layout="@layout/activity_login"
     />
     <fragment
         android:id="@+id/onBoardingFragment"
@@ -48,8 +48,8 @@
             app:popUpTo="@id/onBoardingFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_onBoardingFragment_to_registActivity"
-            app:destination="@id/registrastActivity"
+            android:id="@+id/action_onBoardingFragment_to_loginActivity"
+            app:destination="@id/loginActivity"
             app:popUpTo="@id/onBoardingFragment"
             app:popUpToInclusive="true" />
     </fragment>

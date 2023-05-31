@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.register.RegisterActivity">
+    tools:context=".ui.auth.login.LoginActivity"
+    android:layout_gravity="center_vertical">
 
     <include
-        android:id="@+id/registerLayout"
-        layout="@layout/layout_register" />
+        android:id="@+id/loginLayout"
+        layout="@layout/layout_login"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
