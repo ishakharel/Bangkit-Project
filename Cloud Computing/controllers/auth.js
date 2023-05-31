@@ -152,9 +152,10 @@ const forgotPassword = (req, res) => {
       specialChars: false,
     });
 
+    const id = nanoid(16);
     db.query(
-      "INSERT INTO users_otp (email, otp) VALUES (?, ?)",
-      [email, generatedOTP],
+      "INSERT INTO users_otp VALUES (?, ?, ?, NOW())",
+      [id, email, generatedOTP],
       (error, results) => {
         if (error) {
           res.status(500).json({
@@ -277,8 +278,9 @@ const resetPassword = (req, res) => {
 };
 
 const changePassword = (req, res) => {
-  const { email, oldPassword, newPassword } = req.body;
-  if (!email || !oldPassword || !newPassword) {
+  const { oldPassword, newPassword } = req.body;
+  const userId = req.user.id;
+  if (!oldPassword || !newPassword) {
     res.status(400).json({
       status: "error",
       message:
@@ -287,7 +289,7 @@ const changePassword = (req, res) => {
     return;
   }
 
-  db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
+  db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
     if (error) {
       res.status(500).json({
         status: "error",
@@ -311,8 +313,8 @@ const changePassword = (req, res) => {
     if (isPassValid) {
       const hashedPassword = bcrypt.hashSync(newPassword, 8);
       db.query(
-        "UPDATE users SET password = ? WHERE email = ?",
-        [hashedPassword, email],
+        "UPDATE users SET password = ? WHERE id = ?",
+        [hashedPassword, userId],
         (error, results) => {
           if (error) {
             res.status(500).json({
@@ -340,10 +342,31 @@ const changePassword = (req, res) => {
   });
 };
 
+const logout = (req, res) => {
+  const userId = req.user.id;
+  db.query("UPDATE users SET token = '' WHERE id = ?", [userId], (error, results) => {
+    if(error){
+      res.status(500).json({
+        status: "error",
+        message:
+          "Internal server error. Cannot update user Try again later",
+      });
+      console.log(error);
+      return;
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'User Logout Successfully'
+    });
+  })
+}
+
 module.exports = {
   register,
   login,
   forgotPassword,
   resetPassword,
   changePassword,
+  logout
 };

@@ -269,6 +269,7 @@ const getNotificationByUserId = (req, res) => {
 
 const deleteNotificationById = (req, res) => {
   const notifId = req.params.id;
+  const userId = req.user.id;
   if (!notifId) {
     res.status(400).json({
       status: "error",
@@ -298,8 +299,8 @@ const deleteNotificationById = (req, res) => {
         return;
       }
       db.query(
-        "DELETE FROM users_notifications WHERE id = ?",
-        [notifId],
+        "DELETE FROM users_notifications WHERE id = ? AND user_id = ?",
+        [notifId, userId],
         (error, results) => {
           if (error) {
             res.status(500).json({
