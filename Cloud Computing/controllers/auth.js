@@ -210,8 +210,6 @@ const forgotPassword = (req, res) => {
   });
 };
 
-const uploadProfile = (req, res) => {};
-
 const resetPassword = (req, res) => {
   const { email, newPassword, otp } = req.body;
   if (!email || !newPassword || !otp) {
@@ -352,23 +350,26 @@ const changePassword = (req, res) => {
 
 const logout = (req, res) => {
   const userId = req.user.id;
-  db.query("UPDATE users SET token = '' WHERE id = ?", [userId], (error, results) => {
-    if(error){
-      res.status(500).json({
-        status: "error",
-        message:
-          "Internal server error. Cannot update user Try again later",
-      });
-      console.log(error);
-      return;
-    }
+  db.query(
+    "UPDATE users SET token = '' WHERE id = ?",
+    [userId],
+    (error, results) => {
+      if (error) {
+        res.status(500).json({
+          status: "error",
+          message: "Internal server error. Cannot update user Try again later",
+        });
+        console.log(error);
+        return;
+      }
 
-    res.status(200).json({
-      status: 'success',
-      message: 'User Logout Successfully'
-    });
-  })
-}
+      res.status(200).json({
+        status: "success",
+        message: "User Logout Successfully",
+      });
+    }
+  );
+};
 
 module.exports = {
   register,
@@ -376,5 +377,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   changePassword,
-  logout
+  logout,
 };
