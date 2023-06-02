@@ -3,7 +3,8 @@ const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
 const { format } = require("util");
 const sharp = require("sharp");
-const { tf } = require("@tensorflow/tfjs");
+const axios = require("axios");
+const FormData = require("form-data");
 
 require("dotenv").config();
 
@@ -74,7 +75,6 @@ const historyDetail = (req, res) => {
 const upload = async (req, res) => {
   try {
     const userId = req.user.id;
-    const categoryId = req.body.categoryId;
 
     if (!userId) {
       res.status(400).json({
@@ -110,9 +110,24 @@ const upload = async (req, res) => {
         `https://storage.googleapis.com/waste_history/${bucket.name}/${blob.name}`
       );
 
+      const formData = new FormData();
+      formData.append("image", publicUrl);
+
+      const result = await axios.post(
+        "http://127.0.0.1:5000/upload",
+        formData,
+        {
+          headers: formData.getHeaders(),
+        }
+      );
+
+      console.log(result.data);
+
+      return 0;
+
       const id = nanoid(16);
       const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const values = [id, userId, 8, publicUrl, 100, new Date()];
+      const values = [id, userId, categoryId, publicUrl, 100, new Date()];
 
       try {
         // Make the file public
