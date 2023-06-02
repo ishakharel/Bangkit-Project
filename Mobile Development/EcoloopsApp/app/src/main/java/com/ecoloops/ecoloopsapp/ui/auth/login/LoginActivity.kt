@@ -2,6 +2,7 @@ package com.ecoloops.ecoloopsapp.ui.auth.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -11,6 +12,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
+import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -19,6 +21,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.loginLayout.registerButton.setOnClickListener {
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         val spannable = SpannableStringBuilder(getText(R.string.welcome_back))
         spannable.setSpan(
