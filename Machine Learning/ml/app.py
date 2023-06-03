@@ -1,6 +1,6 @@
 from tensorflow import keras
 from tensorflow.keras.preprocessing import image
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from PIL import Image
 import numpy as np
 
@@ -11,8 +11,14 @@ model = keras.models.load_model("model.h5")
 
 @app.route("/upload", methods=["POST"])
 def upload():
-    if "image" not in request.files:
-        return jsonify({"error": "No image uploaded"})
+    apikey = request.headers.get('apikey')
+
+    if "image" not in request.files or "apikey" not in request.headers:
+        return jsonify({"error": "Missing required request"})
+    
+    if apikey != "B1sM1Llaht0pi5C4p5t0N3":
+        return make_response(jsonify({"status": "error", 
+                        "message": "API key is invalid"}), 401)
 
     image_file = request.files["image"]
     image_file.save("img.jpg")
