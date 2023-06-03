@@ -15,9 +15,11 @@ def upload():
         return jsonify({"error": "No image uploaded"})
 
     image_file = request.files["image"]
+    image_file.save("img.jpg")
+    path = "img.jpg"
 
     try:
-        img = image.load_img(image_file.filename, target_size=(200, 200))
+        img = image.load_img(path, target_size=(200, 200))
         x = image.img_to_array(img)
         x = x / 255.0
         x = np.expand_dims(x, axis=0)
