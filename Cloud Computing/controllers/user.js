@@ -7,7 +7,7 @@ const getUserById = (req, res) => {
 
   if (!userId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id",
     });
     return;
@@ -16,7 +16,7 @@ const getUserById = (req, res) => {
   db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: "error",
+        error: true,
         message:
           "Internal server error. Cannot find user, please try again later",
       });
@@ -26,7 +26,7 @@ const getUserById = (req, res) => {
 
     if (results.length === 0) {
       res.status(404).json({
-        status: "error",
+        error: true,
         message: "User Not Found",
       });
       return;
@@ -34,7 +34,7 @@ const getUserById = (req, res) => {
 
     res.status(200).json({
       status: "success",
-      data: results
+      data: results,
     });
   });
 };
@@ -45,7 +45,7 @@ const changeUsername = (req, res) => {
 
   if (!userId || !newUsername) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id and new username",
     });
     return;
@@ -57,7 +57,7 @@ const changeUsername = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot find user, please try again later",
         });
@@ -75,26 +75,35 @@ const changeUsername = (req, res) => {
 
 const changeImage = (req, res) => {
   const userId = req.user.id;
-  if (!req.file) return res.status(400).send({ status: 'error', message: 'Please provide an image' });
+  if (!req.file)
+    return res
+      .status(400)
+      .send({ status: "error", message: "Please provide an image" });
 
   const fileName = `user_profile/${userId}`;
   const blob = bucket.file(fileName);
 
   db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
     if (error) {
-      res.status(500).json({ status: "error", message: "Internal server error. Cannot find user, please try again later" });
+      res.status(500).json({
+        error: true,
+        message:
+          "Internal server error. Cannot find user, please try again later",
+      });
       console.log(error);
       return;
     }
 
     if (results.length !== 0 && results[0].image) {
-      const oldFileName = results[0].image.replace('https://storage.googleapis.com/ecoloops_bucket/', '');
+      const oldFileName = results[0].image.replace(
+        "https://storage.googleapis.com/ecoloops_bucket/",
+        ""
+      );
       const blobDelete = bucket.file(oldFileName);
 
-      blobDelete.delete()
-        .catch((err) => {
-          console.log(err);
-        });
+      blobDelete.delete().catch((err) => {
+        console.log(err);
+      });
     }
 
     const blobStream = blob.createWriteStream({
@@ -103,38 +112,46 @@ const changeImage = (req, res) => {
       },
     });
 
-    blobStream.on("error", (err) => {
+    blobStream.on(true, (err) => {
       console.log(err);
-      res.status(500).json({ status: 'error', message: err });
+      res.status(500).json({ status: "error", message: err });
     });
 
-    blobStream.on('finish', () => {
+    blobStream.on("finish", () => {
       const publicUrl = `https://storage.googleapis.com/ecoloops_bucket/${blob.name}`;
       console.log(publicUrl);
-      db.query("UPDATE users SET image = ? WHERE id = ?", [publicUrl, userId], (error, results) => {
-        if (error) {
-          res.status(500).json({ status: "error", message: "Internal server error. Cannot update user image, please try again later" });
-          console.log(error);
-          return;
-        }
+      db.query(
+        "UPDATE users SET image = ? WHERE id = ?",
+        [publicUrl, userId],
+        (error, results) => {
+          if (error) {
+            res.status(500).json({
+              error: true,
+              message:
+                "Internal server error. Cannot update user image, please try again later",
+            });
+            console.log(error);
+            return;
+          }
 
-        res.status(200).json({
-          status: 'success',
-          message: 'Image is successfully updated',
-          imageUrl: publicUrl,
-        });
-      });
+          res.status(200).json({
+            status: "success",
+            message: "Image is successfully updated",
+            imageUrl: publicUrl,
+          });
+        }
+      );
     });
 
     blobStream.end(req.file.buffer);
   });
-}
+};
 
 const checkPoints = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id",
     });
     return;
@@ -142,7 +159,7 @@ const checkPoints = (req, res) => {
   db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: "error",
+        error: true,
         message:
           "Internal server error. Cannot find user, please try again later",
       });
@@ -165,7 +182,7 @@ const exchangePoints = (req, res) => {
 
   if (!userId || !merchId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message:
         "Invalid request. Please provide user id, merch id, and merch points",
     });
@@ -174,7 +191,7 @@ const exchangePoints = (req, res) => {
   db.query("SELECT * FROM merch WHERE id = ?", [merchId], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: "error",
+        error: true,
         message:
           "Internal server error. Cannot find user, please try again later",
       });
@@ -187,69 +204,70 @@ const exchangePoints = (req, res) => {
     db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot find user, please try again later",
         });
         console.log(error);
         return;
       }
-  
+
       const user = results[0];
-  
+
       if (merch.points > user.total_points) {
         res.status(400).json({
+          error: true,
           message: "Points is not enough to exchange this merch",
         });
         return;
       }
-  
+
       const total_points = user.total_points - merch.points;
-  
+
       db.query(
         "UPDATE users SET total_points = ? WHERE id = ?",
         [total_points, userId],
         (error, results2) => {
           if (error) {
             res.status(500).json({
-              status: "error",
+              error: true,
               message:
                 "Internal server error. Cannot update user, please try again later",
             });
             console.log(error);
             return;
           }
-  
+
           db.query(
             "UPDATE merch SET stok = stok - 1 WHERE id = ?",
             [merchId],
             (error, results3) => {
               if (error) {
                 res.status(500).json({
-                  status: "error",
+                  error: true,
                   message:
                     "Internal server error. Cannot update merch, please try again later",
                 });
                 console.log(error);
                 return;
               }
-  
+
               const id = nanoid(20);
-  
+
               db.query(
                 "INSERT INTO users_merch_redeem VALUES (?, ?, ?, NOW())",
                 [id, userId, merchId],
                 (error, results4) => {
                   if (error) {
                     res.status(500).json({
-                      status: "error",
+                      error: true,
                       message:
                         "Internal server error. Cannot insert merch redeem by user, please try again later",
                     });
                     console.log(error);
                     return;
                   }
-  
+
                   res.status(200).json({
                     status: "success",
                     message: "Points is successfully exchange",
@@ -269,7 +287,7 @@ const addNotification = (req, res) => {
   const userId = req.user.id;
   if (!userId || !title || !message) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id, title, and message",
     });
     return;
@@ -283,7 +301,7 @@ const addNotification = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot insert user notification, please try again later",
         });
@@ -303,7 +321,7 @@ const getNotificationByUserId = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id",
     });
     return;
@@ -315,7 +333,7 @@ const getNotificationByUserId = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot find user notification, please try again later",
         });
@@ -325,7 +343,7 @@ const getNotificationByUserId = (req, res) => {
 
       if (results.length === 0) {
         res.status(404).json({
-          status: "error",
+          error: true,
           message: "Notification not found",
         });
         return;
@@ -344,7 +362,7 @@ const deleteNotificationById = (req, res) => {
   const userId = req.user.id;
   if (!notifId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide notification id",
     });
     return;
@@ -355,7 +373,7 @@ const deleteNotificationById = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot delete user notification, please try again later",
         });
@@ -365,7 +383,7 @@ const deleteNotificationById = (req, res) => {
 
       if (results.length === 0) {
         res.status(404).json({
-          status: "error",
+          error: true,
           message: "Notification not found",
         });
         return;
@@ -376,7 +394,7 @@ const deleteNotificationById = (req, res) => {
         (error, results) => {
           if (error) {
             res.status(500).json({
-              status: "error",
+              error: true,
               message:
                 "Internal server error. Cannot delete user notification, please try again later",
             });
@@ -398,7 +416,7 @@ const getAllMerch = (req, res) => {
   db.query("SELECT * FROM merch", (error, results) => {
     if (error) {
       res.status(500).json({
-        status: "error",
+        error: true,
         message:
           "Internal server error. Cannot get data from merch, please try again later",
       });
@@ -417,7 +435,7 @@ const getMerchRedeemedByUserId = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
-      status: "error",
+      error: true,
       message: "Invalid request. Please provide user id",
     });
     return;
@@ -429,7 +447,7 @@ const getMerchRedeemedByUserId = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: "error",
+          error: true,
           message:
             "Internal server error. Cannot get data, please try again later",
         });
@@ -455,5 +473,5 @@ module.exports = {
   deleteNotificationById,
   getAllMerch,
   getMerchRedeemedByUserId,
-  changeImage
+  changeImage,
 };

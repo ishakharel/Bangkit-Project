@@ -1,11 +1,11 @@
 const { nanoid } = require("nanoid");
 const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
-const { format } = require("util");
+const { format, promisify } = require("util");
 const sharp = require("sharp");
 const axios = require("axios");
+const fs = require("fs");
 const FormData = require("form-data");
-
 require("dotenv").config();
 
 const categories = (req, res) => {
@@ -78,7 +78,7 @@ const upload = async (req, res) => {
 
     if (!userId) {
       res.status(400).json({
-        status: "error",
+        error: true,
         message: "Invalid request. Please provide user id",
       });
       return;
@@ -90,6 +90,29 @@ const upload = async (req, res) => {
       return res.status(400).send({ message: "Please upload a file!" });
     }
 
+    const imagePath = `./temp/${req.file.originalname}`;
+    await promisify(fs.writeFile)(imagePath, req.file.buffer);
+
+    const formData = {
+      image: fs.createReadStream(imagePath),
+    };
+
+    const server = "http://127.0.0.1:5000/upload";
+
+    const options = {
+      url: server,
+      formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const response = await axios.post(options.url, formData, {
+      headers: options.headers,
+    });
+
+    const categoryId = response.data.predicted_class;
+
     // Create a new blob in the bucket and upload the file data.
     const resizedImageBuffer = await sharp(req.file.buffer)
       .resize(200, 200) // Specify the desired width and height
@@ -100,30 +123,15 @@ const upload = async (req, res) => {
       resumable: false,
     });
 
-    blobStream.on("error", (err) => {
+    blobStream.on(true, (err) => {
       res.status(500).send({ message: err.message });
     });
 
     blobStream.on("finish", async (data) => {
       // Create URL for directly file access via HTTP.
       const publicUrl = format(
-        `https://storage.googleapis.com/waste_history/${bucket.name}/${blob.name}`
+        `https://storage.googleapis.com/${bucket.name}/waste_history/${blob.name}`
       );
-
-      const formData = new FormData();
-      formData.append("image", publicUrl);
-
-      const result = await axios.post(
-        "http://127.0.0.1:5000/upload",
-        formData,
-        {
-          headers: formData.getHeaders(),
-        }
-      );
-
-      console.log(result.data);
-
-      return 0;
 
       const id = nanoid(16);
       const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
@@ -133,27 +141,23 @@ const upload = async (req, res) => {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        return res.status(500).send({
-          message: `Uploaded the file successfully: ${req.file.originalname}`,
-          url: publicUrl,
-        });
-      }
-
-      db.query(sql, values, (err, result) => {
-        db.query(
-          "UPDATE users SET total_points = (SELECT SUM(point) FROM waste_history WHERE waste_history.user_id = ?)",
-          [userId],
-          (err, result) => {
-            res.status(201).json({
-              status: "success",
-              message: "Successfully upload!",
-              url: publicUrl,
+        db.query(sql, values, (err, result) => {
+          if (err) {
+            res.status(400).json({
+              error: true,
+              message: "Error connection!",
             });
           }
-        );
-      });
+
+          res.status(201).json({
+            status: "success",
+            message: "Successfully upload!",
+          });
+        });
+      }
     });
 
+    fs.unlinkSync(imagePath);
     blobStream.end(resizedImageBuffer);
   } catch (err) {
     res.status(500).send({
