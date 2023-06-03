@@ -10,7 +10,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).json({
-      status: true,
+      error: true,
       message: "Invalid request. Please provide email and password",
     });
     return;
@@ -19,7 +19,7 @@ const login = (req, res) => {
   db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: true,
+        error: true,
         message:
           "Internal server error. Cannot find email, please try again later",
       });
@@ -29,7 +29,7 @@ const login = (req, res) => {
 
     if (results.length === 0) {
       res.status(404).json({
-        status: true,
+        error: true,
         message: "Email is not registered",
       });
       return;
@@ -40,7 +40,7 @@ const login = (req, res) => {
 
     if (!isPassValid) {
       res.status(401).json({
-        status: true,
+        error: true,
         message: "Invalid password",
       });
       return;
@@ -75,7 +75,7 @@ const register = (req, res) => {
 
   if (!email || !password || !name) {
     res.status(400).json({
-      status: true,
+      error: true,
       message: "Invalid request, please provide email, password, and name",
     });
     return;
@@ -84,7 +84,7 @@ const register = (req, res) => {
   db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: true,
+        error: true,
         message:
           "Internal server error. Cannot find email, please try again later",
       });
@@ -94,7 +94,7 @@ const register = (req, res) => {
 
     if (results.length > 0) {
       res.status(409).json({
-        status: true,
+        error: true,
         message: "Email alredy exist",
       });
       return;
@@ -109,7 +109,7 @@ const register = (req, res) => {
       (error, results) => {
         if (error) {
           res.status(500).json({
-            status: true,
+            error: true,
             message:
               "Internal server error. Cannot insert user, please try again later",
           });
@@ -129,7 +129,7 @@ const forgotPassword = (req, res) => {
   const { email } = req.body;
   if (!email) {
     res.status(400).json({
-      status: true,
+      error: true,
       message: "Invalid request. Please provide email",
     });
     return;
@@ -137,7 +137,7 @@ const forgotPassword = (req, res) => {
   db.query("SELECT * FROM users WHERE email = ?", [email], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: true,
+        error: true,
         message:
           "Internal server error. Cannot find email, please try again later",
       });
@@ -147,7 +147,7 @@ const forgotPassword = (req, res) => {
 
     if (results.length === 0) {
       res.status(404).json({
-        status: true,
+        error: true,
         message: "Email not found",
       });
       return;
@@ -165,7 +165,7 @@ const forgotPassword = (req, res) => {
       (error, results) => {
         if (error) {
           res.status(500).json({
-            status: true,
+            error: true,
             message:
               "Internal server error. Cannot insert otp, please try again later",
           });
@@ -194,13 +194,13 @@ const forgotPassword = (req, res) => {
         transporter.sendMail(mailOptions, (error) => {
           if (error) {
             res.status(500).json({
-              status: true,
+              error: true,
               message: "Failed to send OTP email.",
             });
             console.log(error);
           } else {
             res.status(200).json({
-              status: "success",
+              error: "success",
               message: "OTP email sent successfully",
             });
           }
@@ -214,7 +214,7 @@ const resetPassword = (req, res) => {
   const { email, newPassword, otp } = req.body;
   if (!email || !newPassword || !otp) {
     res.status(400).json({
-      status: true,
+      error: true,
       message: "Invalid request. Please provide email, password and otp",
     });
     return;
@@ -226,7 +226,7 @@ const resetPassword = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: true,
+          error: true,
           message:
             "Internal server error. Cannot verifying OTP, please try again later",
         });
@@ -236,7 +236,7 @@ const resetPassword = (req, res) => {
 
       if (results.length === 0) {
         res.status(400).json({
-          status: true,
+          error: true,
           message: "Invalid OTP and Email",
         });
         return;
@@ -249,7 +249,7 @@ const resetPassword = (req, res) => {
         (error, results) => {
           if (error) {
             res.status(500).json({
-              status: true,
+              error: true,
               message:
                 "Internal server error. Cannot update password, please try again later",
             });
@@ -263,7 +263,7 @@ const resetPassword = (req, res) => {
             (error, results) => {
               if (error) {
                 res.status(500).json({
-                  status: true,
+                  error: true,
                   message:
                     "Internal server error. Cannot delete OTP code, please try again later",
                 });
@@ -288,7 +288,7 @@ const changePassword = (req, res) => {
   const userId = req.user.id;
   if (!oldPassword || !newPassword) {
     res.status(400).json({
-      status: true,
+      error: true,
       message:
         "Invalid request. Please provide email, old password, and new password",
     });
@@ -298,7 +298,7 @@ const changePassword = (req, res) => {
   db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
     if (error) {
       res.status(500).json({
-        status: true,
+        error: true,
         message: "Internal server error, Cannot find email, try again later",
       });
       console.log(error);
@@ -307,7 +307,7 @@ const changePassword = (req, res) => {
 
     if (results.length === 0) {
       res.status(401).json({
-        status: true,
+        error: true,
         message: "Email not registered",
       });
       return;
@@ -324,7 +324,7 @@ const changePassword = (req, res) => {
         (error, results) => {
           if (error) {
             res.status(500).json({
-              status: true,
+              error: true,
               message:
                 "Internal server error. Cannot update user Try again later",
             });
@@ -340,7 +340,7 @@ const changePassword = (req, res) => {
       );
     } else {
       res.status(401).json({
-        status: true,
+        error: true,
         message: "Invalid Old Password",
       });
       return;
@@ -356,7 +356,7 @@ const logout = (req, res) => {
     (error, results) => {
       if (error) {
         res.status(500).json({
-          status: true,
+          error: true,
           message: "Internal server error. Cannot update user Try again later",
         });
         console.log(error);
