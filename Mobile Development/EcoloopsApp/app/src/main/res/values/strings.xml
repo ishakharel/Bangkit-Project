@@ -14,8 +14,8 @@
     <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
     <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
     <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
-    <string name="lets_register">Ayo Bergabung Bersama Ecoloops!</string>
-    <string name="name">Name</string>
+    <string name="lets_register">Selamat Bergabung Bersama Ecoloops!</string>
+    <string name="name">Nama Lengkap</string>
     <string name="name_hint">Masukan Nama Kamu</string>
     <string name="email">Email</string>
     <string name="email_hint">Masukan Email Kamu</string>
@@ -26,7 +26,7 @@
     <string name="register">Bergabung</string>
     <string name="login">Masuk</string>
     <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops</string>
-    <string name="invalid_name">Nama Invalid</string>
+    <string name="invalid_name">Nama Tidak Valid</string>
     <string name="invalid_email">Email Tidak Valid</string>
     <string name="invalid_password">Password Tidak Valid</string>
     <string name="error_message">error</string>

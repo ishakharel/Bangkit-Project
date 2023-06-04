@@ -2,11 +2,17 @@ package com.ecoloops.ecoloopsapp.ui.auth.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.databinding.ActivityRegisterBinding
+import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -15,6 +21,21 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.registerLayout.backButton.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        val spannable = SpannableStringBuilder(getText(R.string.lets_register))
+        spannable.setSpan(
+            ForegroundColorSpan(Color.BLACK),
+            0, // start
+            26, // end
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+
+        binding.registerLayout.tvWelcomeBack.text = spannable
 
         playAnimation()
         setupToolbar()

@@ -5,14 +5,15 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_welcome_back"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="25dp"
         android:text="@string/lets_register"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
@@ -22,7 +23,9 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:text="@string/name"
+        android:alpha="0"
         android:textSize="18sp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_welcome_back" />
 
@@ -32,6 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTextView"
@@ -39,7 +43,7 @@
         app:errorEnabled="true"
         app:errorTextColor="@color/colorPrimary">
 
-        <TextView
+        <com.ecoloops.ecoloopsapp.ui.custom_view.CustomNameText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:text="@string/email"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        android:alpha="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout" />
 
@@ -63,6 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextView"
@@ -70,7 +77,7 @@
         app:errorEnabled="true"
         app:errorTextColor="@color/colorPrimary">
 
-        <TextView
+        <com.ecoloops.ecoloopsapp.ui.custom_view.CustomEmailText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +92,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:text="@string/password"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        android:alpha="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout" />
 
@@ -95,13 +104,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
         app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_lock">
 
-        <TextView
+        <com.ecoloops.ecoloopsapp.ui.custom_view.CustomPasswordText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,6 +129,8 @@
         android:layout_marginTop="20dp"
         android:text="@string/confirm_password"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:alpha="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
 
@@ -128,13 +140,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextView"
         app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_lock">
 
-        <TextView
+        <com.ecoloops.ecoloopsapp.ui.custom_view.CustomPasswordText
             android:id="@+id/confirmPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,13 +157,14 @@
             android:hint="@string/confirm_password_hint"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.ecoloops.ecoloopsapp.ui.custom_view.CustomButton
         android:id="@+id/registerButton"
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:text="@string/register"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditTextLayout" />
@@ -167,6 +181,7 @@
         android:textStyle="bold"
         android:text="@string/login"
         android:textAllCaps="true"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerButton"/>
 
