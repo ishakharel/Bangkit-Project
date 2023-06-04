@@ -3,6 +3,7 @@ from tensorflow.keras.preprocessing import image
 from flask import Flask, request, jsonify, make_response
 from PIL import Image
 import numpy as np
+import os
 
 app = Flask(__name__)
 
@@ -36,6 +37,7 @@ def upload():
         perspective_class = np.argmax(classes[0])
         print("Perspective class:", perspective_class)
 
+        os.remove(path)
         return jsonify({"predicted_class": str(perspective_class)})
 
     except Exception as e:

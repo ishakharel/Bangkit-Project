@@ -56,10 +56,10 @@ const histories = (req, res) => {
 
 const historyDetail = (req, res) => {
   const userId = req.user.id;
-  const id = req.params.history_id;
+  const { id } = req.params;
 
   db.query(
-    "SELECT * FROM waste_history WHERE user_id = ? AND id = ? ",
+    "SELECT a.id, b.name as waste_name, b.category FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE user_id = ? AND a.id = ?",
     [userId, id],
     (error, result) => {
       if (error) {
@@ -67,7 +67,7 @@ const historyDetail = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ id: userId, data: result });
+      return res.status(200).json({ data: result });
     }
   );
 };
@@ -75,6 +75,7 @@ const historyDetail = (req, res) => {
 const upload = async (req, res) => {
   try {
     const userId = req.user.id;
+    const id = nanoid(16);
 
     if (!userId) {
       res.status(400).json({
@@ -104,6 +105,7 @@ const upload = async (req, res) => {
       formData,
       headers: {
         "Content-Type": "multipart/form-data",
+        apikey: process.env.API_KEY,
       },
     };
 
@@ -118,7 +120,7 @@ const upload = async (req, res) => {
       .resize(200, 200) // Specify the desired width and height
       .toBuffer();
 
-    const blob = bucket.file("waste_history/" + req.file.originalname);
+    const blob = bucket.file("waste_history/" + id);
     const blobStream = blob.createWriteStream({
       resumable: false,
     });
@@ -130,28 +132,31 @@ const upload = async (req, res) => {
     blobStream.on("finish", async (data) => {
       // Create URL for directly file access via HTTP.
       const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/waste_history/${blob.name}`
+        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
       );
 
-      const id = nanoid(16);
-      const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const values = [id, userId, categoryId, publicUrl, 100, new Date()];
+      const insertWaste = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
+      const valuesWaste = [id, userId, categoryId, publicUrl, 100, new Date()];
+      const updatePoints =
+        "UPDATE users SET total_points = total_points + 100 WHERE id = ?";
 
       try {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        db.query(sql, values, (err, result) => {
-          if (err) {
-            res.status(400).json({
-              error: true,
-              message: "Error connection!",
-            });
-          }
+        db.query(insertWaste, valuesWaste, (err, result1) => {
+          db.query(updatePoints, [userId], (err, result) => {
+            if (err) {
+              res.status(400).json({
+                error: true,
+                message: "Error connection!",
+              });
+            }
 
-          res.status(201).json({
-            status: "success",
-            message: "Successfully upload!",
+            res.status(201).json({
+              status: "success",
+              message: "Successfully upload!",
+            });
           });
         });
       }
