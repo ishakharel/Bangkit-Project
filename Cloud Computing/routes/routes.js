@@ -77,7 +77,7 @@ router.get(
   wasteController.histories
 );
 router.get(
-  "/waste/histories/:history_id",
+  "/waste/histories/:id",
   checkApiKey,
   checkAuth,
   wasteController.historyDetail

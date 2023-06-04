@@ -200,7 +200,7 @@ const forgotPassword = (req, res) => {
             console.log(error);
           } else {
             res.status(200).json({
-              error: "success",
+              status: "success",
               message: "OTP email sent successfully",
             });
           }
