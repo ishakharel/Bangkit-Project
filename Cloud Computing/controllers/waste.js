@@ -1,10 +1,12 @@
 const { nanoid } = require("nanoid");
 const db = require("../config/db-config");
 const { bucket, processFileConfig } = require("../config/storage-config");
-const { format } = require("util");
+const { format, promisify } = require("util");
 const sharp = require("sharp");
-const userId = "4w3zSDRVZoNCCoFN";
-
+const axios = require("axios");
+const fs = require("fs");
+const FormData = require("form-data");
+const { error } = require("console");
 require("dotenv").config();
 
 const categories = (req, res) => {
@@ -18,12 +20,13 @@ const categories = (req, res) => {
   });
 };
 
-const categoriesWithId = (req, res) => {
-  const { id } = req.params;
+const categoryById = (req, res) => {
+  const categoryId = req.params.category_id;
+  console.log(categoryId);
 
   db.query(
     "SELECT * FROM waste_category WHERE id = ? ",
-    [id],
+    [categoryId],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -36,8 +39,10 @@ const categoriesWithId = (req, res) => {
 };
 
 const histories = (req, res) => {
+  const userId = req.user.id;
+
   db.query(
-    "SELECT * FROM waste_history WHERE user_id = ?",
+    "SELECT a.id, b.name as name, b.category as category, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ?",
     [userId],
     (error, result) => {
       if (error) {
@@ -50,24 +55,81 @@ const histories = (req, res) => {
   );
 };
 
+const historyDetail = (req, res) => {
+  const userId = req.user.id;
+  const { id } = req.params;
+
+  db.query(
+    "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
+    [userId, id],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Server Error!");
+      }
+
+      return res.status(200).json({ data: result });
+    }
+  );
+};
+
 const upload = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const id = nanoid(16);
+
+    if (!userId) {
+      res.status(400).json({
+        error: true,
+        message: "Invalid request. Please provide user id",
+      });
+      return;
+    }
+
     await processFileConfig(req, res);
 
     if (!req.file) {
       return res.status(400).send({ message: "Please upload a file!" });
     }
 
+    const imagePath = `./temp/${req.file.originalname}`;
+    await promisify(fs.writeFile)(imagePath, req.file.buffer);
+
+    const formData = {
+      image: fs.createReadStream(imagePath),
+    };
+
+    const server = "http://127.0.0.1:5000/upload";
+
+    const options = {
+      url: server,
+      formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        apikey: process.env.API_KEY,
+      },
+    };
+
+    const response = await axios.post(options.url, formData, {
+      headers: options.headers,
+    });
+
+    const categoryId = response.data.predicted_class;
+
     // Create a new blob in the bucket and upload the file data.
     const resizedImageBuffer = await sharp(req.file.buffer)
       .resize(200, 200) // Specify the desired width and height
       .toBuffer();
-    const blob = bucket.file(req.file.originalname);
+
+    const blob = bucket.file("waste_history/" + id);
     const blobStream = blob.createWriteStream({
       resumable: false,
+      metadata: {
+        contentType: req.file.mimetype,
+      },
     });
 
-    blobStream.on("error", (err) => {
+    blobStream.on(true, (err) => {
       res.status(500).send({ message: err.message });
     });
 
@@ -77,29 +139,46 @@ const upload = async (req, res) => {
         `https://storage.googleapis.com/${bucket.name}/${blob.name}`
       );
 
-      const id = nanoid(16);
-      const sql = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const values = [id, userId, 1, publicUrl, 100, new Date()];
-
       try {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        return res.status(500).send({
-          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
-          url: publicUrl,
+        db.query("SELECT * FROM waste_category WHERE id = ? ", [categoryId], (error, results) => {
+          const points = results[0].points
+          const insertWaste = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
+          const valuesWaste = [id, userId, categoryId, publicUrl, points, new Date()];
+          const updatePoints = "UPDATE users SET total_points = total_points + ? WHERE id = ?";
+          db.query(insertWaste, valuesWaste, (err, result1) => {
+            db.query(updatePoints, [points, userId], (err, result) => {
+              if (err) {
+                res.status(400).json({
+                  error: true,
+                  message: "Error connection!",
+                });
+              }
+  
+              db.query(
+                "SELECT a.id, b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ? ",
+                [userId, id],
+                (error, results) => {
+                  if (error) {
+                    console.log(error);
+                    return res.status(500).send("Server Error!");
+                  }
+                  res.status(200).json({
+                    status: 'success',
+                    message: "Successfully upload!",
+                    data: results
+                  });
+                }
+              );
+            });
+          });
         });
       }
-
-      db.query(sql, values, (err, result) => {
-        res.status(201).json({
-          status: "success",
-          message: "Successfully upload!",
-          url: publicUrl,
-        });
-      });
     });
 
+    fs.unlinkSync(imagePath);
     blobStream.end(resizedImageBuffer);
   } catch (err) {
     res.status(500).send({
@@ -108,22 +187,10 @@ const upload = async (req, res) => {
   }
 };
 
-const historyWithId = (req, res) => {
-  const { id } = req.params;
-
-  db.query("SELECT * FROM waste_histories WHERE id = ? ", [id], (err, res) => {
-    if (err) {
-      return res.status(500).json({ message: id });
-    }
-
-    return res.status(200).json({ data: id });
-  });
-};
-
 module.exports = {
   categories,
   histories,
   upload,
-  historyWithId,
-  categoriesWithId,
+  categoryById,
+  historyDetail,
 };
