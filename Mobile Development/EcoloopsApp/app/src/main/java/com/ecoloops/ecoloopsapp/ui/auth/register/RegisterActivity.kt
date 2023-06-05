@@ -10,6 +10,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.ecoloops.ecoloopsapp.MainActivity
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.databinding.ActivityRegisterBinding
 import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
@@ -24,6 +25,11 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.registerLayout.backButton.setOnClickListener {
             val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.registerLayout.registerButton.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
