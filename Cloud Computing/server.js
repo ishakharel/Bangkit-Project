@@ -23,7 +23,7 @@ app.get("/test", checkApiKey, (req, res) => {
   });
 });
 
-app.use("/", authRouter);
+app.use("/", checkApiKey, authRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port: http://localhost:${PORT}/`);

@@ -6,6 +6,7 @@ const sharp = require("sharp");
 const axios = require("axios");
 const fs = require("fs");
 const FormData = require("form-data");
+const { error } = require("console");
 require("dotenv").config();
 
 const categories = (req, res) => {
@@ -41,7 +42,7 @@ const histories = (req, res) => {
   const userId = req.user.id;
 
   db.query(
-    "SELECT a.*, b.name as waste_name, b.category FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE user_id = ?",
+    "SELECT a.id, b.name as name, b.category as category, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ?",
     [userId],
     (error, result) => {
       if (error) {
@@ -59,7 +60,7 @@ const historyDetail = (req, res) => {
   const { id } = req.params;
 
   db.query(
-    "SELECT a.id, b.name as waste_name, b.category FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE user_id = ? AND a.id = ?",
+    "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
     [userId, id],
     (error, result) => {
       if (error) {
@@ -122,6 +123,9 @@ const upload = async (req, res) => {
     const blob = bucket.file("waste_history/" + id);
     const blobStream = blob.createWriteStream({
       resumable: false,
+      metadata: {
+        contentType: req.file.mimetype,
+      },
     });
 
     blobStream.on(true, (err) => {
@@ -133,11 +137,6 @@ const upload = async (req, res) => {
       const publicUrl = format(
         `https://storage.googleapis.com/${bucket.name}/${blob.name}`
       );
-
-      const insertWaste = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-      const valuesWaste = [id, userId, categoryId, publicUrl, 100, new Date()];
-      const updatePoints =
-        "UPDATE users SET total_points = total_points + 100 WHERE id = ?";
 
       try {
         // Make the file public
