@@ -143,6 +143,49 @@ const upload = async (req, res) => {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
+        db.query(
+          "SELECT * FROM waste_category WHERE id = ? ",
+          [categoryId],
+          (error, results) => {
+            const points = results[0].points;
+            const insertWaste =
+              "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
+            const valuesWaste = [
+              id,
+              userId,
+              categoryId,
+              publicUrl,
+              points,
+              new Date(),
+            ];
+            const updatePoints =
+              "UPDATE users SET total_points = total_points + ? WHERE id = ?";
+            db.query(insertWaste, valuesWaste, (err, result1) => {
+              db.query(updatePoints, [points, userId], (err, result) => {
+                if (err) {
+                  res.status(400).json({
+                    error: true,
+                    message: "Error connection!",
+                  });
+                }
+
+                db.query(
+                  "SELECT a.id, b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ? ",
+                  [userId, id],
+                  (error, results) => {
+                    if (error) {
+                      console.log(error);
+                      return res.status(500).send("Server Error!");
+                    }
+                    res.status(200).json({
+                      status: "success",
+                      message: "Successfully upload!",
+                      data: results,
+                    });
+                  }
+                );
+              });
+
         db.query("SELECT * FROM waste_category WHERE id = ? ", [categoryId], (error, results) => {
           const points = results[0].points
           const insertWaste = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
@@ -173,8 +216,8 @@ const upload = async (req, res) => {
                 }
               );
             });
-          });
-        });
+          }
+        );
       }
     });
 

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ecoloopse-bangkit-project",
+  "private_key_id": "b3d2daaab1e9480b3719d2beba1899fe42f1abfe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDTIMPGn3v9TEoh\nNioGjhaJg2yuI/EPMlVt9WOEwv9b84RQaVa2WDJFOh/9shs6wIOx5R7ihrCRhFwp\ni0n9RuNqBU6Q5fOdiPOBjJ6PA8JdrfMi1S3cDfj9LfHGkZNGgDzk+VpCZV4h4Y0m\npgyRUnGtrTG10tCZUzMF5JuQOtLm/2E/4gFrQaA2OPW6TWO7DC/w5/4z9KiiVQhW\n3+EgULf62I+G7U1wlyKO69gpdHDmAVAm2t1g6X2hphnePGcC5nG671yHfqxF3CKG\nMruoV1gnpNhF73ekv+rHnMR7n4rXpJUcloio3zH9X6qM0d75FyMHXIAsqhL1QioL\no9nNqvLrAgMBAAECggEAAbQOntgGSEphHHxc2sUzCBtC3jjctW5Uc9fxmoa1X4dQ\nz1g927eyDJ4suKg3ZplikMypaUOjQd1qMXuNIRHC/rJzNARnKtYCKM7KXrJQz2pn\nFmRLor26ispvc4ygfExS9VN61pfm7EqpNrSgV9iXyEoYiCqoasIUII/Y5GxRb25Z\ndT3tAEqm3OGs+lwzNTvn9bPJ+PQnOIzm2R1BSPRM+H0N//+lP+37fTg9biZ5xrkC\ny5tLYsD2dyNghRbCB3Ub5eM4qtzgGbJwOnczdGXs9dru3/MH1fh+H8zs1nBWmdbW\nU50AaGTrLBL5hNKZ+aym/b6WqeCtbCVMysWCS2Xx0QKBgQDyFo23dYWfujlK6vwg\n9oa7B8fpdF7K7Mc5WX5Hx+5otrZZEUeD9Jy9fmRJcpn0xWQXtqMfkybMjZ4CQcOM\nv0G8AJ6j+STklY0DCwNQJYBzQBIHK6bXyu/5PhGWPP86jz0TRXewIppvHHjX/ybz\n3x5ZeqpYoharbFYxwo48DOIdEQKBgQDfQr7i3cZUUxjj1DKX3cv//2idPzK3xa1w\nSmFH7t4LIULkbQ9p1udnpPKy3CLJP66Rgyb0CzpQfUDEGfjFD92vKfI68JgQlF62\nDW5Er4diEpsghOIQGK7dNt+yRomCVmx9GJD5di8yxM65H2cOgLrK1t31G9+tS+8D\n2VDm8apAOwKBgQDv9d0ZSVtfPRbHJO8vuU1JHGhTBq9jU5oSRZv/iLTPhLRwysjp\nilDHH/5GM1tZnUMeokFE7fZacdF6iTdNTtLYiIC3JiEklvyEVKk/Cz0sgAiepO0n\nHxgJJTYHhoSyxgKTFJuTsmkD0+QQrfAtcS7DIOyzGE+CMcuqXR/hdB+5EQKBgQCI\nVyRnOvQhDtYGW9HBuGsaHIlwbeW1IHz4NBQQb6kdtuQ4xvlAs0KBotOrso9zwvYC\nWstxAWJNQRBKMWogPb4teDo7EC5tAY6NMsqCG4dbtu0RANVk6w3ufdJB9p2HAOwj\nwNrX3PqZ0GJF3w16Z9aqhGjrhGgmVlbSTOYBAtfrfQKBgGFDcmSZPQH3//Wn6tkB\nkHzXmuF65zJiE7FSHCHGJODtRQfpv5GbC3+K7Lw70DLrctA1Kxzgy3cvLdGUizk9\n0uCJozRPZiawzsXzJF7aYTCMUiE7OnsOezCAfdKhMeUNFcCGL/4ahNzQ8V/YPhZW\n7ar6mnHI1CTMyqXx3nN/M/Ri\n-----END PRIVATE KEY-----\n",
+  "client_email": "ecoloops-storage@ecoloopse-bangkit-project.iam.gserviceaccount.com",
+  "client_id": "101001849475024499405",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ecoloops-storage%40ecoloopse-bangkit-project.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
