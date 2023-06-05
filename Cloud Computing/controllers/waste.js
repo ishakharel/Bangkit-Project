@@ -91,14 +91,13 @@ const upload = async (req, res) => {
       return res.status(400).send({ message: "Please upload a file!" });
     }
 
-    const imagePath = `./temp/${req.file.originalname}`;
-    await promisify(fs.writeFile)(imagePath, req.file.buffer);
+    await promisify(fs.writeFile)(req.file.originalname, req.file.buffer);
 
     const formData = {
-      image: fs.createReadStream(imagePath),
+      image: fs.createReadStream(req.file.originalname),
     };
 
-    const server = "http://127.0.0.1:5000/upload";
+    const server = "https://cloud-run-app-ki2c4ur6wa-et.a.run.app/upload";
 
     const options = {
       url: server,
@@ -144,20 +143,6 @@ const upload = async (req, res) => {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-<<<<<<< Updated upstream
-        db.query(insertWaste, valuesWaste, (err, result1) => {
-          db.query(updatePoints, [userId], (err, result) => {
-            if (err) {
-              res.status(400).json({
-                error: true,
-                message: "Error connection!",
-              });
-            }
-
-            res.status(201).json({
-              status: "success",
-              message: "Successfully upload!",
-=======
         db.query(
           "SELECT * FROM waste_category WHERE id = ? ",
           [categoryId],
@@ -200,14 +185,12 @@ const upload = async (req, res) => {
                   }
                 );
               });
->>>>>>> Stashed changes
             });
           }
         );
       }
     });
-
-    fs.unlinkSync(imagePath);
+    fs.unlinkSync(req.file.originalname);
     blobStream.end(resizedImageBuffer);
   } catch (err) {
     res.status(500).send({
