@@ -8,12 +8,21 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.MainActivity
 import com.ecoloops.ecoloopsapp.R
+import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
+import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
+import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityRegisterBinding
 import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
+import com.ecoloops.ecoloopsapp.utils.showAlert
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -29,8 +38,59 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.registerLayout.registerButton.setOnClickListener {
-            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-            startActivity(intent)
+            binding.registerLayout.registerButton.isEnabled = false
+            binding.registerLayout.registerButton.text = "Loading..."
+
+            val email = binding.registerLayout.emailEditText.text.toString()
+            val password = binding.registerLayout.passwordEditText.text.toString()
+            val username = binding.registerLayout.nameEditText.text.toString()
+
+            if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
+                showAlert(this, "Please fill all the fields")
+                binding.registerLayout.registerButton.isEnabled = true
+                binding.registerLayout.registerButton.text = "Register"
+                return@setOnClickListener
+            }
+
+            val apiClient = ApiConfig()
+
+            val apiService = apiClient.createApiService()
+
+            val registerRequest = RegisterRequest(
+                username, email, password
+            )
+
+            val call = apiService.register(registerRequest)
+
+            call.enqueue(object : Callback<RegisterResponse> {
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val registerResponse = response.body()
+                        Log.d("RegisterActivity", "onResponse: ${registerResponse?.message}")
+                        val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                        intent.putExtra("email", email)
+                        startActivity(intent)
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        val jsonObject = JSONObject(errorBody)
+                        val message = jsonObject.getString("message")
+                        showAlert(this@RegisterActivity, message)
+                    }
+
+                    binding.registerLayout.registerButton.isEnabled = true
+                    binding.registerLayout.registerButton.text = "Register"
+                }
+
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    showAlert(this@RegisterActivity, "This is a simple alertis.")
+                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    binding.registerLayout.registerButton.isEnabled = true
+                    binding.registerLayout.registerButton.text = "Register"
+                }
+            })
         }
 
         val spannable = SpannableStringBuilder(getText(R.string.lets_register))

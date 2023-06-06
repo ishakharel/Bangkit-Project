@@ -10,7 +10,9 @@
         android:icon="@drawable/ic_point" />
 
     <item android:id="@+id/placeholder"
-        android:title="" />
+        android:title=""
+        android:enabled="false"
+        />
 
     <item android:id="@+id/miHistory"
         android:title="History"

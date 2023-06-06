@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/title_boarding1"
-        android:textColor="@color/black"
         android:textSize="34sp"
         android:fontFamily="@font/poppins_bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
