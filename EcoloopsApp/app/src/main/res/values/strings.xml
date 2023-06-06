@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">EcoloopsApp</string>
+
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+
+
+    <string name="title_boarding1">About Us</string>
+    <string name="title_boarding2">Scan Sampah</string>
+    <string name="title_boarding3">Recycle</string>
+    <string name="title_boarding4">Monetize</string>
+
+    <string name="description_boarding1">Ecoloops adalah aplikasi Identifikasi untuk Mengklasifikasikan sampah pengguna.</string>
+    <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
+    <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
+    <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
+    <string name="lets_register">Ayo Bergabung Bersama Ecoloops!</string>
+    <string name="name">Name</string>
+    <string name="name_hint">Masukan Nama Kamu</string>
+    <string name="email">Email</string>
+    <string name="email_hint">Masukan Email Kamu</string>
+    <string name="password">Password</string>
+    <string name="password_hint">Masukan Password</string>
+    <string name="confirm_password">Konfirmasi Password</string>
+    <string name="confirm_password_hint">Masukan Kembali Password</string>
+    <string name="register">Bergabung</string>
+    <string name="login">Masuk</string>
+    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops</string>
+    <string name="invalid_name">Nama Invalid</string>
+    <string name="invalid_email">Email Tidak Valid</string>
+    <string name="invalid_password">Password Tidak Valid</string>
+
+<!--    homepage-->
+    <string name="greeting">Hello,</string>
+    <string name="ePoints">E-Points mu</string>
+    <string name="points">100.000</string>
+
+
+</resources>
