@@ -117,9 +117,9 @@ class LoginActivity : AppCompatActivity() {
 
         val spannable = SpannableStringBuilder(getText(R.string.welcome_back))
         spannable.setSpan(
-            ForegroundColorSpan(Color.BLACK),
-            0, // start
-            24, // end
+            ForegroundColorSpan(getColor(R.color.colorPrimary)),
+            25, // start
+            34, // end
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
 
@@ -148,6 +148,8 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.loginLayout.passwordEditTextLayout, View.ALPHA, 1f).setDuration(300)
         val passwordEditText = ObjectAnimator.ofFloat(binding.loginLayout.passwordEditText, View.ALPHA, 1f).setDuration(300)
 
+        val forgetPassword = ObjectAnimator.ofFloat(binding.loginLayout.forgetPassword, View.ALPHA, 1f).setDuration(300)
+
         val loginButton = ObjectAnimator.ofFloat(binding.loginLayout.loginButton, View.ALPHA, 1f).setDuration(300)
         val registerButton = ObjectAnimator.ofFloat(binding.loginLayout.registerButton, View.ALPHA, 1f).setDuration(300)
 
@@ -156,13 +158,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         AnimatorSet().apply {
-            playSequentially(emailTextView, emailEditTextLayout, emailEditText, passwordTextView, passwordEditTextLayout, passwordEditText, together)
+            playSequentially(emailTextView, emailEditTextLayout, emailEditText, passwordTextView, passwordEditTextLayout, passwordEditText, forgetPassword, together)
             start()
         }
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                    finish()
+                finishAffinity()
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)

@@ -95,9 +95,9 @@ class RegisterActivity : AppCompatActivity() {
 
         val spannable = SpannableStringBuilder(getText(R.string.lets_register))
         spannable.setSpan(
-            ForegroundColorSpan(Color.BLACK),
-            0, // start
-            26, // end
+            ForegroundColorSpan(getColor(R.color.colorPrimary)),
+            26, // start
+            35, // end
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
 

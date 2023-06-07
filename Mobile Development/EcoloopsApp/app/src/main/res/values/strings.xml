@@ -25,7 +25,7 @@
     <string name="confirm_password_hint">Masukan Kembali Password</string>
     <string name="register">Bergabung</string>
     <string name="login">Masuk</string>
-    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops</string>
+    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops!</string>
     <string name="invalid_name">Nama Tidak Valid</string>
     <string name="invalid_email">Email Tidak Valid</string>
     <string name="invalid_password">Password Tidak Valid</string>
