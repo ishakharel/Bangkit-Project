@@ -13,6 +13,7 @@ import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.preference.UploadWastePreference
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivityUploadWasteBinding
+import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
 import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
 import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
 
@@ -65,6 +66,18 @@ class HomeActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@HomeActivity, UploadWasteActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.logoutButton.setOnClickListener {
+            val logout = userPreference.clearUser()
+            if (logout) {
+                Toast.makeText(this@HomeActivity, "Logout Success", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@HomeActivity, LoginActivity::class.java)
+                intent.putExtra("isLogout", true)
+                startActivity(intent)
+                finish()
+            }
+
         }
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
