@@ -103,6 +103,7 @@ class UploadWasteActivity : AppCompatActivity() {
             myFile?.let { file ->
                 getFile = file
                 binding.uploadWasteLayout.imagePickerView.setImageBitmap(BitmapFactory.decodeFile(file.path))
+                binding.uploadWasteLayout.cameraButton.text = "RETAKE PHOTO"
             }
 
         }
@@ -147,11 +148,11 @@ class UploadWasteActivity : AppCompatActivity() {
                         val image = responseBody?.data?.image.toString()
 
                         uploadWastePreferences.setUploadWaste(id, name, category, descriptionRecycle, date, points, image)
-                        Toast.makeText(this@UploadWasteActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@UploadWasteActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@UploadWasteActivity, ResultWasteActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(this@UploadWasteActivity, response.message(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UploadWasteActivity, "gagal di sini", Toast.LENGTH_SHORT).show()
                     }
                     binding.uploadWasteLayout.uploadWasteButton.isEnabled = true
                     binding.uploadWasteLayout.uploadWasteButton.text = "Upload Waste"
@@ -159,7 +160,7 @@ class UploadWasteActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<UploadWasteResponse>, t: Throwable) {
                     binding.uploadWasteLayout.uploadWasteButton.isEnabled = true
                     binding.uploadWasteLayout.uploadWasteButton.text = "Upload Waste"
-                    Toast.makeText(this@UploadWasteActivity, "gagal di sini", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@UploadWasteActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
             })
 

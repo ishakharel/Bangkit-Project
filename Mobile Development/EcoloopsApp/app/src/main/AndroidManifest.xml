@@ -34,6 +34,9 @@
             android:name=".ui.scan.UploadWasteActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.scan.ResultWasteActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.camera.CameraActivity"
             android:exported="false" />
         <activity
