@@ -10,7 +10,9 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
@@ -41,6 +43,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        binding.loginLayout.forgetPassword.setOnClickListener{
+            val intent = Intent(this@LoginActivity, SendOtpActivity::class.java)
+            startActivity(intent)
         }
 
         binding.loginLayout.registerButton.setOnClickListener {

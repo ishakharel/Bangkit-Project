@@ -148,9 +148,10 @@ class UploadWasteActivity : AppCompatActivity() {
                         val image = responseBody?.data?.image.toString()
 
                         uploadWastePreferences.setUploadWaste(id, name, category, descriptionRecycle, date, points, image)
-//                        Toast.makeText(this@UploadWasteActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@UploadWasteActivity, ResultWasteActivity::class.java))
                         finish()
+                        Toast.makeText(this@UploadWasteActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
+
                     } else {
                         Toast.makeText(this@UploadWasteActivity, "gagal di sini", Toast.LENGTH_SHORT).show()
                     }

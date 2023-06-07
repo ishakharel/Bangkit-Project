@@ -10,6 +10,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.MainActivity
 import com.ecoloops.ecoloopsapp.R
@@ -69,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val registerResponse = response.body()
-                        Log.d("RegisterActivity", "onResponse: ${registerResponse?.message}")
+                        Toast.makeText(this@RegisterActivity, registerResponse?.message, Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                         intent.putExtra("email", email)
                         startActivity(intent)
