@@ -1,25 +1,32 @@
-package com.ecoloops.ecoloopsapp.ui.home
+package com.ecoloops.ecoloopsapp.ui.page.home
 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
-import com.ecoloops.ecoloopsapp.data.preference.UploadWastePreference
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
-import com.ecoloops.ecoloopsapp.databinding.ActivityUploadWasteBinding
-import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
-import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
+import com.ecoloops.ecoloopsapp.ui.auth.login.SendOtpActivity
+import com.ecoloops.ecoloopsapp.ui.page.notification.NotificationActivity
+import com.ecoloops.ecoloopsapp.ui.page.profile.ProfileActivity
+import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
 import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var bottomNavigation: BottomNavigationView
+
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
@@ -47,6 +54,7 @@ class HomeActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -68,18 +76,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.logoutButton.setOnClickListener {
-            val logout = userPreference.clearUser()
-            if (logout) {
-                Toast.makeText(this@HomeActivity, "Logout Success", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this@HomeActivity, LoginActivity::class.java)
-                intent.putExtra("isLogout", true)
-                startActivity(intent)
-                finish()
-            }
-
-        }
-
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (sharedPreferences.token != "") {
@@ -88,5 +84,30 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
+        bottomNavigation = binding.bottomNavigationView
+        bottomNavigation.background = null
+
+        val view: View = bottomNavigation.findViewById(R.id.home)
+        view.performClick()
+
+        val reward: View = bottomNavigation.findViewById(R.id.reward)
+        reward.setOnClickListener{
+            val intent = Intent(this@HomeActivity, RewardActivity::class.java)
+            startActivity(intent)
+        }
+
+        val notification: View = bottomNavigation.findViewById(R.id.notification)
+        notification.setOnClickListener{
+            val intent = Intent(this@HomeActivity, NotificationActivity::class.java)
+            startActivity(intent)
+        }
+
+        val profile: View = bottomNavigation.findViewById(R.id.profile)
+        profile.setOnClickListener{
+            val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }

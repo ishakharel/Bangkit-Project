@@ -3,16 +3,13 @@ package com.ecoloops.ecoloopsapp.ui.auth.login
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
@@ -21,7 +18,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
 import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
-import com.ecoloops.ecoloopsapp.ui.home.HomeActivity
+import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call

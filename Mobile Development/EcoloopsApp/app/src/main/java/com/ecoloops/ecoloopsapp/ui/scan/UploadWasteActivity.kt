@@ -18,7 +18,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityUploadWasteBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity
-import com.ecoloops.ecoloopsapp.ui.home.HomeActivity
+import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody

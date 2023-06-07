@@ -11,8 +11,6 @@ import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivitySendOtpBinding
-import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
-import com.ecoloops.ecoloopsapp.ui.home.HomeActivity
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call
