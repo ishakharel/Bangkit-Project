@@ -35,6 +35,11 @@
     <string name="ePoints">E-Points mu</string>
     <string name="points">100.000</string>
     <string name="category_tv">Kategori</string>
+    <string name="userActivity_tv">Aktivitas Anda</string>
 
+<!--    reward page-->
+    <string name="reward_name">T-Shirt Ecoloops</string>
+    <string name="reward_points">25.000 Poin</string>
+    <string name="reward_stock">10 Stok Tersisa</string>
 
 </resources>
