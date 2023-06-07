@@ -33,7 +33,7 @@ const categoryById = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json(result);
+      return res.status(200).json(result[0]);
     }
   );
 };
@@ -68,7 +68,7 @@ const historyDetail = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ data: result[0] });
     }
   );
 };
@@ -179,7 +179,7 @@ const upload = async (req, res) => {
                     res.status(200).json({
                       status: "success",
                       message: "Successfully upload!",
-                      data: results,
+                      data: results[0],
                     });
                   }
                 );
