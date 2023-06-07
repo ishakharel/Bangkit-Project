@@ -105,7 +105,7 @@
                             android:layout_marginTop="8dp"
                             android:text="@string/points"
                             android:textColor="@color/colorPrimaryDark"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="@+id/word_point"
                             app:layout_constraintTop_toBottomOf="@+id/word_point" />
@@ -113,10 +113,32 @@
                 </com.google.android.material.card.MaterialCardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/category_tv"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/parent_rv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
         </LinearLayout>
-
-
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,7 @@
     <string name="greeting">Hello,</string>
     <string name="ePoints">E-Points mu</string>
     <string name="points">100.000</string>
+    <string name="category_tv">Kategori</string>
 
 
 </resources>
