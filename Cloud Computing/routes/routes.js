@@ -21,11 +21,24 @@ router.get("/user/notif/", checkAuth, userController.getNotificationByUserId);
 router.get("/user", checkAuth, userController.getUserById);
 router.get("/user/merch/", userController.getAllMerch);
 router.get("/user/points/", checkAuth, userController.checkPoints);
-router.get("/user/merch-redeemed/", checkAuth, userController.getMerchRedeemedByUserId);
+router.get(
+  "/user/merch-redeemed/",
+  checkAuth,
+  userController.getMerchRedeemedByUserId
+);
 router.put("/user/points/", checkAuth, userController.exchangePoints);
-router.put("/user/username/",checkAuth, userController.changeUsername);
-router.put("/user/profile/", checkAuth, multerConfig, userController.changeImage);
-router.delete("/user/notif/:id", checkAuth, userController.deleteNotificationById);
+router.put("/user/username/", checkAuth, userController.editProfile);
+router.put(
+  "/user/profile/",
+  checkAuth,
+  multerConfig,
+  userController.changeImage
+);
+router.delete(
+  "/user/notif/:id",
+  checkAuth,
+  userController.deleteNotificationById
+);
 
 //Waste
 router.get("/waste/categories/", wasteController.categories);
