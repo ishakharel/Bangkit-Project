@@ -39,17 +39,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/cameraButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginHorizontal="70dp"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circle_iv_avatar"
-        android:background="@drawable/rounded_shape"
-        android:text="Take Photo"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_camera"
+        app:layout_constraintEnd_toEndOf="@id/circle_iv_avatar"
+        app:layout_constraintBottom_toBottomOf="@id/circle_iv_avatar"/>
+    
 
     <Button
         android:id="@+id/submitEditButton"
