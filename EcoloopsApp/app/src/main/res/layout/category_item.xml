@@ -32,7 +32,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tv_categoryTitle"
+            android:id="@+id/tv_logo_categoryTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginVertical="5dp"
