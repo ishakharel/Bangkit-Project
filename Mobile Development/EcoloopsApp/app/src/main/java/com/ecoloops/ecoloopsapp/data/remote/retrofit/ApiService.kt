@@ -6,6 +6,7 @@ import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
 import com.ecoloops.ecoloopsapp.data.model.ResetPassRequest
 import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
@@ -33,6 +34,12 @@ interface ApiService {
     fun login(
         @Body body: LoginRequest
     ): Call<LoginResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @POST("auth/logout")
+    fun logout(
+        @Header("authorization") token: String
+    ): Call<LogoutResponse>
 
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
     @POST("auth/forgot-pass")

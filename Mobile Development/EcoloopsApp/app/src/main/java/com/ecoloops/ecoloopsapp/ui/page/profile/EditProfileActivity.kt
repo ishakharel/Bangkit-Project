@@ -168,6 +168,7 @@ class EditProfileActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this@EditProfileActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
         }
+
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 startActivity(Intent(this@EditProfileActivity, ProfileActivity::class.java))

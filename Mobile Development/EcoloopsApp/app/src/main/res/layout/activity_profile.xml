@@ -239,6 +239,7 @@
                 android:padding="15dp">
 
                 <TextView
+                    android:id="@+id/tv_logout"
                     style="@style/TextViewTheme"
                     android:text="Logout"
                     android:gravity="center"
