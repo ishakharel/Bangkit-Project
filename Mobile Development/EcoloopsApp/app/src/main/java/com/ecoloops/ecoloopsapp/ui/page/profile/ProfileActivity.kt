@@ -19,6 +19,7 @@ import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
 import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.ui.page.notification.NotificationActivity
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
+import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONObject
@@ -35,6 +36,11 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.fab.setOnClickListener {
+            val intent = Intent(this@ProfileActivity, UploadWasteActivity::class.java)
+            startActivity(intent)
+        }
+
         val userProfilePreference = LoginPreference(this)
         val userProfile = userProfilePreference.getUser()
 
@@ -50,6 +56,12 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.editProfileCV.setOnClickListener{
             val intent = Intent(this@ProfileActivity, EditProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.editPasswordCV.setOnClickListener{
+            val intent = Intent(this@ProfileActivity, EditPasswordActivity::class.java)
             startActivity(intent)
             finish()
         }

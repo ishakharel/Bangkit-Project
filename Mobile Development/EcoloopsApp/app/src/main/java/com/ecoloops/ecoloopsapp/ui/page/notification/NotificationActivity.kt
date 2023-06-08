@@ -9,6 +9,7 @@ import com.ecoloops.ecoloopsapp.databinding.ActivityNotificationBinding
 import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.ui.page.profile.ProfileActivity
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
+import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class NotificationActivity : AppCompatActivity() {
@@ -19,6 +20,11 @@ class NotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNotificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.fab.setOnClickListener {
+            val intent = Intent(this@NotificationActivity, UploadWasteActivity::class.java)
+            startActivity(intent)
+        }
 
         bottomNavigation = binding.bottomNavigationView
         bottomNavigation.background = null

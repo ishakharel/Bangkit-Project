@@ -19,9 +19,11 @@ import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityEditProfileBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity2
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
+import com.ecoloops.ecoloopsapp.utils.showAlert
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -153,7 +155,10 @@ class EditProfileActivity : AppCompatActivity() {
                         Toast.makeText(this@EditProfileActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
 
                     } else {
-                        Toast.makeText(this@EditProfileActivity, "gagal", Toast.LENGTH_SHORT).show()
+                        val errorBody = response.errorBody()?.string()
+                        val jsonObject = JSONObject(errorBody.toString())
+                        val message = jsonObject.getString("message")
+                        showAlert(this@EditProfileActivity, message)
                     }
                     binding.submitEditButton.isEnabled = true
                     binding.submitEditButton.text = "Upload Story"

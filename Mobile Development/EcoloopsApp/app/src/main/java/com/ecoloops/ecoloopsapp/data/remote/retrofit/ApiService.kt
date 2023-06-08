@@ -1,5 +1,6 @@
 package com.ecoloops.ecoloopsapp.data.remote.retrofit
 
+import com.ecoloops.ecoloopsapp.data.model.EditPassRequest
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
@@ -40,6 +41,13 @@ interface ApiService {
     fun logout(
         @Header("authorization") token: String
     ): Call<LogoutResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @PUT("auth/change-pass")
+    fun editPassword(
+        @Header("authorization") token: String,
+        @Body body: EditPassRequest
+    ): Call<ResetPassResponse>
 
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
     @POST("auth/forgot-pass")
