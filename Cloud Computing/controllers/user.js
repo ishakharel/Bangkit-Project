@@ -39,9 +39,9 @@ const getUserById = (req, res) => {
   });
 };
 
-const changeUsername = (req, res) => {
+const editProfile = (req, res) => {
   const userId = req.user.id;
-  const { newUsername } = req.body;
+  const { newUsername, address, gender, age, job, dob } = req.body;
 
   if (!userId || !newUsername) {
     res.status(400).json({
@@ -52,8 +52,8 @@ const changeUsername = (req, res) => {
   }
 
   db.query(
-    "UPDATE users SET name = ? WHERE id = ?",
-    [newUsername, userId],
+    "UPDATE users SET name = ?, address = ?, gender = ?, age = ?, job = ?, dob = ? WHERE id = ?",
+    [newUsername, address, gender, age, job, dob, userId],
     (error, results) => {
       if (error) {
         res.status(500).json({
@@ -67,7 +67,14 @@ const changeUsername = (req, res) => {
 
       res.status(200).json({
         status: "success",
-        message: "Username change successfully",
+        data: {
+          username: newUsername,
+          address: address,
+          gender: gender,
+          age: age,
+          job: job,
+          dob: dob,
+        },
       });
     }
   );
@@ -255,8 +262,8 @@ const exchangePoints = (req, res) => {
               const id = nanoid(20);
 
               db.query(
-                "INSERT INTO users_merch_redeem VALUES (?, ?, ?, NOW())",
-                [id, userId, merchId],
+                "INSERT INTO users_merch_redeem VALUES (?, ?, ?, ?, NOW())",
+                [id, userId, merchId, "On Process"],
                 (error, results4) => {
                   if (error) {
                     res.status(500).json({
@@ -465,7 +472,7 @@ const getMerchRedeemedByUserId = (req, res) => {
 
 module.exports = {
   getUserById,
-  changeUsername,
+  editProfile,
   checkPoints,
   exchangePoints,
   addNotification,
