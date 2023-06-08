@@ -17,6 +17,12 @@ class LoginPreference(context: Context) {
         editor.apply()
     }
 
+    fun setImgUrl(image: String?) {
+        val editor = preferences.edit()
+        editor.putString("image", image)
+        editor.apply()
+    }
+
     fun getUser(): UserModel {
         val model = UserModel()
         model.id = preferences.getString("id", "")

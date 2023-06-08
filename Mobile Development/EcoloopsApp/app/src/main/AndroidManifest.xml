@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -28,9 +29,6 @@
             android:name=".ui.auth.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.home.HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.scan.UploadWasteActivity"
             android:exported="false" />
         <activity
@@ -38,6 +36,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.camera.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraActivity2"
             android:exported="false" />
         <activity
             android:name=".ui.auth.login.SendOtpActivity"
@@ -56,6 +57,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.page.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

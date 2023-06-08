@@ -14,6 +14,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circle_iv_avatar"
+        android:src="@drawable/no_profile"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="30dp"
@@ -21,8 +22,7 @@
         app:civ_border_color="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tv_full_name"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/circle_iv_avatar" />
 
     <TextView
-        android:id="@+id/tv_username"
+        android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="cahyadiantoni@gmail.com"
@@ -53,10 +53,10 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_username"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_email"/>
 
     <TextView
-        android:id="@+id/tv_count_repo"
+        android:id="@+id/count_reward_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -66,11 +66,11 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv_count_followers"
+        app:layout_constraintEnd_toStartOf="@id/count_scan_tv"
         app:layout_constraintTop_toBottomOf="@id/material_divider_top"/>
 
     <TextView
-        android:id="@+id/tv_count_followers"
+        android:id="@+id/count_scan_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="0"
@@ -78,12 +78,12 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toEndOf="@id/tv_count_repo"
-        app:layout_constraintEnd_toStartOf="@id/tv_count_following"
-        app:layout_constraintTop_toTopOf="@id/tv_count_repo" />
+        app:layout_constraintStart_toEndOf="@id/count_reward_tv"
+        app:layout_constraintEnd_toStartOf="@id/count_point_tv"
+        app:layout_constraintTop_toTopOf="@id/count_reward_tv" />
 
     <TextView
-        android:id="@+id/tv_count_following"
+        android:id="@+id/count_point_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="0"
@@ -91,8 +91,8 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="@id/tv_count_repo"
-        app:layout_constraintStart_toEndOf="@id/tv_count_followers"
+        app:layout_constraintTop_toTopOf="@id/count_reward_tv"
+        app:layout_constraintStart_toEndOf="@id/count_scan_tv"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
@@ -103,7 +103,7 @@
         android:textSize="16sp"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_count_repo"
+        app:layout_constraintTop_toBottomOf="@id/count_reward_tv"
         app:layout_constraintEnd_toStartOf="@id/tv_static_followers"/>
 
     <TextView

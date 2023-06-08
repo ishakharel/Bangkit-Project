@@ -8,6 +8,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -52,4 +53,12 @@ interface ApiService {
         @Header("authorization") token: String,
         @Part file: MultipartBody.Part,
     ): Call<UploadWasteResponse>
+
+    @Multipart
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @PUT("user/profile")
+    fun uploadPhoto(
+        @Header("authorization") token: String,
+        @Part file: MultipartBody.Part,
+    ): Call<UploadPhotoResponse>
 }

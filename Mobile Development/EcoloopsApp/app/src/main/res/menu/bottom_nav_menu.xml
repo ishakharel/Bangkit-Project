@@ -15,7 +15,7 @@
         />
 
     <item android:id="@+id/notification"
-        android:title="Notification"
+        android:title="Notif"
         android:icon="@drawable/ic_notification" />
 
     <item android:id="@+id/profile"
