@@ -13,6 +13,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.page.category.DetailCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.page.category.CategoryActivity"
             android:exported="false" />
         <activity
@@ -32,7 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

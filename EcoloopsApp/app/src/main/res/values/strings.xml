@@ -49,5 +49,9 @@
     <string name="category_description_recycle_title">Cara Daur Ulang</string>
     <string name="category_description_recycle">Buang kedalam tempat sampah daur ulang\nberwarna hijau untuk sampah makanan.</string>
     <string name="detail_category">produk</string>
+    <string name="detail_product_name">Nama Produk</string>
+    <string name="product_name">Roti</string>
+    <string name="product_recycle_title">Cara Daur Ulang</string>
+    <string name="product_recycle_description">Buang kedalam tempat sampah daur ulang berwarna hijau untuk sampah makanan.</string>
 
 </resources>

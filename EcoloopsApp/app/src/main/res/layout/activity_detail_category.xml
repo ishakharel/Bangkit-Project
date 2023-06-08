@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.page.category.CategoryActivity">
+    tools:context=".ui.page.category.DetailCategoryActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,11 +22,10 @@
                 android:elevation="8dp">
 
                 <ImageView
-                    android:id="@+id/iv_category"
+                    android:id="@+id/iv_detail_category"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/food_waste" />
-
+                    android:layout_height="310dp"
+                    android:src="@drawable/bread" />
             </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,22 +38,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="@string/category_title"
+                    android:text="@string/detail_product_name"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_categoryDescription"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/category_description"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/product_name"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_categoryTitle"
                     app:layout_constraintTop_toBottomOf="@+id/tv_categoryTitle" />
 
@@ -66,48 +64,47 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray" />
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_categoryExampleTitle"
+                    android:id="@+id/tv_product_category_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/category_example_title"
+                    android:text="@string/category_tv"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_category_product_name"
+                <TextView
+                    android:id="@+id/tv_product_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@+id/tv_categoryExampleTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_categoryExampleTitle"
-                    tools:listitem="@layout/item_detail_category" />
+                    android:layout_marginStart="16dp"
+                    android:text="@string/category_title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_product_category_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_product_category_title" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_category_description_recycle_title"
+                    android:id="@+id/tv_product_recycle_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/category_description_recycle_title"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/product_recycle_title"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -115,16 +112,15 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_category_description_recycle"
+                    android:id="@+id/tv_product_recycle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/category_description_recycle"
-                    android:textColor="@color/black"
+                    android:text="@string/product_recycle_description"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/tv_category_description_recycle_title"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_category_description_recycle_title" />
+                    app:layout_constraintStart_toStartOf="@+id/tv_product_recycle_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_product_recycle_title" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
