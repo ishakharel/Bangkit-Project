@@ -87,7 +87,8 @@ const changeImage = (req, res) => {
       .status(400)
       .send({ status: "error", message: "Please provide an image" });
 
-  const fileName = `user_profile/${userId}`;
+  const id = nanoid(16);
+  const fileName = `user_profile/${id}`;
   const blob = bucket.file(fileName);
 
   db.query("SELECT * FROM users WHERE id = ?", [userId], (error, results) => {
@@ -393,7 +394,7 @@ const getNotificationByUserId = (req, res) => {
 };
 
 const deleteNotificationById = (req, res) => {
-  const notifId = req.params.id;
+  const notifId = req.body.id;
   const userId = req.user.id;
   if (!notifId) {
     res.status(400).json({

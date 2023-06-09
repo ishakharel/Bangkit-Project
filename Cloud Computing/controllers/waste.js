@@ -21,7 +21,7 @@ const categories = (req, res) => {
 };
 
 const categoryById = (req, res) => {
-  const categoryId = req.params.category_id;
+  const categoryId = req.body.category_id;
   console.log(categoryId);
 
   db.query(
@@ -57,7 +57,7 @@ const histories = (req, res) => {
 
 const historyDetail = (req, res) => {
   const userId = req.user.id;
-  const { id } = req.params;
+  const { id } = req.body;
 
   db.query(
     "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
