@@ -34,14 +34,14 @@ const getUserById = (req, res) => {
 
     res.status(200).json({
       status: "success",
-      data: results,
+      data: results[0],
     });
   });
 };
 
-const changeUsername = (req, res) => {
+const editProfile = (req, res) => {
   const userId = req.user.id;
-  const { newUsername } = req.body;
+  const { newUsername, address, gender, age, job, dob } = req.body;
 
   if (!userId || !newUsername) {
     res.status(400).json({
@@ -52,8 +52,8 @@ const changeUsername = (req, res) => {
   }
 
   db.query(
-    "UPDATE users SET name = ? WHERE id = ?",
-    [newUsername, userId],
+    "UPDATE users SET name = ?, address = ?, gender = ?, age = ?, job = ?, dob = ? WHERE id = ?",
+    [newUsername, address, gender, age, job, dob, userId],
     (error, results) => {
       if (error) {
         res.status(500).json({
@@ -67,7 +67,14 @@ const changeUsername = (req, res) => {
 
       res.status(200).json({
         status: "success",
-        message: "Username change successfully",
+        data: {
+          username: newUsername,
+          address: address,
+          gender: gender,
+          age: age,
+          job: job,
+          dob: dob,
+        },
       });
     }
   );
@@ -147,7 +154,7 @@ const changeImage = (req, res) => {
   });
 };
 
-const checkPoints = (req, res) => {
+const getUserDashboardData = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
@@ -169,9 +176,37 @@ const checkPoints = (req, res) => {
 
     const user = results[0];
 
-    res.status(200).json({
-      status: "success",
-      points: user.total_points,
+    db.query("SELECT COUNT(id) as scan FROM waste_history WHERE user_id = ?", [userId], (error, results2) => {
+      if (error) {
+        res.status(500).json({
+          error: true,
+          message:
+            "Internal server error. Cannot find user, please try again later",
+        });
+        console.log(error);
+        return;
+      }
+
+      db.query("SELECT COUNT(id) as rewards FROM users_merch_redeem WHERE user_id = ?", [userId], (error, results3) => {
+        if (error) {
+          res.status(500).json({
+            error: true,
+            message:
+              "Internal server error. Cannot find user, please try again later",
+          });
+          console.log(error);
+          return;
+        }
+
+        res.status(200).json({
+          status: "success",
+          data: {
+            rewards: results3[0].rewards,
+            scan: results2[0].scan,
+            points: user.total_points,
+          }
+        });
+      });
     });
   });
 };
@@ -255,8 +290,8 @@ const exchangePoints = (req, res) => {
               const id = nanoid(20);
 
               db.query(
-                "INSERT INTO users_merch_redeem VALUES (?, ?, ?, NOW())",
-                [id, userId, merchId],
+                "INSERT INTO users_merch_redeem VALUES (?, ?, ?, ?, NOW())",
+                [id, userId, merchId, "On Process"],
                 (error, results4) => {
                   if (error) {
                     res.status(500).json({
@@ -465,8 +500,8 @@ const getMerchRedeemedByUserId = (req, res) => {
 
 module.exports = {
   getUserById,
-  changeUsername,
-  checkPoints,
+  editProfile,
+  getUserDashboardData,
   exchangePoints,
   addNotification,
   getNotificationByUserId,

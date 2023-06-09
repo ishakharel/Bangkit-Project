@@ -33,7 +33,7 @@ const categoryById = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json(result);
+      return res.status(200).json(result[0]);
     }
   );
 };
@@ -68,7 +68,7 @@ const historyDetail = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ data: result[0] });
     }
   );
 };
@@ -92,14 +92,13 @@ const upload = async (req, res) => {
       return res.status(400).send({ message: "Please upload a file!" });
     }
 
-    const imagePath = `./temp/${req.file.originalname}`;
-    await promisify(fs.writeFile)(imagePath, req.file.buffer);
+    await promisify(fs.writeFile)(req.file.originalname, req.file.buffer);
 
     const formData = {
-      image: fs.createReadStream(imagePath),
+      image: fs.createReadStream(req.file.originalname),
     };
 
-    const server = "http://127.0.0.1:5000/upload";
+    const server = "https://cloud-run-app-ki2c4ur6wa-et.a.run.app/upload";
 
     const options = {
       url: server,
@@ -143,42 +142,54 @@ const upload = async (req, res) => {
         // Make the file public
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        db.query("SELECT * FROM waste_category WHERE id = ? ", [categoryId], (error, results) => {
-          const points = results[0].points
-          const insertWaste = "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
-          const valuesWaste = [id, userId, categoryId, publicUrl, points, new Date()];
-          const updatePoints = "UPDATE users SET total_points = total_points + ? WHERE id = ?";
-          db.query(insertWaste, valuesWaste, (err, result1) => {
-            db.query(updatePoints, [points, userId], (err, result) => {
-              if (err) {
-                res.status(400).json({
-                  error: true,
-                  message: "Error connection!",
-                });
-              }
-  
-              db.query(
-                "SELECT a.id, b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ? ",
-                [userId, id],
-                (error, results) => {
-                  if (error) {
-                    console.log(error);
-                    return res.status(500).send("Server Error!");
-                  }
-                  res.status(200).json({
-                    status: 'success',
-                    message: "Successfully upload!",
-                    data: results
+        db.query(
+          "SELECT * FROM waste_category WHERE id = ? ",
+          [categoryId],
+          (error, results) => {
+            const points = results[0].points;
+            const insertWaste =
+              "INSERT INTO waste_history VALUES (?, ?, ?, ?, ?, ?)";
+            const valuesWaste = [
+              id,
+              userId,
+              categoryId,
+              publicUrl,
+              points,
+              new Date(),
+            ];
+            const updatePoints =
+              "UPDATE users SET total_points = total_points + ? WHERE id = ?";
+            db.query(insertWaste, valuesWaste, (err, result1) => {
+              db.query(updatePoints, [points, userId], (err, result) => {
+                if (err) {
+                  res.status(400).json({
+                    error: true,
+                    message: "Error connection!",
                   });
                 }
-              );
+
+                db.query(
+                  "SELECT a.id, b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ? ",
+                  [userId, id],
+                  (error, results) => {
+                    if (error) {
+                      console.log(error);
+                      return res.status(500).send("Server Error!");
+                    }
+                    res.status(200).json({
+                      status: "success",
+                      message: "Successfully upload!",
+                      data: results[0],
+                    });
+                  }
+                );
+              });
             });
-          });
-        });
+          }
+        );
       }
     });
-
-    fs.unlinkSync(imagePath);
+    fs.unlinkSync(req.file.originalname);
     blobStream.end(resizedImageBuffer);
   } catch (err) {
     res.status(500).send({
