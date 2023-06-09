@@ -21,12 +21,11 @@ const categories = (req, res) => {
 };
 
 const categoryById = (req, res) => {
-  const categoryId = req.body.category_id;
-  console.log(categoryId);
+  const { id } = req.body;
 
   db.query(
     "SELECT * FROM waste_category WHERE id = ? ",
-    [categoryId],
+    [id],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -60,7 +59,7 @@ const historyDetail = (req, res) => {
   const { id } = req.body;
 
   db.query(
-    "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
+    "SELECT b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image as image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
     [userId, id],
     (error, result) => {
       if (error) {
