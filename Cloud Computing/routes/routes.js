@@ -43,8 +43,8 @@ router.delete(
 //Waste
 router.get("/waste/categories/", wasteController.categories);
 router.get("/waste/histories/", checkAuth, wasteController.histories);
-router.get("/waste/histories-id/", checkAuth, wasteController.historyDetail);
-router.get("/waste/categories-id/", wasteController.categoryById);
+router.get("/waste/history/", checkAuth, wasteController.historyDetail);
+router.get("/waste/category/", wasteController.categoryById);
 router.post("/waste/upload/", checkAuth, checkUpload, wasteController.upload);
 
 module.exports = router;
