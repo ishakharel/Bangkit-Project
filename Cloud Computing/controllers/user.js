@@ -34,7 +34,7 @@ const getUserById = (req, res) => {
 
     res.status(200).json({
       status: "success",
-      data: results,
+      data: results[0],
     });
   });
 };
@@ -154,7 +154,7 @@ const changeImage = (req, res) => {
   });
 };
 
-const checkPoints = (req, res) => {
+const getUserDashboardData = (req, res) => {
   const userId = req.user.id;
   if (!userId) {
     res.status(400).json({
@@ -176,9 +176,37 @@ const checkPoints = (req, res) => {
 
     const user = results[0];
 
-    res.status(200).json({
-      status: "success",
-      points: user.total_points,
+    db.query("SELECT COUNT(id) as scan FROM waste_history WHERE user_id = ?", [userId], (error, results2) => {
+      if (error) {
+        res.status(500).json({
+          error: true,
+          message:
+            "Internal server error. Cannot find user, please try again later",
+        });
+        console.log(error);
+        return;
+      }
+
+      db.query("SELECT COUNT(id) as rewards FROM users_merch_redeem WHERE user_id = ?", [userId], (error, results3) => {
+        if (error) {
+          res.status(500).json({
+            error: true,
+            message:
+              "Internal server error. Cannot find user, please try again later",
+          });
+          console.log(error);
+          return;
+        }
+
+        res.status(200).json({
+          status: "success",
+          data: {
+            rewards: results3[0].rewards,
+            scan: results2[0].scan,
+            points: user.total_points,
+          }
+        });
+      });
     });
   });
 };
@@ -473,7 +501,7 @@ const getMerchRedeemedByUserId = (req, res) => {
 module.exports = {
   getUserById,
   editProfile,
-  checkPoints,
+  getUserDashboardData,
   exchangePoints,
   addNotification,
   getNotificationByUserId,
