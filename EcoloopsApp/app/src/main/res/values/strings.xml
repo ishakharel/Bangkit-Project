@@ -54,4 +54,13 @@
     <string name="product_recycle_title">Cara Daur Ulang</string>
     <string name="product_recycle_description">Buang kedalam tempat sampah daur ulang berwarna hijau untuk sampah makanan.</string>
 
+    <!--    notification-->
+    <string name="notification_title">Selamat datang di aplikasi Ecoloops</string>
+    <string name="notification_body">Bersama Ecoloops membuat lingkungan lebih bersih!</string>
+    <string name="notification_time">21 Mei 2023</string>
+
+<!--    history-->
+    <string name="history_time">09 Januari 2023</string>
+    <string name="history_point">+25 poin</string>
+
 </resources>
