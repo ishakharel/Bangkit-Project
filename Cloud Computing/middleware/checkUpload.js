@@ -8,7 +8,8 @@ const checkUpload = (req, res, next) => {
         if(total_scan > 4){
             res.status(400).json({
                 error: true,
-                message: "User alredy upload 4 waste today!"
+                message: "User alredy upload 4 waste today!",
+                total_scan_today: total_scan,
             });
         } else {
             next();
