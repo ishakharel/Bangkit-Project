@@ -46,7 +46,7 @@
         android:src="@drawable/ic_camera"
         app:layout_constraintEnd_toEndOf="@id/circle_iv_avatar"
         app:layout_constraintBottom_toBottomOf="@id/circle_iv_avatar"/>
-    
+
 
     <Button
         android:id="@+id/submitEditButton"

@@ -28,9 +28,6 @@ class EditPasswordActivity : AppCompatActivity() {
         binding = ActivityEditPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userProfilePreference = LoginPreference(this)
-        val userProfile = userProfilePreference.getUser()
-
         binding.resetPasswordButton.setOnClickListener {
 
             val passwordOld = binding.passwordOldEV.text.toString()

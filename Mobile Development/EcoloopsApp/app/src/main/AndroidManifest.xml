@@ -65,6 +65,9 @@
             android:name=".ui.page.profile.EditPasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.page.profile.HistoryScanActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
