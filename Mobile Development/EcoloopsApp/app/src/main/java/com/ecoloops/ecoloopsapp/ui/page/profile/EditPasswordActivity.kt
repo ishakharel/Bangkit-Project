@@ -3,17 +3,12 @@ package com.ecoloops.ecoloopsapp.ui.page.profile
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.data.model.EditPassRequest
-import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
-import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
-import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityEditPasswordBinding
-import com.ecoloops.ecoloopsapp.databinding.ActivityEditProfileBinding
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call

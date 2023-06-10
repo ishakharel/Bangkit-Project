@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.preference.UploadWastePreference
+import com.ecoloops.ecoloopsapp.data.remote.response.DashboardResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
@@ -36,13 +40,17 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val userProfilePreference = LoginPreference(this)
+        val userProfile = userProfilePreference.getUser()
+
+        dashboardData(userProfile.token)
+
         binding.fab.setOnClickListener {
             val intent = Intent(this@ProfileActivity, UploadWasteActivity::class.java)
             startActivity(intent)
         }
 
-        val userProfilePreference = LoginPreference(this)
-        val userProfile = userProfilePreference.getUser()
+
 
         if(userProfile.image != ""){
             Glide.with(this@ProfileActivity)
@@ -62,6 +70,12 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.editPasswordCV.setOnClickListener{
             val intent = Intent(this@ProfileActivity, EditPasswordActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.historyCV.setOnClickListener{
+            val intent = Intent(this@ProfileActivity, HistoryScanActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -142,5 +156,37 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    fun dashboardData(token: String?){
+        val apiClient = ApiConfig()
+        val apiService = apiClient.createApiService()
+        val call = apiService.getDashboard("Bearer $token")
+
+        call.enqueue(object : Callback<DashboardResponse> {
+            override fun onResponse(
+                call: Call<DashboardResponse>,
+                response: Response<DashboardResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val dashboardResponse = response.body()
+                    binding.countRewardTv.text = dashboardResponse?.data?.rewards.toString()
+                    binding.countScanTv.text = dashboardResponse?.data?.scan.toString()
+                    binding.countPointTv.text = dashboardResponse?.data?.points.toString()
+
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val jsonObject = JSONObject(errorBody)
+                    val message = jsonObject.getString("message")
+                    Log.d("HistoryActivity", "onResponses: ${message}")
+                }
+
+            }
+
+            override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
+                Log.e("HistoryActivity", "onFailure: ${t.message}")
+            }
+
+        })
     }
 }

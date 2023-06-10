@@ -18,4 +18,9 @@
         <item name="android:drawableStart">@drawable/ic_lock</item>
     </style>
 
+    <style name="Widget.Material3.CardView.Filled" parent="Base.Widget.Material3.CardView">
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/colorSurfaceVariant1</item>
+    </style>
+
 </resources>

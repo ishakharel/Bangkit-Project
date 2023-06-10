@@ -127,7 +127,7 @@ class UploadWasteActivity : AppCompatActivity() {
             val apiClient = ApiConfig()
             val apiService = apiClient.createApiService()
 
-            val userPreferences = LoginPreference(this)
+            val userPreferences = LoginPreference(this@UploadWasteActivity)
             val uploadWastePreferences = UploadWastePreference(this)
             val userData = userPreferences.getUser()
 

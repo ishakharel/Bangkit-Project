@@ -16,4 +16,9 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:drawablePadding">10dp</item>
     </style>
+
+    <style name="Widget.Material3.CardView.Filled" parent="Base.Widget.Material3.CardView">
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/colorSurfaceVariant2</item>
+    </style>
 </resources>

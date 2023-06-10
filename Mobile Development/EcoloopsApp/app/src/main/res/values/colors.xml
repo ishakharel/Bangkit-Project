@@ -4,6 +4,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="colorPrimary">#72C16A</color>
+    <color name="colorSurfaceVariant1">#D7F3F1</color>
+    <color name="colorSurfaceVariant2">#809190</color>
     <color name="colorPrimaryDark">#21585A</color>
     <color name="colorAccent">#FF5255</color>
     <color name="colorTextPrimary">#FF000000</color>

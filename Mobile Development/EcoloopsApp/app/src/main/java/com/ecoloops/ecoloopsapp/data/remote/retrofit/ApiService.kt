@@ -1,11 +1,14 @@
 package com.ecoloops.ecoloopsapp.data.remote.retrofit
 
+import com.ecoloops.ecoloopsapp.data.model.DetailRequest
 import com.ecoloops.ecoloopsapp.data.model.EditPassRequest
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
 import com.ecoloops.ecoloopsapp.data.model.ResetPassRequest
+import com.ecoloops.ecoloopsapp.data.remote.response.DashboardResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
@@ -16,6 +19,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
@@ -76,4 +80,23 @@ interface ApiService {
         @Header("authorization") token: String,
         @Part file: MultipartBody.Part,
     ): Call<UploadPhotoResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("waste/histories")
+    fun getHistories(
+        @Header("authorization") token: String
+    ): Call<ListHistoryResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("user/dashboard")
+    fun getDashboard(
+        @Header("authorization") token: String
+    ): Call<DashboardResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("waste/histories-id")
+    fun getHistoriesDetail(
+        @Header("authorization") token: String,
+        @Body body: DetailRequest
+    ): Call<UploadWasteResponse>
 }

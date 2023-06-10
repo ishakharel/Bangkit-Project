@@ -9,13 +9,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
-import com.ecoloops.ecoloopsapp.ui.auth.login.SendOtpActivity
 import com.ecoloops.ecoloopsapp.ui.page.notification.NotificationActivity
 import com.ecoloops.ecoloopsapp.ui.page.profile.ProfileActivity
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
