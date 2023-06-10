@@ -24,6 +24,10 @@ class HistoryScanActivity : AppCompatActivity() {
         binding = ActivityHistoryScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         val userPreference = LoginPreference(this@HistoryScanActivity)
         val sharedPreferences = userPreference.getUser()
 

@@ -60,6 +60,8 @@ class RewardActivity : AppCompatActivity() {
         val userPreference = LoginPreference(this@RewardActivity)
         val sharedPreferences = userPreference.getUser()
 
+        binding.tvPoint.text = "${sharedPreferences.points.toString()} Points"
+
         listMerchViewModel.getListMerch(sharedPreferences.token)
 
         listMerchViewModel.merch.observe(this) {

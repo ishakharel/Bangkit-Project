@@ -27,9 +27,18 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textSize="20sp"
                 android:background="@color/colorPrimary"
-                android:backgroundTint="@color/colorPrimary"
-                app:layout_constraintStart_toStartOf="@id/iv_back"
-                app:layout_constraintTop_toTopOf="@id/iv_back" />
+                android:backgroundTint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:paddingVertical="5dp"
+                android:text="100 Point"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_reward"

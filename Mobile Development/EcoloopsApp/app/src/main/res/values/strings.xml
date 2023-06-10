@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EcoloopsApp</string>
+    <string name="app_name">EcoLoops</string>
 
     <string name="next">Next</string>
     <string name="start">Start</string>
@@ -10,11 +10,11 @@
     <string name="title_boarding3">Recycle</string>
     <string name="title_boarding4">Monetize</string>
 
-    <string name="description_boarding1">Ecoloops adalah aplikasi Identifikasi untuk Mengklasifikasikan sampah pengguna.</string>
+    <string name="description_boarding1">EcoLoops adalah aplikasi Identifikasi untuk Mengklasifikasikan sampah pengguna.</string>
     <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
     <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
     <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
-    <string name="lets_register">Selamat Bergabung Bersama Ecoloops!</string>
+    <string name="lets_register">Selamat Bergabung Bersama EcoLoops!</string>
     <string name="name">Nama Lengkap</string>
     <string name="name_hint">Masukan Nama Kamu</string>
     <string name="email">Email</string>
@@ -25,7 +25,7 @@
     <string name="confirm_password_hint">Masukan Kembali Password</string>
     <string name="register">Bergabung</string>
     <string name="login">Masuk</string>
-    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops!</string>
+    <string name="welcome_back">Nikmati Keseruan Bersama EcoLoops!</string>
     <string name="invalid_name">Nama Tidak Valid</string>
     <string name="invalid_email">Email Tidak Valid</string>
     <string name="invalid_password">Password Tidak Valid</string>
@@ -41,7 +41,7 @@
     <string name="userActivity_tv">Aktivitas Anda</string>
 
     <!--    reward page-->
-    <string name="reward_name">T-Shirt Ecoloops</string>
+    <string name="reward_name">T-Shirt EcoLoops</string>
     <string name="reward_points">25.000 Poin</string>
     <string name="reward_stock">10 Stok Tersisa</string>
 
@@ -58,8 +58,8 @@
     <string name="product_recycle_description">Buang kedalam tempat sampah daur ulang berwarna hijau untuk sampah makanan.</string>
 
     <!--    notification-->
-    <string name="notification_title">Selamat datang di aplikasi Ecoloops</string>
-    <string name="notification_body">Bersama Ecoloops membuat lingkungan lebih bersih!</string>
+    <string name="notification_title">Selamat datang di aplikasi EcoLoops</string>
+    <string name="notification_body">Bersama EcoLoops membuat lingkungan lebih bersih!</string>
     <string name="notification_time">21 Mei 2023</string>
 
     <!--    history-->

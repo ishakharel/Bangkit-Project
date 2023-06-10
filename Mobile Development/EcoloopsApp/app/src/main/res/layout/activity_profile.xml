@@ -211,7 +211,7 @@
 
                 <TextView
                     style="@style/TextViewTheme"
-                    android:text="History"
+                    android:text="Riwayat Scan"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     card_view:drawableStartCompat="@drawable/ic_history"

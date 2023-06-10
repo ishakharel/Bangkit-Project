@@ -6,6 +6,27 @@
     android:padding="20dp">
 
     <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kode OTP"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_back"
+        app:layout_constraintBottom_toBottomOf="@id/iv_back" />
+
+    <ImageView
         android:id="@+id/otpIv"
         android:layout_width="200dp"
         android:layout_height="200dp"

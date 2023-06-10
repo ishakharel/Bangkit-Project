@@ -25,6 +25,10 @@ class ResetPasswordActivity : AppCompatActivity() {
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         binding.emailNewEV.setText(intent.getStringExtra("email"))
         
         binding.resetPasswordButton.setOnClickListener {

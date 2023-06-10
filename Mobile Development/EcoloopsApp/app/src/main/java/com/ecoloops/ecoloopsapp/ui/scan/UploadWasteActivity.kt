@@ -65,6 +65,9 @@ class UploadWasteActivity : AppCompatActivity() {
         binding = ActivityUploadWasteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.uploadWasteLayout.ivBack.setOnClickListener{
+            finish()
+        }
 
         val isGallery = intent.getBooleanExtra("isGallery", false)
         val image = intent.getStringExtra("picture")

@@ -25,6 +25,10 @@ class SendOtpActivity : AppCompatActivity() {
         binding = ActivitySendOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         binding.sendOtpButton.setOnClickListener{
             binding.sendOtpButton.isEnabled = false
             binding.sendOtpButton.text = "Loading..."

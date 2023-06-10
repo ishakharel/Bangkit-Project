@@ -66,6 +66,10 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         val userProfilePreference = LoginPreference(this)
         val userProfile = userProfilePreference.getUser()
 

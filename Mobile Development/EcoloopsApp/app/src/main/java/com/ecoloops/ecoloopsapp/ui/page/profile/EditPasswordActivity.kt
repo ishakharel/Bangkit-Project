@@ -23,6 +23,10 @@ class EditPasswordActivity : AppCompatActivity() {
         binding = ActivityEditPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         binding.resetPasswordButton.setOnClickListener {
 
             val passwordOld = binding.passwordOldEV.text.toString()

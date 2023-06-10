@@ -21,6 +21,10 @@ class DetailCategoryActivity: AppCompatActivity() {
             .load(intent.getStringExtra("image"))
             .fitCenter()
             .into(binding.wasteImageView)
+
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
     }
 
 }

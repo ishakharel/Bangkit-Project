@@ -15,6 +15,10 @@ class ResultWasteActivity : AppCompatActivity() {
         binding = ActivityResultWasteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
         val uploadWastePreferences = UploadWastePreference(this)
         val uploadData = uploadWastePreferences.getUploadWaste()
 

@@ -65,19 +65,16 @@ class ProfileActivity : AppCompatActivity() {
         binding.editProfileCV.setOnClickListener{
             val intent = Intent(this@ProfileActivity, EditProfileActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         binding.editPasswordCV.setOnClickListener{
             val intent = Intent(this@ProfileActivity, EditPasswordActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         binding.historyCV.setOnClickListener{
             val intent = Intent(this@ProfileActivity, HistoryScanActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         binding.logoutCV.setOnClickListener {
@@ -158,7 +155,7 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    fun dashboardData(token: String?){
+    private fun dashboardData(token: String?){
         val apiClient = ApiConfig()
         val apiService = apiClient.createApiService()
         val call = apiService.getDashboard("Bearer $token")

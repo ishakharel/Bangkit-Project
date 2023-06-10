@@ -11,7 +11,7 @@
         android:id="@+id/tv_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ecoloops"
+        android:text="EcoLoops"
         android:textSize="40sp"
         android:fontFamily="@font/poppins_bold"
         app:layout_constraintBottom_toBottomOf="parent"
