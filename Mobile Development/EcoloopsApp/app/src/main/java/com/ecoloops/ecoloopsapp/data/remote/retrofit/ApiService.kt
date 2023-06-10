@@ -1,6 +1,5 @@
 package com.ecoloops.ecoloopsapp.data.remote.retrofit
 
-import com.ecoloops.ecoloopsapp.data.model.DetailRequest
 import com.ecoloops.ecoloopsapp.data.model.EditPassRequest
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
@@ -16,7 +15,6 @@ import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,6 +24,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
@@ -94,9 +93,9 @@ interface ApiService {
     ): Call<DashboardResponse>
 
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
-    @GET("waste/histories-id")
+    @GET("waste/histories/{id}")
     fun getHistoriesDetail(
         @Header("authorization") token: String,
-        @Body body: DetailRequest
+        @Path("id") id: String
     ): Call<UploadWasteResponse>
 }

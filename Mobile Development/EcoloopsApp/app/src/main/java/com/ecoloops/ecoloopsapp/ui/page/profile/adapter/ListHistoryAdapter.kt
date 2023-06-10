@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ecoloops.ecoloopsapp.data.model.DetailRequest
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryItem
-import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ItemHistoryBinding
-import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.ui.scan.ResultWasteActivity
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import com.ecoloops.ecoloopsapp.utils.withDateFormat
@@ -21,7 +18,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.content.Context
 import com.ecoloops.ecoloopsapp.data.preference.UploadWastePreference
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
 
@@ -72,13 +68,12 @@ class ListHistoryAdapter() : RecyclerView.Adapter<ListHistoryAdapter.ViewHolder>
             val apiService = apiClient.createApiService()
 
             val id = story.id.toString()
-            val detailRequest = DetailRequest(id)
 
             val userPreference = LoginPreference(holder.itemView.context)
             val uploadWastePreferences = UploadWastePreference(holder.itemView.context)
             val sharedPreferences = userPreference.getUser()
 
-            val call = apiService.getHistoriesDetail("Bearer ${sharedPreferences.token}", detailRequest)
+            val call = apiService.getHistoriesDetail("Bearer ${sharedPreferences.token}", id)
 
             call.enqueue(object : Callback<UploadWasteResponse> {
                 override fun onResponse(
