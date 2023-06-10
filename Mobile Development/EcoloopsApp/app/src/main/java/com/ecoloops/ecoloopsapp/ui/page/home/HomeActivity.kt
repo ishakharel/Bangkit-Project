@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -13,11 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
+import com.ecoloops.ecoloopsapp.data.remote.response.ListCategoryItem
+import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryItem
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
-import com.ecoloops.ecoloopsapp.ui.page.home.data.CategoryAdapter
-import com.ecoloops.ecoloopsapp.ui.page.home.data.CategoryItem
+import com.ecoloops.ecoloopsapp.ui.page.home.adapter.ListCategoryAdapter
+import com.ecoloops.ecoloopsapp.ui.page.home.model.ListCategoryVM
 import com.ecoloops.ecoloopsapp.ui.page.notification.NotificationActivity
 import com.ecoloops.ecoloopsapp.ui.page.profile.ProfileActivity
+import com.ecoloops.ecoloopsapp.ui.page.profile.adapter.ListHistoryAdapter
+import com.ecoloops.ecoloopsapp.ui.page.profile.model.ListHistoryVM
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
 import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,8 +31,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var bottomNavigation: BottomNavigationView
-    private lateinit var recyclerView: RecyclerView
-    private val categoryList = ArrayList<CategoryItem>()
+    private val listCategoryViewModel by viewModels<ListCategoryVM>()
+
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
@@ -111,22 +116,16 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recyclerView = findViewById(R.id.rv_category)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        listCategoryViewModel.getCategories()
 
-        addDataToList()
-        val adapter = CategoryAdapter(categoryList)
-        recyclerView.adapter = adapter
+        listCategoryViewModel.categories.observe(this) {
+            val adapter = ListCategoryAdapter()
+            adapter.setList(it.data as ArrayList<ListCategoryItem>)
+            binding.rvCategory.layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
+            binding.rvCategory.adapter = adapter
+        }
 
-    }
+        listCategoryViewModel.getCategories()
 
-    private fun addDataToList() {
-        categoryList.add(CategoryItem("Medis", R.drawable.kalengsemprot))
-        categoryList.add(CategoryItem("Logam", R.drawable.kalengsemprot))
-        categoryList.add(CategoryItem("Plastik", R.drawable.kalengsemprot))
-        categoryList.add(CategoryItem("Glass", R.drawable.masker))
-        categoryList.add(CategoryItem("Karton", R.drawable.masker))
-        categoryList.add(CategoryItem("Kertas", R.drawable.masker))
     }
 }

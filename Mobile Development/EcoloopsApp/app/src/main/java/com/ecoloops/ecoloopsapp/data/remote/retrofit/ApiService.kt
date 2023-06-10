@@ -7,6 +7,7 @@ import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
 import com.ecoloops.ecoloopsapp.data.model.ResetPassRequest
 import com.ecoloops.ecoloopsapp.data.remote.response.DashboardResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.ListCategoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
@@ -98,4 +99,8 @@ interface ApiService {
         @Header("authorization") token: String,
         @Path("id") id: String
     ): Call<UploadWasteResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("waste/categories")
+    fun getCategories(): Call<ListCategoryResponse>
 }
