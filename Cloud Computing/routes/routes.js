@@ -35,7 +35,7 @@ router.put(
   userController.changeImage
 );
 router.delete(
-  "/user/notif/:id",
+  "/user/notif/",
   checkAuth,
   userController.deleteNotificationById
 );
@@ -44,7 +44,7 @@ router.delete(
 router.get("/waste/categories/", wasteController.categories);
 router.get("/waste/histories/", checkAuth, wasteController.histories);
 router.get("/waste/histories/:id", checkAuth, wasteController.historyDetail);
-router.get("/waste/categories/:category_id", wasteController.categoryById);
+router.get("/waste/categories/:id", wasteController.categoryById);
 router.post("/waste/upload/", checkAuth, checkUpload, wasteController.upload);
 
 module.exports = router;

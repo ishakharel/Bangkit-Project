@@ -16,7 +16,10 @@ const categories = (req, res) => {
       return res.status(500).send("Server Error!");
     }
 
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status : "success",
+      data : result
+    });
   });
 };
 
@@ -33,7 +36,10 @@ const categoryById = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json(result[0]);
+      return res.status(200).json({
+        status : "success",
+        data : result[0]
+      });
     }
   );
 };
@@ -50,7 +56,11 @@ const histories = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ id: userId, data: result });
+      return res.status(200).json({
+        status : "success",
+        id: userId,
+        data: result 
+      });
     }
   );
 };
@@ -68,7 +78,10 @@ const historyDetail = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ data: result[0] });
+      return res.status(200).json({
+        status: 'success',
+        data: result[0]
+      });
     }
   );
 };
