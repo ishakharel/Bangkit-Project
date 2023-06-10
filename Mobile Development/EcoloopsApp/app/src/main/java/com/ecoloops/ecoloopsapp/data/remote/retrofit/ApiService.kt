@@ -10,6 +10,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.DetailCategoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ListCategoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.ListMerchResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.LogoutResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
@@ -111,4 +112,10 @@ interface ApiService {
         @Header("authorization") token: String,
         @Path("id") id: String
     ): Call<DetailCategoryResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("user/merch")
+    fun getListMerch(
+        @Header("authorization") token: String,
+    ): Call<ListMerchResponse>
 }
