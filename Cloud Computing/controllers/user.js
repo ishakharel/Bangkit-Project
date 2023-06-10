@@ -41,7 +41,7 @@ const getUserById = (req, res) => {
 
 const editProfile = (req, res) => {
   const userId = req.user.id;
-  const { newUsername, address, gender, age, job, dob } = req.body;
+  const { email, newUsername, address, gender, age, job, dob } = req.body;
 
   if (!userId || !newUsername) {
     res.status(400).json({
@@ -52,8 +52,8 @@ const editProfile = (req, res) => {
   }
 
   db.query(
-    "UPDATE users SET name = ?, address = ?, gender = ?, age = ?, job = ?, dob = ? WHERE id = ?",
-    [newUsername, address, gender, age, job, dob, userId],
+    "UPDATE users SET email = ?, name = ?, address = ?, gender = ?, age = ?, job = ?, dob = ? WHERE id = ?",
+    [email, newUsername, address, gender, age, job, dob, userId],
     (error, results) => {
       if (error) {
         res.status(500).json({
@@ -68,6 +68,7 @@ const editProfile = (req, res) => {
       res.status(200).json({
         status: "success",
         data: {
+          email: email,
           username: newUsername,
           address: address,
           gender: gender,

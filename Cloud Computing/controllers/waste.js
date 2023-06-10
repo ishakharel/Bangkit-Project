@@ -16,24 +16,29 @@ const categories = (req, res) => {
       return res.status(500).send("Server Error!");
     }
 
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status : "success",
+      data : result
+    });
   });
 };
 
 const categoryById = (req, res) => {
-  const categoryId = req.body.category_id;
-  console.log(categoryId);
+  const { id } = req.body;
 
   db.query(
     "SELECT * FROM waste_category WHERE id = ? ",
-    [categoryId],
+    [id],
     (error, result) => {
       if (error) {
         console.log(error);
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json(result[0]);
+      return res.status(200).json({
+        status : "success",
+        data : result[0]
+      });
     }
   );
 };
@@ -50,7 +55,11 @@ const histories = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ id: userId, data: result });
+      return res.status(200).json({
+        status : "success",
+        id: userId,
+        data: result 
+      });
     }
   );
 };
@@ -60,7 +69,7 @@ const historyDetail = (req, res) => {
   const { id } = req.body;
 
   db.query(
-    "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
+    "SELECT b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image as image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
     [userId, id],
     (error, result) => {
       if (error) {
@@ -68,7 +77,10 @@ const historyDetail = (req, res) => {
         return res.status(500).send("Server Error!");
       }
 
-      return res.status(200).json({ data: result[0] });
+      return res.status(200).json({
+        status: 'success',
+        data: result[0]
+      });
     }
   );
 };
