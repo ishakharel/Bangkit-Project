@@ -14,21 +14,24 @@
     <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
     <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
     <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
-    <string name="lets_register">Ayo Bergabung Bersama Ecoloops!</string>
-    <string name="name">Name</string>
+    <string name="lets_register">Selamat Bergabung Bersama Ecoloops!</string>
+    <string name="name">Nama Lengkap</string>
     <string name="name_hint">Masukan Nama Kamu</string>
     <string name="email">Email</string>
     <string name="email_hint">Masukan Email Kamu</string>
     <string name="password">Password</string>
-    <string name="password_hint">Masukan Password</string>
+    <string name="password_hint">Masukan Password Kamu</string>
     <string name="confirm_password">Konfirmasi Password</string>
     <string name="confirm_password_hint">Masukan Kembali Password</string>
     <string name="register">Bergabung</string>
     <string name="login">Masuk</string>
-    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops</string>
-    <string name="invalid_name">Nama Invalid</string>
+    <string name="welcome_back">Nikmati Keseruan Bersama Ecoloops!</string>
+    <string name="invalid_name">Nama Tidak Valid</string>
     <string name="invalid_email">Email Tidak Valid</string>
     <string name="invalid_password">Password Tidak Valid</string>
+    <string name="error_message">error</string>
+    <string name="ok">Oke\n</string>
+    <string name="forget_pass">Lupa Password?</string>
 
     <!--    homepage-->
     <string name="greeting">Hello,</string>
@@ -59,8 +62,9 @@
     <string name="notification_body">Bersama Ecoloops membuat lingkungan lebih bersih!</string>
     <string name="notification_time">21 Mei 2023</string>
 
-<!--    history-->
+    <!--    history-->
     <string name="history_time">09 Januari 2023</string>
     <string name="history_point">+25 poin</string>
+
 
 </resources>

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.page.category.CategoryActivity">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,7 +33,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_categoryTitle"
+                    android:id="@+id/tv_category_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -47,7 +46,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_categoryDescription"
+                    android:id="@+id/tv_category_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -55,8 +54,8 @@
                     android:text="@string/category_description"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/tv_categoryTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_categoryTitle" />
+                    app:layout_constraintStart_toStartOf="@+id/tv_category_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_category_title" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

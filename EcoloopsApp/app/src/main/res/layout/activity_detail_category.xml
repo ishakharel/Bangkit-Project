@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.page.category.DetailCategoryActivity">
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:elevation="8dp">
 
                 <ImageView
-                    android:id="@+id/iv_detail_category"
+                    android:id="@+id/iv_detail_category_product"
                     android:layout_width="match_parent"
                     android:layout_height="310dp"
                     android:src="@drawable/bread" />
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_categoryTitle"
+                    android:id="@+id/tv_detail_product_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -46,15 +46,15 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_detail_product_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:text="@string/product_name"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_categoryTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_categoryTitle" />
+                    app:layout_constraintStart_toStartOf="@+id/tv_detail_product_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_detail_product_title" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

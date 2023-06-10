@@ -2,15 +2,28 @@ package com.ecoloops.ecoloopsapp.ui.auth.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.ecoloops.ecoloopsapp.R
+import com.ecoloops.ecoloopsapp.data.model.LoginRequest
+import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
+import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
+import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
+import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
+import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
+import com.ecoloops.ecoloopsapp.utils.showAlert
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -20,11 +33,97 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val userPreference = LoginPreference(this@LoginActivity)
+
+        val userData = userPreference.getUser()
+        if (userData.token != "") {
+            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.loginLayout.forgetPassword.setOnClickListener{
+            val intent = Intent(this@LoginActivity, SendOtpActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.loginLayout.registerButton.setOnClickListener {
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.loginLayout.loginButton.setOnClickListener{
+            binding.loginLayout.loginButton.isEnabled = false
+            binding.loginLayout.loginButton.text = "Loading..."
+
+            val email = binding.loginLayout.emailEditText.text.toString()
+            val password = binding.loginLayout.passwordEditText.text.toString()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                showAlert(this, "Please fill all the fields")
+                binding.loginLayout.loginButton.isEnabled = true
+                binding.loginLayout.loginButton.text = "Login"
+                return@setOnClickListener
+            }
+
+            val apiClient = ApiConfig()
+
+            val apiService = apiClient.createApiService()
+
+            val loginRequest = LoginRequest(email, password)
+
+            val call = apiService.login(loginRequest)
+
+            call.enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val loginResponse = response.body()
+                        val id = loginResponse?.data?.id.toString()
+                        val name = loginResponse?.data?.name.toString()
+                        val email = loginResponse?.data?.email.toString()
+                        val image = loginResponse?.data?.image.toString()
+                        val points = loginResponse?.data?.points.toString().toInt()
+                        val token = loginResponse?.data?.token.toString()
+
+                        userPreference.setUser(id, name, email,image, points, token)
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        startActivity(intent)
+
+
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        val jsonObject = JSONObject(errorBody.toString())
+                        val message = jsonObject.getString("message")
+                        showAlert(this@LoginActivity, message)
+
+
+                    }
+                    binding.loginLayout.loginButton.isEnabled = true
+                    binding.loginLayout.loginButton.text = "Login"
+
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    showAlert(this@LoginActivity, "This is a simple alertis.")
+                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    binding.loginLayout.loginButton.isEnabled = true
+                    binding.loginLayout.loginButton.text = "Login"
+                }
+
+            })
+
+
+
+        }
+
         val spannable = SpannableStringBuilder(getText(R.string.welcome_back))
         spannable.setSpan(
-            ForegroundColorSpan(Color.BLACK),
-            0, // start
-            24, // end
+            ForegroundColorSpan(getColor(R.color.colorPrimary)),
+            25, // start
+            34, // end
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
 
@@ -53,6 +152,8 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.loginLayout.passwordEditTextLayout, View.ALPHA, 1f).setDuration(300)
         val passwordEditText = ObjectAnimator.ofFloat(binding.loginLayout.passwordEditText, View.ALPHA, 1f).setDuration(300)
 
+        val forgetPassword = ObjectAnimator.ofFloat(binding.loginLayout.forgetPassword, View.ALPHA, 1f).setDuration(300)
+
         val loginButton = ObjectAnimator.ofFloat(binding.loginLayout.loginButton, View.ALPHA, 1f).setDuration(300)
         val registerButton = ObjectAnimator.ofFloat(binding.loginLayout.registerButton, View.ALPHA, 1f).setDuration(300)
 
@@ -61,8 +162,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         AnimatorSet().apply {
-            playSequentially(emailTextView, emailEditTextLayout, emailEditText, passwordTextView, passwordEditTextLayout, passwordEditText, together)
+            playSequentially(emailTextView, emailEditTextLayout, emailEditText, passwordTextView, passwordEditTextLayout, passwordEditText, forgetPassword, together)
             start()
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 }

@@ -10,6 +10,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
+    card_view:cardElevation="5dp"
     card_view:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +19,7 @@
         android:padding="18dp">
 
         <TextView
-            android:id="@+id/tv_notificationTitle"
+            android:id="@+id/tv_notification_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -29,25 +30,25 @@
             tools:text="@string/notification_title" />
 
         <TextView
-            android:id="@+id/tv_notificationMessage"
+            android:id="@+id/tv_notification_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:textSize="12sp"
-            card_view:layout_constraintStart_toStartOf="@+id/tv_notificationTitle"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_notificationTitle"
+            card_view:layout_constraintStart_toStartOf="@+id/tv_notification_title"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_notification_title"
             tools:text="@string/notification_body" />
 
         <TextView
-            android:id="@+id/tv_notificationDate"
+            android:id="@+id/tv_notification_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:textSize="12sp"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_notificationMessage"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_notification_message"
             tools:text="@string/notification_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

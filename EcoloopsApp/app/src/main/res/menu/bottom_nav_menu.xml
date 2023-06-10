@@ -2,22 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/home"
-        android:title="Beranda"
-        android:icon="@drawable/ic_home"/>
+        android:title="Home"
+        android:icon="@drawable/ic_home" />
 
     <item android:id="@+id/reward"
         android:title="E-Points"
-        android:icon="@drawable/ic_reward"/>
+        android:icon="@drawable/ic_point" />
 
-    <item android:id="@+id/fab"
-        android:title=" "
-        android:enabled="false"/>
+    <item android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false"
+        />
 
     <item android:id="@+id/notification"
-        android:title="Notifikasi"
-        android:icon="@drawable/ic_notification"/>
+        android:title="Notif"
+        android:icon="@drawable/ic_notification" />
 
     <item android:id="@+id/profile"
-        android:title="Profil"
-        android:icon="@drawable/ic_profile"/>
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
 </menu>

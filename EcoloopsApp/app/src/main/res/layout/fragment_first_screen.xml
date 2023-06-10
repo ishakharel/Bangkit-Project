@@ -24,9 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/title_boarding1"
-        android:textColor="@color/black"
         android:textSize="34sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -38,8 +37,8 @@
         android:layout_marginTop="18dp"
         android:gravity="center"
         android:text="@string/description_boarding1"
-        android:textColor="@color/black"
         android:textSize="20sp"
+        android:fontFamily="@font/poppins_regular"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
