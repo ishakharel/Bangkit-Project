@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.remote.response.ListCategoryItem
@@ -77,6 +78,15 @@ class HomeActivity : AppCompatActivity() {
 
         val userPreference = LoginPreference(this@HomeActivity)
         val sharedPreferences = userPreference.getUser()
+
+        binding.userName.text = sharedPreferences.name
+        binding.ePoints.text = sharedPreferences.points.toString()
+        if(sharedPreferences.image != ""){
+            Glide.with(this@HomeActivity)
+                .load(sharedPreferences.image)
+                .fitCenter()
+                .into(binding.profileImage)
+        }
 
         binding.fab.setOnClickListener {
             val intent = Intent(this@HomeActivity, UploadWasteActivity::class.java)

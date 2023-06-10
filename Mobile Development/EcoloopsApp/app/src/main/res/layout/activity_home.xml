@@ -39,7 +39,7 @@
                     android:layout_height="80dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
-                    android:src="@drawable/boarding1"
+                    android:src="@drawable/no_profile"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.894"
