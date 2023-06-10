@@ -9,9 +9,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
+import com.ecoloops.ecoloopsapp.ui.page.home.data.CategoryAdapter
+import com.ecoloops.ecoloopsapp.ui.page.home.data.CategoryItem
 import com.ecoloops.ecoloopsapp.ui.page.notification.NotificationActivity
 import com.ecoloops.ecoloopsapp.ui.page.profile.ProfileActivity
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
@@ -22,6 +26,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var recyclerView: RecyclerView
+    private val categoryList = ArrayList<CategoryItem>()
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
@@ -105,5 +111,22 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        recyclerView = findViewById(R.id.rv_category)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        addDataToList()
+        val adapter = CategoryAdapter(categoryList)
+        recyclerView.adapter = adapter
+
+    }
+
+    private fun addDataToList() {
+        categoryList.add(CategoryItem("Medis", R.drawable.kalengsemprot))
+        categoryList.add(CategoryItem("Logam", R.drawable.kalengsemprot))
+        categoryList.add(CategoryItem("Plastik", R.drawable.kalengsemprot))
+        categoryList.add(CategoryItem("Glass", R.drawable.masker))
+        categoryList.add(CategoryItem("Karton", R.drawable.masker))
+        categoryList.add(CategoryItem("Kertas", R.drawable.masker))
     }
 }
