@@ -22,9 +22,8 @@
             android:id="@+id/tv_notification_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_bold"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:text="@string/notification_title" />
@@ -34,8 +33,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_regular"
             card_view:layout_constraintStart_toStartOf="@+id/tv_notification_title"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_notification_title"
             tools:text="@string/notification_body" />
@@ -47,6 +46,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:textSize="12sp"
+            android:fontFamily="@font/poppins_medium"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_notification_message"
             tools:text="@string/notification_time" />
