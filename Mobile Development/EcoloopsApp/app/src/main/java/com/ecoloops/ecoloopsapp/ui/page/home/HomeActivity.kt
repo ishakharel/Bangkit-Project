@@ -3,6 +3,7 @@ package com.ecoloops.ecoloopsapp.ui.page.home
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
+import com.ecoloops.ecoloopsapp.data.remote.response.DashboardResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ListCategoryItem
 import com.ecoloops.ecoloopsapp.data.remote.response.ListHistoryItem
+import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityHomeBinding
 import com.ecoloops.ecoloopsapp.ui.page.home.adapter.ListCategoryAdapter
 import com.ecoloops.ecoloopsapp.ui.page.home.model.ListCategoryVM
@@ -27,6 +30,10 @@ import com.ecoloops.ecoloopsapp.ui.page.profile.model.ListHistoryVM
 import com.ecoloops.ecoloopsapp.ui.page.reward.RewardActivity
 import com.ecoloops.ecoloopsapp.ui.scan.UploadWasteActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class HomeActivity : AppCompatActivity() {
@@ -80,13 +87,14 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = userPreference.getUser()
 
         binding.userName.text = sharedPreferences.name
-        binding.ePoints.text = sharedPreferences.points.toString()
         if(sharedPreferences.image != ""){
             Glide.with(this@HomeActivity)
                 .load(sharedPreferences.image)
                 .fitCenter()
                 .into(binding.profileImage)
         }
+
+        dashboardData(sharedPreferences.token)
 
         binding.fab.setOnClickListener {
             val intent = Intent(this@HomeActivity, UploadWasteActivity::class.java)
@@ -137,5 +145,35 @@ class HomeActivity : AppCompatActivity() {
 
         listCategoryViewModel.getCategories()
 
+    }
+
+    private fun dashboardData(token: String?){
+        val apiClient = ApiConfig()
+        val apiService = apiClient.createApiService()
+        val call = apiService.getDashboard("Bearer $token")
+
+        call.enqueue(object : Callback<DashboardResponse> {
+            override fun onResponse(
+                call: Call<DashboardResponse>,
+                response: Response<DashboardResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val dashboardResponse = response.body()
+                    binding.ePoints.text = dashboardResponse?.data?.points.toString()
+
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val jsonObject = JSONObject(errorBody)
+                    val message = jsonObject.getString("message")
+                    Log.d("HistoryActivity", "onResponses: ${message}")
+                }
+
+            }
+
+            override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
+                Log.e("HistoryActivity", "onFailure: ${t.message}")
+            }
+
+        })
     }
 }
