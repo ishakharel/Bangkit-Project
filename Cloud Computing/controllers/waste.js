@@ -47,7 +47,7 @@ const histories = (req, res) => {
   const userId = req.user.id;
 
   db.query(
-    "SELECT a.id, b.name as name, b.category as category, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ?",
+    "SELECT a.id, b.name as name, b.category as category, a.date as date, a.point as points, a.image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? ORDER BY a.date DESC",
     [userId],
     (error, result) => {
       if (error) {
