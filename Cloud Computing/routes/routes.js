@@ -16,7 +16,7 @@ router.put("/auth/reset-pass", authController.resetPassword);
 router.put("/auth/change-pass", checkAuth, authController.changePassword);
 
 //User
-router.post("/user/notif", checkAuth, userController.addNotification);
+router.post("/user/notif/", checkAuth, userController.addNotification);
 router.get("/user/notif/", checkAuth, userController.getNotificationByUserId);
 router.get("/user/", checkAuth, userController.getUserById);
 router.get("/user/merch/", userController.getAllMerch);

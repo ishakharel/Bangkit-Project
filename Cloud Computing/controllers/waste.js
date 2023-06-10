@@ -69,7 +69,7 @@ const historyDetail = (req, res) => {
   const { id } = req.params;
 
   db.query(
-    "SELECT b.name as name, b.category as category, a.date as date, a.point as points FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
+    "SELECT b.name as name, b.category as category, b.description_recycle as description_recycle, a.date as date, a.point as points, a.image as image FROM waste_history a JOIN waste_category b ON a.category_id = b.id WHERE a.user_id = ? AND a.id = ?",
     [userId, id],
     (error, result) => {
       if (error) {
