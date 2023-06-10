@@ -24,6 +24,7 @@ class ResultWasteActivity : AppCompatActivity() {
             .fitCenter()
             .into(binding.wasteImageView)
 
+        binding.titlePage.text = uploadData.name
         binding.nameTextView.text = uploadData.name
         binding.dateTextView.text = uploadData.date?.withDateFormat()
         binding.poinTextView.text = "+${uploadData.points.toString()}"

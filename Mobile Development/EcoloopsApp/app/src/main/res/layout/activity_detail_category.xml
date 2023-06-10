@@ -25,7 +25,7 @@
             android:id="@+id/title_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hasil Scan"
+            android:text="Detail Sampah"
             android:textStyle="bold"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
             android:layout_margin="20dp"/>
 
         <TextView
-            android:id="@+id/nameTextView"
+            android:id="@+id/descTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Botol Plastik"
@@ -77,31 +77,11 @@
             android:layout_marginHorizontal="20dp"/>
 
         <TextView
-            android:id="@+id/poinTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+100 Poin"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateTextView"
-            android:textSize="20sp"
-            android:layout_marginHorizontal="20dp"/>
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2023-06-07T00:00:00.000Z"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/titleNameTextView"
-            android:textSize="15sp"
-            android:layout_marginHorizontal="20dp"/>
-
-        <TextView
             android:id="@+id/categoryTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/descTextView"
             android:text="Category"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -129,7 +109,7 @@
             android:layout_margin="20dp"/>
 
         <TextView
-            android:id="@+id/descriptionTextView"
+            android:id="@+id/descriptionRCTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pastikan untuk membuang tutup botol dan membuang sisa minuman sebelum membuangnya. Tempatkan botol plastik bersama dengan sampah daur ulang plastik lainnya atau serahkan ke pusat daur ulang plastik."

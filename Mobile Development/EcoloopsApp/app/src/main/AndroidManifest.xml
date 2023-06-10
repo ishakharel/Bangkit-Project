@@ -50,6 +50,9 @@
             android:name=".ui.page.home.HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.page.home.DetailCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.page.reward.RewardActivity"
             android:exported="false" />
         <activity
