@@ -17,6 +17,7 @@ import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityEditProfileBinding
+import com.ecoloops.ecoloopsapp.databinding.ActivityFormEditProfileBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity2
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import com.ecoloops.ecoloopsapp.utils.showAlert
@@ -30,7 +31,7 @@ import retrofit2.Response
 import java.io.File
 
 class EditProfileActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEditProfileBinding
+    private lateinit var binding: ActivityFormEditProfileBinding
     private var getFile: File? = null
 
     companion object {
@@ -63,8 +64,11 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditProfileBinding.inflate(layoutInflater)
+        binding = ActivityFormEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val age = "80"
+        binding.editTextAge.setText(age)
 
         binding.ivBack.setOnClickListener{
             finish()
@@ -90,7 +94,7 @@ class EditProfileActivity : AppCompatActivity() {
             binding.circleIvAvatar.setImageURI(image?.toUri())
         }
 
-        binding.submitEditButton.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             uploadStory()
         }
 
@@ -127,8 +131,8 @@ class EditProfileActivity : AppCompatActivity() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
-            binding.submitEditButton.isEnabled = false
-            binding.submitEditButton.text = "Mengunggah..."
+            binding.buttonSave.isEnabled = false
+            binding.buttonSave.text = "Mengunggah..."
 
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -164,12 +168,12 @@ class EditProfileActivity : AppCompatActivity() {
                         val message = jsonObject.getString("message")
                         showAlert(this@EditProfileActivity, message)
                     }
-                    binding.submitEditButton.isEnabled = true
-                    binding.submitEditButton.text = "Upload Story"
+                    binding.buttonSave.isEnabled = true
+                    binding.buttonSave.text = "Upload Story"
                 }
                 override fun onFailure(call: Call<UploadPhotoResponse>, t: Throwable) {
-                    binding.submitEditButton.isEnabled = true
-                    binding.submitEditButton.text = "Upload Story"
+                    binding.buttonSave.isEnabled = true
+                    binding.buttonSave.text = "Upload Story"
                     Toast.makeText(this@EditProfileActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
             })
