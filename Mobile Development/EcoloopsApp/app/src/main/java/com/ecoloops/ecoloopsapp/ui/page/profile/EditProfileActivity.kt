@@ -86,6 +86,14 @@ class EditProfileActivity : AppCompatActivity() {
         binding.cameraButton.setOnClickListener {
             startActivity(Intent(this@EditProfileActivity, EditPhotoActivity::class.java))
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@EditProfileActivity, ProfileActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun dataProfile(){

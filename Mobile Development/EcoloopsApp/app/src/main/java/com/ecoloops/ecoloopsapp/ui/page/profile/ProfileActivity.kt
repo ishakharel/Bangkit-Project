@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -138,21 +139,30 @@ class ProfileActivity : AppCompatActivity() {
         reward.setOnClickListener{
             val intent = Intent(this@ProfileActivity, RewardActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val notification: View = bottomNavigation.findViewById(R.id.notification)
         notification.setOnClickListener{
             val intent = Intent(this@ProfileActivity, NotificationActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val home: View = bottomNavigation.findViewById(R.id.home)
         home.setOnClickListener{
             val intent = Intent(this@ProfileActivity, HomeActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
-
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@ProfileActivity, HomeActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun dashboardData(token: String?){

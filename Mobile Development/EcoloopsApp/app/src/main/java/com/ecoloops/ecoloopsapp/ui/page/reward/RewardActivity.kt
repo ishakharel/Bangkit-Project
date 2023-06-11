@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,19 +51,30 @@ class RewardActivity : AppCompatActivity() {
         home.setOnClickListener{
             val intent = Intent(this@RewardActivity, HomeActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val notification: View = bottomNavigation.findViewById(R.id.notification)
         notification.setOnClickListener{
             val intent = Intent(this@RewardActivity, NotificationActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val profile: View = bottomNavigation.findViewById(R.id.profile)
         profile.setOnClickListener{
             val intent = Intent(this@RewardActivity, ProfileActivity::class.java)
             startActivity(intent)
+            finish()
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@RewardActivity, HomeActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         val userPreference = LoginPreference(this@RewardActivity)
         val sharedPreferences = userPreference.getUser()

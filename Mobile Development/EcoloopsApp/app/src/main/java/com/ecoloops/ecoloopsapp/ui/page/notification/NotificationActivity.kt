@@ -3,6 +3,7 @@ package com.ecoloops.ecoloopsapp.ui.page.notification
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,19 +43,30 @@ class NotificationActivity : AppCompatActivity() {
         reward.setOnClickListener{
             val intent = Intent(this@NotificationActivity, RewardActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val home: View = bottomNavigation.findViewById(R.id.home)
         home.setOnClickListener{
             val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val profile: View = bottomNavigation.findViewById(R.id.profile)
         profile.setOnClickListener{
             val intent = Intent(this@NotificationActivity, ProfileActivity::class.java)
             startActivity(intent)
+            finish()
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         recyclerView = findViewById(R.id.rv_notification)
         recyclerView.setHasFixedSize(true)
