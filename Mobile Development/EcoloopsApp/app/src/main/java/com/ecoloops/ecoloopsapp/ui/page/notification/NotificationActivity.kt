@@ -31,6 +31,7 @@ class NotificationActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@NotificationActivity, UploadWasteActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         bottomNavigation = binding.bottomNavigationView

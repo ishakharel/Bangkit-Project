@@ -49,6 +49,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@ProfileActivity, UploadWasteActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
 

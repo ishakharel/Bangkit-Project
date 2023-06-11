@@ -46,7 +46,7 @@
         android:layout_marginStart="84dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/rounded_shape"
-        android:text="Take Photo"
+        android:text="Ambil Foto"
         app:layout_constraintStart_toStartOf="@+id/imagePickerView"
         app:layout_constraintTop_toBottomOf="@+id/imagePickerView" />
 
@@ -58,7 +58,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/rounded_shape"
-        android:text="Upload Waste"
+        android:text="Upload Sampah"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraButton" />

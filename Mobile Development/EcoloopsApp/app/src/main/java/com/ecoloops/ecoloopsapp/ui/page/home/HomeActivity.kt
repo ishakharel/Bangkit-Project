@@ -104,6 +104,7 @@ class HomeActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@HomeActivity, UploadWasteActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {

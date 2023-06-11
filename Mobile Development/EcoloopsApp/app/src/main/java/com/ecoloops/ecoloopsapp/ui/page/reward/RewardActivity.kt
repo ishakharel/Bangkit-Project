@@ -39,6 +39,7 @@ class RewardActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@RewardActivity, UploadWasteActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         bottomNavigation = binding.bottomNavigationView

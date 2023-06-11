@@ -69,8 +69,19 @@ class UploadWasteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.uploadWasteLayout.ivBack.setOnClickListener{
+            val intent = Intent(this@UploadWasteActivity, HomeActivity::class.java)
+            startActivity(intent)
             finish()
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@UploadWasteActivity, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         val isGallery = intent.getBooleanExtra("isGallery", false)
         val image = intent.getStringExtra("picture")
@@ -109,7 +120,7 @@ class UploadWasteActivity : AppCompatActivity() {
             myFile?.let { file ->
                 getFile = file
                 binding.uploadWasteLayout.imagePickerView.setImageBitmap(BitmapFactory.decodeFile(file.path))
-                binding.uploadWasteLayout.cameraButton.text = "RETAKE PHOTO"
+                binding.uploadWasteLayout.cameraButton.text = "Ulangi Foto"
             }
 
         }
@@ -165,11 +176,11 @@ class UploadWasteActivity : AppCompatActivity() {
                         CustomAlertDialog(this@UploadWasteActivity, message, R.drawable.custom_error).show()
                     }
                     binding.uploadWasteLayout.uploadWasteButton.isEnabled = true
-                    binding.uploadWasteLayout.uploadWasteButton.text = "Upload Waste"
+                    binding.uploadWasteLayout.uploadWasteButton.text = "Upload Sampah"
                 }
                 override fun onFailure(call: Call<UploadWasteResponse>, t: Throwable) {
                     binding.uploadWasteLayout.uploadWasteButton.isEnabled = true
-                    binding.uploadWasteLayout.uploadWasteButton.text = "Upload Waste"
+                    binding.uploadWasteLayout.uploadWasteButton.text = "Upload Sampah"
                     Toast.makeText(this@UploadWasteActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
             })
@@ -177,12 +188,5 @@ class UploadWasteActivity : AppCompatActivity() {
         } else {
             CustomAlertDialog(this@UploadWasteActivity, "Silakan potret sampah terlebih dahulu.", R.drawable.custom_error).show()
         }
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                startActivity(Intent(this@UploadWasteActivity, HomeActivity::class.java))
-                finish()
-            }
-        }
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 }

@@ -129,12 +129,16 @@ class EditProfileActivity : AppCompatActivity() {
                     if(gender == "Male") {
                         binding.radioButtonMale.setChecked(true)
                         binding.radioButtonFemale.setChecked(false)
-                    }else {
+                    }else if(gender == "Female"){
                         binding.radioButtonFemale.setChecked(true)
                         binding.radioButtonMale.setChecked(false)
                     }
-                    binding.editTextDateOfBirth.setText(dob.withDateFormat())
-                    binding.editTextAge.setText(age)
+                    if(dob != "0000-00-00"){
+                        binding.editTextDateOfBirth.setText(dob.withDateFormat())
+                    }
+                    if(age.toInt() != 0){
+                        binding.editTextAge.setText(age)
+                    }
                     binding.editTextAddress.setText(address)
                     binding.editTextProficiency.setText(job)
                     if(image != ""){
