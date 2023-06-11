@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.remote.response.ForgotPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivitySendOtpBinding
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call
@@ -36,7 +38,7 @@ class SendOtpActivity : AppCompatActivity() {
             val email = binding.emailOtpEV.text.toString()
 
             if (email.isEmpty()){
-                showAlert(this, "Harap Masukan Emailmu!")
+                CustomAlertDialog(this@SendOtpActivity, "Harap Masukan Emailmu!", R.drawable.custom_error).show()
                 binding.sendOtpButton.isEnabled = true
                 binding.sendOtpButton.text = "Send OTP"
                 return@setOnClickListener
@@ -69,7 +71,7 @@ class SendOtpActivity : AppCompatActivity() {
                         val errorBody = response.errorBody()?.string()
                         val jsonObject = JSONObject(errorBody.toString())
                         val message = jsonObject.getString("message")
-                        showAlert(this@SendOtpActivity, message)
+                        CustomAlertDialog(this@SendOtpActivity, message, R.drawable.custom_error).show()
                     }
                     binding.sendOtpButton.isEnabled = true
                     binding.sendOtpButton.text = "Send OTP"
@@ -77,8 +79,7 @@ class SendOtpActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ForgotPassResponse>, t: Throwable) {
-                    showAlert(this@SendOtpActivity, "This is a simple alertis.")
-                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    CustomAlertDialog(this@SendOtpActivity, "${t.message}", R.drawable.custom_error).show()
                     binding.sendOtpButton.isEnabled = true
                     binding.sendOtpButton.text = "Send OTP"
                 }

@@ -19,6 +19,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityRegisterBinding
 import com.ecoloops.ecoloopsapp.ui.auth.login.LoginActivity
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call
@@ -47,7 +48,7 @@ class RegisterActivity : AppCompatActivity() {
             val username = binding.registerLayout.nameEditText.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
-                showAlert(this, "Please fill all the fields")
+                CustomAlertDialog(this@RegisterActivity, "Harap Isi Semua Field!", R.drawable.custom_error).show()
                 binding.registerLayout.registerButton.isEnabled = true
                 binding.registerLayout.registerButton.text = "Register"
                 return@setOnClickListener
@@ -78,7 +79,7 @@ class RegisterActivity : AppCompatActivity() {
                         val errorBody = response.errorBody()?.string()
                         val jsonObject = JSONObject(errorBody)
                         val message = jsonObject.getString("message")
-                        showAlert(this@RegisterActivity, message)
+                        CustomAlertDialog(this@RegisterActivity, message, R.drawable.custom_error).show()
                     }
 
                     binding.registerLayout.registerButton.isEnabled = true
@@ -86,8 +87,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    showAlert(this@RegisterActivity, "This is a simple alertis.")
-                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    CustomAlertDialog(this@RegisterActivity, "${t.message}", R.drawable.custom_error).show()
                     binding.registerLayout.registerButton.isEnabled = true
                     binding.registerLayout.registerButton.text = "Register"
                 }

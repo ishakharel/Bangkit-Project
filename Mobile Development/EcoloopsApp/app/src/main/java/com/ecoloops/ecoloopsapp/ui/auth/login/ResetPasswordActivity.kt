@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.ResetPassRequest
 import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityResetPasswordBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivitySendOtpBinding
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
 import retrofit2.Call
@@ -40,7 +42,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             val otp = binding.otpEV.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || otp.isEmpty()){
-                showAlert(this, "Harap isi semua field!")
+                CustomAlertDialog(this@ResetPasswordActivity, "Harap isi semua field!", R.drawable.custom_error).show()
                 binding.resetPasswordButton.isEnabled = true
                 binding.resetPasswordButton.text = "Reset Password"
                 return@setOnClickListener
@@ -72,7 +74,8 @@ class ResetPasswordActivity : AppCompatActivity() {
                         val errorBody = response.errorBody()?.string()
                         val jsonObject = JSONObject(errorBody.toString())
                         val message = jsonObject.getString("message")
-                        showAlert(this@ResetPasswordActivity, message)
+                        CustomAlertDialog(this@ResetPasswordActivity, message, R.drawable.custom_error).show()
+
                     }
                     binding.resetPasswordButton.isEnabled = true
                     binding.resetPasswordButton.text = "Reset Password"
@@ -80,8 +83,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ResetPassResponse>, t: Throwable) {
-                    showAlert(this@ResetPasswordActivity, "This is a simple alertis.")
-                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    CustomAlertDialog(this@ResetPasswordActivity, "onFailure: ${t.message}", R.drawable.custom_error).show()
                     binding.resetPasswordButton.isEnabled = true
                     binding.resetPasswordButton.text = "Reset Password"
                 }

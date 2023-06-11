@@ -33,6 +33,10 @@
     <string name="ok">Oke\n</string>
     <string name="forget_pass">Lupa Password?</string>
 
+    <!--    Login-->
+    <string name="email_pass_null">Tolong isi username dan password</string>
+
+
     <!--    homepage-->
     <string name="greeting">Hello,</string>
     <string name="ePoints">E-Points mu</string>

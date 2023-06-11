@@ -12,17 +12,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.preference.UploadWastePreference
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityUploadWasteBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -156,7 +159,10 @@ class UploadWasteActivity : AppCompatActivity() {
                         Toast.makeText(this@UploadWasteActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
 
                     } else {
-                        Toast.makeText(this@UploadWasteActivity, "gagal di sini", Toast.LENGTH_SHORT).show()
+                        val errorBody = response.errorBody()?.string()
+                        val jsonObject = JSONObject(errorBody.toString())
+                        val message = jsonObject.getString("message")
+                        CustomAlertDialog(this@UploadWasteActivity, message, R.drawable.custom_error).show()
                     }
                     binding.uploadWasteLayout.uploadWasteButton.isEnabled = true
                     binding.uploadWasteLayout.uploadWasteButton.text = "Upload Waste"
@@ -169,7 +175,7 @@ class UploadWasteActivity : AppCompatActivity() {
             })
 
         } else {
-            Toast.makeText(this@UploadWasteActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            CustomAlertDialog(this@UploadWasteActivity, "Silakan potret sampah terlebih dahulu.", R.drawable.custom_error).show()
         }
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

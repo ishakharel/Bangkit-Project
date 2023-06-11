@@ -18,6 +18,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.LoginResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityLoginBinding
 import com.ecoloops.ecoloopsapp.ui.auth.register.RegisterActivity
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import org.json.JSONObject
@@ -60,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.loginLayout.passwordEditText.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                showAlert(this, "Please fill all the fields")
+                CustomAlertDialog(this, "Tolong isi username dan password", R.drawable.custom_error).show()
                 binding.loginLayout.loginButton.isEnabled = true
                 binding.loginLayout.loginButton.text = "Login"
                 return@setOnClickListener
@@ -97,7 +98,8 @@ class LoginActivity : AppCompatActivity() {
                         val errorBody = response.errorBody()?.string()
                         val jsonObject = JSONObject(errorBody.toString())
                         val message = jsonObject.getString("message")
-                        showAlert(this@LoginActivity, message)
+                        CustomAlertDialog(this@LoginActivity, message, R.drawable.custom_error).show()
+
 
 
                     }
@@ -107,8 +109,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    showAlert(this@LoginActivity, "This is a simple alertis.")
-                    Log.e("RegisterActivity", "onFailure: ${t.message}")
+                    CustomAlertDialog(this@LoginActivity, "${t.message}", R.drawable.custom_error).show()
                     binding.loginLayout.loginButton.isEnabled = true
                     binding.loginLayout.loginButton.text = "Login"
                 }

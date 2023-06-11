@@ -10,7 +10,7 @@ import com.ecoloops.ecoloopsapp.R
 
 class CustomAlertDialog(
     context: Context,
-    private val message: Int,
+    private val message: String,
     private val image: Int,
     private val action: (() -> Unit)? = null
 ): AlertDialog(context) {
@@ -23,7 +23,7 @@ class CustomAlertDialog(
         setContentView(R.layout.layout_error)
 
         val messageView = findViewById<TextView>(R.id.tvError)
-        messageView.text = context.getString(message)
+        messageView.text = message
 
         val imageView = findViewById<ImageView>(R.id.ivEmptyUser)
         imageView.setImageResource(image)

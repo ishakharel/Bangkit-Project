@@ -1,11 +1,13 @@
 package com.ecoloops.ecoloopsapp.ui.page.profile
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,14 +15,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityEditProfileBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivityFormEditProfileBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity2
+import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import com.ecoloops.ecoloopsapp.utils.showAlert
+import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -29,6 +34,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.Calendar
 
 class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormEditProfileBinding
@@ -101,6 +107,42 @@ class EditProfileActivity : AppCompatActivity() {
         binding.cameraButton.setOnClickListener {
             startCameraX()
         }
+
+        // on below line we are adding
+        // click listener for our edit text.
+        binding.editTextDateOfBirth.setOnClickListener {
+
+            // on below line we are getting
+            // the instance of our calendar.
+            val c = Calendar.getInstance()
+
+            // on below line we are getting
+            // our day, month and year.
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            // on below line we are creating a
+            // variable for date picker dialog.
+            val datePickerDialog = DatePickerDialog(
+                // on below line we are passing context.
+                this,
+                { view, year, monthOfYear, dayOfMonth ->
+                    // on below line we are setting
+                    // date to our edit text.
+                    val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+                    binding.editTextDateOfBirth.setText(dat)
+                },
+                // on below line we are passing year, month
+                // and day for the selected date in our date picker.
+                year,
+                month,
+                day
+            )
+            // at last we are calling show
+            // to display our date picker dialog.
+            datePickerDialog.show()
+        }
     }
 
     private fun startCameraX() {
@@ -166,7 +208,8 @@ class EditProfileActivity : AppCompatActivity() {
                         val errorBody = response.errorBody()?.string()
                         val jsonObject = JSONObject(errorBody.toString())
                         val message = jsonObject.getString("message")
-                        showAlert(this@EditProfileActivity, message)
+                        CustomAlertDialog(this@EditProfileActivity, message, R.drawable.custom_error).show()
+
                     }
                     binding.buttonSave.isEnabled = true
                     binding.buttonSave.text = "Upload Story"
@@ -189,5 +232,15 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    fun dateOfBirth(view: View) {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setTitleText("Add date of birth").build()
+
+        datePicker.show(supportFragmentManager, datePicker.toString())
+
+
     }
 }

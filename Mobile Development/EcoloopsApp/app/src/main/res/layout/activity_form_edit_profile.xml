@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email:"
+                    android:text="Email :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name:"
+                    android:text="Nama :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gender:"
+                    android:text="Jenis Kelamin :"
                     android:textStyle="bold" />
 
                 <RadioGroup
@@ -147,13 +147,13 @@
                         android:id="@+id/radioButtonFemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Female" />
+                        android:text="Perempuan" />
 
                     <RadioButton
                         android:id="@+id/radioButtonMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Male" />
+                        android:text="Laki Laki" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -171,21 +171,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date of Birth:"
+                    android:text="Tanggal Lahir :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutDateOfBirth"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDateOfBirth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_transparent"
-                        android:hint="Select your date of birth"
-                        android:inputType="date" />
+                        android:hint="Pilih Tanggal Lahirmu"
+                        android:inputType="date"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
