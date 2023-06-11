@@ -75,6 +75,11 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.profileImage.setOnClickListener {
+            val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,

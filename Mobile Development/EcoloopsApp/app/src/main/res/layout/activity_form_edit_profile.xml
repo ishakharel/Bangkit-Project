@@ -144,16 +144,16 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/radioButtonFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Perempuan" />
-
-                    <RadioButton
                         android:id="@+id/radioButtonMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Laki Laki" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perempuan" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -208,20 +208,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Age:"
+                    android:text="Umur :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutAge"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="2">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_transparent"
-                        android:hint="Enter your age"
+                        android:hint="Masukan umurmu"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -240,7 +242,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Address:"
+                    android:text="Alamat :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -253,7 +255,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_transparent"
-                        android:hint="Enter your address" />
+                        android:hint="Masukan Alamatmu" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -271,7 +273,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Proficiency:"
+                    android:text="Profesi :"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -284,7 +286,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_transparent"
-                        android:hint="Enter your proficiency" />
+                        android:hint="Masukan Profesimu" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 

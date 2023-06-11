@@ -23,6 +23,13 @@ class LoginPreference(context: Context) {
         editor.apply()
     }
 
+    fun setEmailUsername(email: String?, name: String?){
+        val editor = preferences.edit()
+        editor.putString("name", name)
+        editor.putString("email", email)
+        editor.apply()
+    }
+
     fun getUser(): UserModel {
         val model = UserModel()
         model.id = preferences.getString("id", "")

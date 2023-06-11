@@ -17,6 +17,7 @@ import com.ecoloops.ecoloopsapp.data.remote.response.RegisterResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadWasteResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.UserDetailResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -47,6 +48,12 @@ interface ApiService {
     fun logout(
         @Header("authorization") token: String
     ): Call<LogoutResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @GET("user")
+    fun getUserDetail(
+        @Header("authorization") token: String
+    ): Call<UserDetailResponse>
 
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
     @PUT("auth/change-pass")

@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,14 +18,18 @@ import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.ecoloops.ecoloopsapp.R
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
+import com.ecoloops.ecoloopsapp.data.remote.response.DetailCategoryResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.UserDetailResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
 import com.ecoloops.ecoloopsapp.databinding.ActivityEditProfileBinding
 import com.ecoloops.ecoloopsapp.databinding.ActivityFormEditProfileBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity2
 import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
+import com.ecoloops.ecoloopsapp.ui.page.home.DetailCategoryActivity
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import com.ecoloops.ecoloopsapp.utils.showAlert
+import com.ecoloops.ecoloopsapp.utils.withDateFormat
 import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -73,21 +78,8 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityFormEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val age = "80"
-        binding.editTextAge.setText(age)
-
         binding.ivBack.setOnClickListener{
             finish()
-        }
-
-        val userProfilePreference = LoginPreference(this)
-        val userProfile = userProfilePreference.getUser()
-
-        if(userProfile.image != ""){
-            Glide.with(this@EditProfileActivity)
-                .load(userProfile.image)
-                .fitCenter()
-                .into(binding.circleIvAvatar)
         }
 
         val isGallery = intent.getBooleanExtra("isGallery", false)
@@ -108,8 +100,8 @@ class EditProfileActivity : AppCompatActivity() {
             startCameraX()
         }
 
-        // on below line we are adding
-        // click listener for our edit text.
+        dataProfile()
+
         binding.editTextDateOfBirth.setOnClickListener {
 
             // on below line we are getting
@@ -130,8 +122,8 @@ class EditProfileActivity : AppCompatActivity() {
                 { view, year, monthOfYear, dayOfMonth ->
                     // on below line we are setting
                     // date to our edit text.
-                    val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
-                    binding.editTextDateOfBirth.setText(dat)
+                    val dat = (year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString() + "T00:00:00.000Z")
+                    binding.editTextDateOfBirth.setText(dat.withDateFormat())
                 },
                 // on below line we are passing year, month
                 // and day for the selected date in our date picker.
@@ -142,6 +134,17 @@ class EditProfileActivity : AppCompatActivity() {
             // at last we are calling show
             // to display our date picker dialog.
             datePickerDialog.show()
+        }
+
+        binding.radioGroupGender.setOnCheckedChangeListener { group, checkedId ->
+            val radio: RadioButton = findViewById(checkedId)
+            var result = "Male"
+            if(radio.text == "Perempuan"){
+                result = "Female"
+            }
+            Toast.makeText(applicationContext," On checked change :"+
+                    " $result",
+                Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -234,13 +237,69 @@ class EditProfileActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    fun dateOfBirth(view: View) {
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .setTitleText("Add date of birth").build()
 
-        datePicker.show(supportFragmentManager, datePicker.toString())
+    private fun dataProfile(){
+        val apiClient = ApiConfig()
+        val apiService = apiClient.createApiService()
 
+        val userPreferences = LoginPreference(this)
+        val userData = userPreferences.getUser()
 
+        val call = apiService.getUserDetail("Bearer ${userData.token}")
+
+        call.enqueue(object : Callback<UserDetailResponse> {
+            override fun onResponse(
+                call: Call<UserDetailResponse>,
+                response: Response<UserDetailResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    val name = responseBody?.data?.name.toString()
+                    val email = responseBody?.data?.email.toString()
+                    val address = responseBody?.data?.address.toString()
+                    val gender = responseBody?.data?.gender.toString()
+                    val age = responseBody?.data?.age.toString()
+                    val job = responseBody?.data?.job.toString()
+                    val dob = responseBody?.data?.dob.toString()
+                    val image = responseBody?.data?.image.toString()
+
+                    userPreferences.setEmailUsername(email, name)
+                    userPreferences.setImgUrl(image)
+
+                    binding.editTextEmail.setText(email)
+                    binding.editTextName.setText(name)
+                    if(gender == "Male") {
+                        binding.radioButtonMale.setChecked(true)
+                        binding.radioButtonFemale.setChecked(false)
+                    }else {
+                        binding.radioButtonFemale.setChecked(true)
+                        binding.radioButtonMale.setChecked(false)
+                    }
+                    binding.editTextDateOfBirth.setText(dob.withDateFormat())
+                    binding.editTextAge.setText(age)
+                    binding.editTextAddress.setText(address)
+                    binding.editTextProficiency.setText(job)
+                    if(image != ""){
+                        Glide.with(this@EditProfileActivity)
+                            .load(image)
+                            .fitCenter()
+                            .into(binding.circleIvAvatar)
+                    }
+
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val jsonObject = JSONObject(errorBody.toString())
+                    val message = jsonObject.getString("message")
+                    showAlert(this@EditProfileActivity, message)
+                }
+
+            }
+
+            override fun onFailure(call: Call<UserDetailResponse>, t: Throwable) {
+                showAlert(this@EditProfileActivity, "This is a simple alertis.")
+                Log.e("Detail Category", "onFailure: ${t.message}")
+            }
+
+        })
     }
 }
