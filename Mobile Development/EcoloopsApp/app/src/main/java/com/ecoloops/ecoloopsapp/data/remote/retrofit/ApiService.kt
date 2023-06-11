@@ -1,6 +1,7 @@
 package com.ecoloops.ecoloopsapp.data.remote.retrofit
 
 import com.ecoloops.ecoloopsapp.data.model.EditPassRequest
+import com.ecoloops.ecoloopsapp.data.model.EditProfileRequest
 import com.ecoloops.ecoloopsapp.data.model.ForgotPassRequest
 import com.ecoloops.ecoloopsapp.data.model.LoginRequest
 import com.ecoloops.ecoloopsapp.data.model.RegisterRequest
@@ -54,6 +55,13 @@ interface ApiService {
     fun getUserDetail(
         @Header("authorization") token: String
     ): Call<UserDetailResponse>
+
+    @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
+    @PUT("user")
+    fun editProfile(
+        @Header("authorization") token: String,
+        @Body body: EditProfileRequest
+    ): Call<ResetPassResponse>
 
     @Headers("apikey: B1sM1Llaht0pi5C4p5t0N3")
     @PUT("auth/change-pass")

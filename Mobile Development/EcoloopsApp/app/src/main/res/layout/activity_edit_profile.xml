@@ -22,7 +22,7 @@
             android:id="@+id/user_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="Edit Photo Profile"
             android:textStyle="bold"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +33,9 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circle_iv_avatar"
             android:src="@drawable/no_profile"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="100dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="150dp"
             app:civ_border_width="5dp"
             app:civ_border_color="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
@@ -44,179 +44,24 @@
 
         <ImageView
             android:id="@+id/cameraButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_camera"
             app:layout_constraintEnd_toEndOf="@id/circle_iv_avatar"
             app:layout_constraintBottom_toBottomOf="@id/circle_iv_avatar"/>
-
-        <!-- User Profile Details -->
-
-        <LinearLayout
-            android:id="@+id/profileDetailsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/cameraButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/submitEditButton"
-            android:layout_marginTop="16dp"
-            android:paddingHorizontal="16dp">
-
-            <!-- Email -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Name -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Gender -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gender:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Date of Birth -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date of Birth:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewDateOfBirth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Age -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Age:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewAge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Address -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Proficiency -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Proficiency:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textViewProficiency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-        </LinearLayout>
 
         <Button
             android:id="@+id/submitEditButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/rounded_shape"
-            android:text="Simpan Perubahan"
+            android:text="Simpan Photo Profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileDetailsLayout" />
+            app:layout_constraintTop_toBottomOf="@id/circle_iv_avatar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

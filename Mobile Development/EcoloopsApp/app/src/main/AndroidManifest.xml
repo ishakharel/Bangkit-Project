@@ -65,6 +65,9 @@
             android:name=".ui.page.profile.EditProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.page.profile.EditPhotoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.page.profile.EditPasswordActivity"
             android:exported="false" />
         <activity

@@ -91,6 +91,15 @@ fun String.withDateFormat(): String {
     return dateFormatter.format(value)
 }
 
+fun String.apiDateFormat(): String {
+    val formatter = SimpleDateFormat("dd-MMM-yyyy")
+    formatter.timeZone = TimeZone.getTimeZone("UTC")
+    val value = formatter.parse(this) as Date
+    val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+    dateFormatter.timeZone = TimeZone.getDefault()
+    return dateFormatter.format(value)
+}
+
 fun reduceFileImage(file: File): File {
     val maximalSize = 1000000
 

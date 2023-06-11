@@ -37,7 +37,7 @@ class EditPasswordActivity : AppCompatActivity() {
             if (passwordOld.isEmpty() || passwordNew.isEmpty()) {
                 CustomAlertDialog(this@EditPasswordActivity, "Harap Isi Semua Field!", R.drawable.custom_error).show()
                 binding.resetPasswordButton.isEnabled = true
-                binding.resetPasswordButton.text = "Login"
+                binding.resetPasswordButton.text = "Edit Password"
                 return@setOnClickListener
             }
 
@@ -67,11 +67,11 @@ class EditPasswordActivity : AppCompatActivity() {
                         CustomAlertDialog(this@EditPasswordActivity, message, R.drawable.custom_error).show()
                     }
                     binding.resetPasswordButton.isEnabled = true
-                    binding.resetPasswordButton.text = "Upload Story"
+                    binding.resetPasswordButton.text = "Edit Password"
                 }
                 override fun onFailure(call: Call<ResetPassResponse>, t: Throwable) {
                     binding.resetPasswordButton.isEnabled = true
-                    binding.resetPasswordButton.text = "Upload Story"
+                    binding.resetPasswordButton.text = "Edit Password"
                     Toast.makeText(this@EditPasswordActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
             })

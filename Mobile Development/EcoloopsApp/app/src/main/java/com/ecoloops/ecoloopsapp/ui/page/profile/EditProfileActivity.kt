@@ -17,8 +17,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.ecoloops.ecoloopsapp.R
+import com.ecoloops.ecoloopsapp.data.model.EditProfileRequest
 import com.ecoloops.ecoloopsapp.data.preference.LoginPreference
 import com.ecoloops.ecoloopsapp.data.remote.response.DetailCategoryResponse
+import com.ecoloops.ecoloopsapp.data.remote.response.ResetPassResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UploadPhotoResponse
 import com.ecoloops.ecoloopsapp.data.remote.response.UserDetailResponse
 import com.ecoloops.ecoloopsapp.data.remote.retrofit.ApiConfig
@@ -27,6 +29,8 @@ import com.ecoloops.ecoloopsapp.databinding.ActivityFormEditProfileBinding
 import com.ecoloops.ecoloopsapp.ui.camera.CameraActivity2
 import com.ecoloops.ecoloopsapp.ui.custom_view.CustomAlertDialog
 import com.ecoloops.ecoloopsapp.ui.page.home.DetailCategoryActivity
+import com.ecoloops.ecoloopsapp.ui.page.home.HomeActivity
+import com.ecoloops.ecoloopsapp.utils.apiDateFormat
 import com.ecoloops.ecoloopsapp.utils.reduceFileImage
 import com.ecoloops.ecoloopsapp.utils.showAlert
 import com.ecoloops.ecoloopsapp.utils.withDateFormat
@@ -43,200 +47,46 @@ import java.util.Calendar
 
 class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormEditProfileBinding
-    private var getFile: File? = null
-
-    companion object {
-        const val CAMERA_X_RESULT = 200
-        private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (!allPermissionsGranted()) {
-                Toast.makeText(
-                    this,
-                    "Tidak mendapatkan permission.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                finish()
-            }
-        }
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.ivBack.setOnClickListener{
-            finish()
-        }
-
-        val isGallery = intent.getBooleanExtra("isGallery", false)
-        val image = intent.getStringExtra("picture")
-
-        if (isGallery) {
-            Log.e("TAG", "onCreate: $image")
-            getFile = File(image)
-            Toast.makeText(this, "isGallery: $image", Toast.LENGTH_SHORT).show()
-            binding.circleIvAvatar.setImageURI(image?.toUri())
-        }
-
-        binding.buttonSave.setOnClickListener {
-            uploadStory()
-        }
-
-        binding.cameraButton.setOnClickListener {
-            startCameraX()
+        val status = getIntent().getStringExtra("status")
+        if(status == "success"){
+            CustomAlertDialog(this@EditProfileActivity, "Sukses Mengubah Profile", R.drawable.custom_success).show()
         }
 
         dataProfile()
 
         binding.editTextDateOfBirth.setOnClickListener {
-
-            // on below line we are getting
-            // the instance of our calendar.
             val c = Calendar.getInstance()
 
-            // on below line we are getting
-            // our day, month and year.
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
 
-            // on below line we are creating a
-            // variable for date picker dialog.
             val datePickerDialog = DatePickerDialog(
-                // on below line we are passing context.
                 this,
                 { view, year, monthOfYear, dayOfMonth ->
-                    // on below line we are setting
-                    // date to our edit text.
-                    val dat = (year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString() + "T00:00:00.000Z")
-                    binding.editTextDateOfBirth.setText(dat.withDateFormat())
+                    val dateNew = (year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString() + "T00:00:00.000Z")
+                    binding.editTextDateOfBirth.setText(dateNew.withDateFormat())
                 },
-                // on below line we are passing year, month
-                // and day for the selected date in our date picker.
                 year,
                 month,
                 day
             )
-            // at last we are calling show
-            // to display our date picker dialog.
             datePickerDialog.show()
         }
 
-        binding.radioGroupGender.setOnCheckedChangeListener { group, checkedId ->
-            val radio: RadioButton = findViewById(checkedId)
-            var result = "Male"
-            if(radio.text == "Perempuan"){
-                result = "Female"
-            }
-            Toast.makeText(applicationContext," On checked change :"+
-                    " $result",
-                Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun startCameraX() {
-        val intent = Intent(this, CameraActivity2::class.java)
-        launcherIntentCameraX.launch(intent)
-    }
-
-    private val launcherIntentCameraX = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == CAMERA_X_RESULT) {
-            val myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.data?.getSerializableExtra("picture", File::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                it.data?.getSerializableExtra("picture")
-            } as? File
-            myFile?.let { file ->
-                getFile = file
-                binding.circleIvAvatar.setImageBitmap(BitmapFactory.decodeFile(file.path))
-            }
-
-        }
-    }
-
-
-    private fun uploadStory() {
-        if (getFile != null) {
-            val file = reduceFileImage(getFile as File)
-
-            binding.buttonSave.isEnabled = false
-            binding.buttonSave.text = "Mengunggah..."
-
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "file",
-                file.name,
-                requestImageFile
-            )
-
-            val apiClient = ApiConfig()
-            val apiService = apiClient.createApiService()
-
-            val userPreferences = LoginPreference(this)
-            val userData = userPreferences.getUser()
-
-            val uploadImageRequest = apiService.uploadPhoto("Bearer ${userData.token}",imageMultipart)
-            uploadImageRequest.enqueue(object : Callback<UploadPhotoResponse> {
-                override fun onResponse(
-                    call: Call<UploadPhotoResponse>,
-                    response: Response<UploadPhotoResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        val imageUrl = responseBody?.imageUrl.toString()
-
-                        userPreferences.setImgUrl(imageUrl)
-                        startActivity(Intent(this@EditProfileActivity, ProfileActivity::class.java))
-                        finish()
-                        Toast.makeText(this@EditProfileActivity, responseBody?.message, Toast.LENGTH_SHORT).show()
-
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        val jsonObject = JSONObject(errorBody.toString())
-                        val message = jsonObject.getString("message")
-                        CustomAlertDialog(this@EditProfileActivity, message, R.drawable.custom_error).show()
-
-                    }
-                    binding.buttonSave.isEnabled = true
-                    binding.buttonSave.text = "Upload Story"
-                }
-                override fun onFailure(call: Call<UploadPhotoResponse>, t: Throwable) {
-                    binding.buttonSave.isEnabled = true
-                    binding.buttonSave.text = "Upload Story"
-                    Toast.makeText(this@EditProfileActivity, t.message, Toast.LENGTH_SHORT).show()
-                }
-            })
-
-        } else {
-            Toast.makeText(this@EditProfileActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+        binding.buttonSave.setOnClickListener() {
+            editProfile()
         }
 
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                startActivity(Intent(this@EditProfileActivity, ProfileActivity::class.java))
-                finish()
-            }
+        binding.cameraButton.setOnClickListener {
+            startActivity(Intent(this@EditProfileActivity, EditPhotoActivity::class.java))
         }
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
-
 
     private fun dataProfile(){
         val apiClient = ApiConfig()
@@ -300,6 +150,63 @@ class EditProfileActivity : AppCompatActivity() {
                 Log.e("Detail Category", "onFailure: ${t.message}")
             }
 
+        })
+    }
+
+    private fun editProfile(){
+        val email = binding.editTextEmail.text.toString()
+        val name = binding.editTextName.text.toString()
+        var gender = ""
+        if(binding.radioButtonMale.isChecked()){
+            gender = "Male"
+        }else{
+            gender = "Female"
+        }
+        val dob = binding.editTextDateOfBirth.text.toString().apiDateFormat()
+//        CustomAlertDialog(this@EditProfileActivity, dob, R.drawable.custom_error).show()
+
+        val age = binding.editTextAge.text.toString()
+        val address = binding.editTextAddress.text.toString()
+        val job = binding.editTextProficiency.text.toString()
+
+        if (email.isEmpty() || name.isEmpty() || gender.isEmpty() || dob.isEmpty() || age.toString().isEmpty() || address.isEmpty() || job.isEmpty()) {
+            CustomAlertDialog(this@EditProfileActivity, "Harap Isi Semua Field!", R.drawable.custom_error).show()
+            binding.buttonSave.isEnabled = true
+            binding.buttonSave.text = "Loading"
+        }
+
+        val apiClient = ApiConfig()
+        val apiService = apiClient.createApiService()
+
+        val userPreferences = LoginPreference(this)
+        val userData = userPreferences.getUser()
+
+        val editProfileRequest = EditProfileRequest(email, name, address, gender,  age.toInt(), job, dob)
+        val call = apiService.editProfile("Bearer ${userData.token}", editProfileRequest)
+        call.enqueue(object : Callback<ResetPassResponse> {
+            override fun onResponse(
+                call: Call<ResetPassResponse>,
+                response: Response<ResetPassResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val intent = Intent(this@EditProfileActivity, EditProfileActivity::class.java)
+                    intent.putExtra("status", "success");
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val jsonObject = JSONObject(errorBody.toString())
+                    val message = jsonObject.getString("message")
+                    CustomAlertDialog(this@EditProfileActivity, message, R.drawable.custom_error).show()
+                }
+                binding.buttonSave.isEnabled = true
+                binding.buttonSave.text = "Edit Profile"
+            }
+            override fun onFailure(call: Call<ResetPassResponse>, t: Throwable) {
+                binding.buttonSave.isEnabled = true
+                binding.buttonSave.text = "Edit Profile"
+                Toast.makeText(this@EditProfileActivity, t.message, Toast.LENGTH_SHORT).show()
+            }
         })
     }
 }

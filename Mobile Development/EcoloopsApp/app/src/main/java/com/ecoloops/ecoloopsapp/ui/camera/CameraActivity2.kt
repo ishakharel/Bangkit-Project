@@ -16,7 +16,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.ecoloops.ecoloopsapp.databinding.ActivityCamera2Binding
-import com.ecoloops.ecoloopsapp.ui.page.profile.EditProfileActivity
+import com.ecoloops.ecoloopsapp.ui.page.profile.EditPhotoActivity
 import com.ecoloops.ecoloopsapp.utils.createFile
 import com.ecoloops.ecoloopsapp.utils.uriToFile
 
@@ -58,7 +58,7 @@ class CameraActivity2 : AppCompatActivity() {
             val selectedImg = result.data?.data as Uri
             selectedImg.let { uri ->
                 val myFile = uriToFile(uri, this@CameraActivity2)
-                val intent = Intent(this, EditProfileActivity::class.java)
+                val intent = Intent(this, EditPhotoActivity::class.java)
                 intent.putExtra("picture", myFile?.absolutePath)
                 intent.putExtra("isGallery", true)
                 startActivity(intent)
@@ -99,7 +99,7 @@ class CameraActivity2 : AppCompatActivity() {
                         cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
                     )
                     intent.putExtra("isGallery", false)
-                    setResult(EditProfileActivity.CAMERA_X_RESULT, intent)
+                    setResult(EditPhotoActivity.CAMERA_X_RESULT, intent)
                     finish()
                 }
             }
