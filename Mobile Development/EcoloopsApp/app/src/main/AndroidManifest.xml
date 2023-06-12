@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ecoloops"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ecoloops"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.auth.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.scan.UploadWasteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.scan.ResultWasteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.login.SendOtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.login.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.home.DetailCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.reward.RewardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.notification.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.EditPhotoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.EditPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.profile.HistoryScanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

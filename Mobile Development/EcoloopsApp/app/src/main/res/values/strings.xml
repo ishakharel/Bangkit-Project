@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">EcoLoops</string>
+
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+
+
+    <string name="title_boarding1">About Us</string>
+    <string name="title_boarding2">Scan Sampah</string>
+    <string name="title_boarding3">Recycle</string>
+    <string name="title_boarding4">Monetize</string>
+
+    <string name="description_boarding1">EcoLoops adalah aplikasi Identifikasi untuk Mengklasifikasikan sampah pengguna.</string>
+    <string name="description_boarding2">Scan sampah anda dan dapatkan informasi bagaimana cara daur ulang yang sesuai berdasarkan kategori sampahnya</string>
+    <string name="description_boarding3">Terdapat informasi mengenai Klasifikasi sampah dan cara untuk Daur Ulang Sampah.</string>
+    <string name="description_boarding4">Dapatkan poin untuk setiap sampah yang kamu unggah dan klasifikasikan. Poin dapat ditukar dengan hadiah menarik!</string>
+    <string name="lets_register">Selamat Bergabung Bersama EcoLoops!</string>
+    <string name="name">Nama Lengkap</string>
+    <string name="name_hint">Masukan Nama Kamu</string>
+    <string name="email">Email</string>
+    <string name="email_hint">Masukan Email Kamu</string>
+    <string name="password">Password</string>
+    <string name="password_hint">Masukan Password Kamu</string>
+    <string name="confirm_password">Konfirmasi Password</string>
+    <string name="confirm_password_hint">Masukan Kembali Password</string>
+    <string name="register">Bergabung</string>
+    <string name="login">Masuk</string>
+    <string name="welcome_back">Nikmati Keseruan Bersama EcoLoops!</string>
+    <string name="invalid_name">Nama Tidak Valid</string>
+    <string name="invalid_email">Email Tidak Valid</string>
+    <string name="invalid_password">Password Tidak Valid</string>
+    <string name="error_message">error</string>
+    <string name="ok">Oke\n</string>
+    <string name="forget_pass">Lupa Password?</string>
+
+    <!--    Login-->
+    <string name="email_pass_null">Tolong isi username dan password</string>
+
+
+    <!--    homepage-->
+    <string name="greeting">Hello,</string>
+    <string name="ePoints">E-Points mu</string>
+    <string name="points">100.000</string>
+    <string name="category_tv">Kategori</string>
+    <string name="userActivity_tv">Aktivitas Anda</string>
+
+    <!--    reward page-->
+    <string name="reward_name">T-Shirt EcoLoops</string>
+    <string name="reward_points">25.000 Poin</string>
+    <string name="reward_stock">10 Stok Tersisa</string>
+
+    <!--    category-->
+    <string name="category_title">Sampah Makanan</string>
+    <string name="category_description">Sampah makanan adalah sisa-sisa makanan\natau bahan organik yang tidak lagi dikonsumsi. \nMendaur ulang sampah makanan memiliki \nmanfaat untuk mengurangi limbah, \nmengurangi emisi gas rumah kaca, dan \nmemproduksi pupuk organik yang berguna \nbagi tanaman.</string>
+    <string name="category_example_title">Contoh</string>
+    <string name="category_description_recycle_title">Cara Daur Ulang</string>
+    <string name="category_description_recycle">Buang kedalam tempat sampah daur ulang\nberwarna hijau untuk sampah makanan.</string>
+    <string name="detail_category">produk</string>
+    <string name="detail_product_name">Nama Produk</string>
+    <string name="product_name">Roti</string>
+    <string name="product_recycle_title">Cara Daur Ulang</string>
+    <string name="product_recycle_description">Buang kedalam tempat sampah daur ulang berwarna hijau untuk sampah makanan.</string>
+
+    <!--    notification-->
+    <string name="notification_title">Selamat datang di aplikasi EcoLoops</string>
+    <string name="notification_body">Bersama EcoLoops membuat lingkungan lebih bersih!</string>
+    <string name="notification_time">21 Mei 2023</string>
+
+    <!--    history-->
+    <string name="history_time">09 Januari 2023</string>
+    <string name="history_point">+25 poin</string>
+
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home" />
+
+    <item android:id="@+id/reward"
+        android:title="E-Points"
+        android:icon="@drawable/ic_point" />
+
+    <item android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false"
+        />
+
+    <item android:id="@+id/notification"
+        android:title="Notification"
+        android:icon="@drawable/ic_notification" />
+
+    <item android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
+</menu>
