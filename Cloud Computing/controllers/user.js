@@ -365,7 +365,7 @@ const getNotificationByUserId = (req, res) => {
   }
 
   db.query(
-    "SELECT * FROM users_notifications WHERE user_id = ?",
+    "SELECT * FROM users_notifications WHERE user_id = ? ORDER BY date DESC",
     [userId],
     (error, results) => {
       if (error) {
@@ -479,7 +479,7 @@ const getMerchRedeemedByUserId = (req, res) => {
   }
 
   db.query(
-    "SELECT b.name as name, b.image as image, a.date as date FROM users_merch_redeem a JOIN merch b ON a.merch_id = b.id JOIN users c ON a.user_id = c.id WHERE a.user_id = ?",
+    "SELECT b.name as name, b.image as image, a.date as date FROM users_merch_redeem a JOIN merch b ON a.merch_id = b.id JOIN users c ON a.user_id = c.id WHERE a.user_id = ? ORDER BY a.date DESC",
     [userId],
     (error, results) => {
       if (error) {
